@@ -1,0 +1,18 @@
+# environment/prod/values.yaml
+constraints:
+  enforcementAction: deny
+  match:
+    namespaces: []
+    labelSelector:
+      matchLabels:
+        environment: "prod"
+  parameters:
+    allowedCapabilities:
+    - "NET_BIND_SERVICE"
+    requiredDropCapabilities:
+    - "CAP_NET_RAW"
+    - "CAP_SYS_ADMIN"
+    excludedContainers:
+    - "prod-exempt-container"
+    excludedImages:
+    - "prod-registry.example.com/trusted/*"

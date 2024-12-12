@@ -1,0 +1,44 @@
+baselines:
+  excludedNamespaces:
+  - kube-system
+  - amazon-cloudwatch
+  - gatekeeper-system
+  - amazon-guardduty
+
+  whitelistedRoles:
+  - "admin"
+  - "system:*"
+  - "eks:*"
+  - "cluster-admin"
+  - "gatekeeper-manager-role"
+  labelSelector:
+    matchLabels: {}
+
+constraints:
+  eksallowedcapabilitieseffect:
+    exemptions:
+      excludedNamespaces: []
+      excludedContainers: []
+      excludedImages: []
+  eksallowedimageseffect:
+    exemptions:
+      excludedNamespaces: []
+      excludedContainers: []
+      excludedImages: []
+  eksblockdefaultnamespaceeffect:
+    exemptions:
+      excludedNamespaces: []
+  eksnoprivilegeescalationeffect:
+    exemptions:
+      excludedNamespaces: []
+      excludedContainers: []
+      excludedImages: []
+  eksenforceprobes:
+    exemptions:
+      excludedNamespaces: []
+      excludedContainers: []
+      excludedImages: []
+  eksblockwildcardroleseffect:
+    exemptions:
+      excludedNamespaces: []
+      excludedRoles: []

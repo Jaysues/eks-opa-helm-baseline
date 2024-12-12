@@ -1,0 +1,44 @@
+apiVersion: templates.gatekeeper.sh/v1beta1
+kind: ConstraintTemplate
+metadata:
+  name: eksenforceprobes
+spec:
+  crd:
+    spec:
+      names:
+        kind: K8sEnforceProbes
+      validation:
+        openAPIV3Schema:
+          properties:
+            enforceProbes:
+              type: array
+              items:
+                type: string
+            excludedContainers:
+              type: array
+              items:
+                type: string
+  targets:
+    - target: admission.k8s.gatekeeper.sh
+      rego: |
+        package eksenforceprobes
+
+        violation[{"msg": msg}] {
+          container := input_containers[_]
+          not input_container_excluded(container.name)
+          probe := input.parameters.enforceProbes[_]
+          not has_probe(container, probe)
+          msg := sprintf("Container <%v> is missing probe <%v>", [container.name, probe])
+        }
+
+        has_probe(container, probe) {
+          container[probe]
+        }
+
+        input_containers[c] {
+          c := input.review.object.spec.containers[_]
+        }
+
+        input_container_excluded(name) {
+          name == input.parameters.excludedContainers[_]
+        }

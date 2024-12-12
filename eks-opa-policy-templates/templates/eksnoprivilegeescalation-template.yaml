@@ -1,0 +1,35 @@
+apiVersion: templates.gatekeeper.sh/v1beta1
+kind: ConstraintTemplate
+metadata:
+  name: eksnoprivilegeescalation
+spec:
+  crd:
+    spec:
+      names:
+        kind: K8sNoPrivilegeEscalation
+      validation:
+        openAPIV3Schema:
+          properties:
+            excludedContainers:
+              type: array
+              items:
+                type: string
+  targets:
+    - target: admission.k8s.gatekeeper.sh
+      rego: |
+        package eksnoprivilegeescalation
+
+        violation[{"msg": msg}] {
+          container := input_containers[_]
+          not input_container_excluded(container.name)
+          container.securityContext.allowPrivilegeEscalation == true
+          msg := sprintf("Container <%v> has privilege escalation enabled", [container.name])
+        }
+
+        input_containers[c] {
+          c := input.review.object.spec.containers[_]
+        }
+
+        input_container_excluded(name) {
+          name == input.parameters.excludedContainers[_]
+        }

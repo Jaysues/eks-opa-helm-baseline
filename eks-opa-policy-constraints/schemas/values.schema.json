@@ -1,0 +1,74 @@
+# eks-opa-policy-constraints/schemas/values.schema.json
+{
+  "$schema": "http://json-schema.org/schema#",
+  "type": "object",
+  "properties": {
+    "enforcementAction": {
+      "type": "string",
+      "enum": ["deny", "dryrun", "audit"],
+      "description": "Enforcement action to take."
+    },
+    "match": {
+      "type": "object",
+      "properties": {
+        "kinds": {
+          "type": "object",
+          "properties": {
+            "apiGroups": {
+              "type": "array",
+              "items": { "type": "string" }
+            },
+            "names": {
+              "type": "array",
+              "items": { "type": "string" }
+            }
+          },
+          "required": ["apiGroups", "names"]
+        },
+        "namespaces": {
+          "type": "array",
+          "items": { "type": "string" }
+        },
+        "excludedNamespaces": {
+          "type": "array",
+          "items": { "type": "string" }
+        },
+        "labelSelector": {
+          "type": "object",
+          "properties": {
+            "matchLabels": {
+              "type": "object",
+              "additionalProperties": { "type": "string" }
+            }
+          },
+          "required": ["matchLabels"]
+        }
+      },
+      "required": ["kinds", "namespaces", "excludedNamespaces", "labelSelector"]
+    },
+    "parameters": {
+      "type": "object",
+      "properties": {
+        "allowedCapabilities": {
+          "type": "array",
+          "items": { "type": "string" }
+        },
+        "requiredDropCapabilities": {
+          "type": "array",
+          "items": { "type": "string" }
+        },
+        "excludedContainers": {
+          "type": "array",
+          "items": { "type": "string" }
+        },
+        "excludedImages": {
+          "type": "array",
+          "items": { "type": "string" },
+          "description": "List of image patterns to exclude from enforcement. Supports prefix matching with '*'."
+        }
+      },
+      "required": ["allowedCapabilities", "requiredDropCapabilities", "excludedContainers", "excludedImages"]
+    }
+  },
+  "required": ["enforcementAction", "match", "parameters"]
+}

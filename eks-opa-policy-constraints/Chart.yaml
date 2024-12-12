@@ -1,0 +1,5 @@
+apiVersion: v2
+name: eks-opa-policy-constraints
+description: Helm chart for deploying Gatekeeper Constraints for EKS
+version: 0.1.0
+appVersion: "1.0"
