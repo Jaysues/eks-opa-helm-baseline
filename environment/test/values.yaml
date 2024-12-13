@@ -1,20 +1,17 @@
-# environment/test/values.yaml
 constraints:
-  enforcementAction: deny
-  match:
-    namespaces:
-    - "test-namespace"
+  enforcementAction: "dryrun" # Default enforcement for development
+  exemptions:
+    excludedNamespaces: []
+    excludedContainers: []
+    excludedImages: []
     labelSelector:
-      matchLabels:
-        environment: "test"
-  parameters:
-    allowedCapabilities:
-    - "NET_BIND_SERVICE"
-    - "CHOWN"
-    requiredDropCapabilities:
-    - "CAP_NET_RAW"
-    - "CAP_SYS_ADMIN"
-    excludedContainers:
-    - "test-exempt-container"
-    excludedImages:
-    - "test-registry.example.com/trusted/*"
+      matchLabels: {}
+
+eksallowedcapabilitieseffect:
+  exemptions:
+    excludedContainers: []
+    excludedImages: []
+    allowedCapabilities: []
+    requiredDropCapabilities: []
+    labelSelector:
+      matchLabels: {}

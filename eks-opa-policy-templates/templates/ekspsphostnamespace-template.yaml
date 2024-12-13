@@ -1,19 +1,17 @@
 apiVersion: templates.gatekeeper.sh/v1beta1
 kind: ConstraintTemplate
 metadata:
-  name: eksnoprivilegeescalation
+  name: ekspsphostnamespace
+  annotations:
+    description: "Prevents sharing of host namespaces"
 spec:
   crd:
     spec:
       names:
-        kind: K8sNoPrivilegeEscalation
+        kind: EksPspHostNamespace
       validation:
         openAPIV3Schema:
           properties:
-            excludedContainers:
-              type: array
-              items:
-                type: string
             excludedImages:
               type: array
               items:
@@ -21,49 +19,33 @@ spec:
   targets:
     - target: admission.k8s.gatekeeper.sh
       rego: |
-        package eksnoprivilegeescalation
-
+        package ekspsphostnamespace
+        
         import data.lib.exclude_container_image.is_excluded
 
         violation[{"msg": msg, "details": {}}] {
-            c := input_containers[_]
-            not input_container_excluded(c.name)
-            not is_excluded(c)
-            input_allow_privilege_escalation(c)
-            msg := sprintf("Privilege escalation container is not allowed: %v", [c.name])
+            not input.review.object.spec.nodeSelector["kubernetes.io/os"] == "windows"
+            containers := input_containers[_]
+            not is_excluded(containers)
+            input_share_hostnamespace(input.review.object)
+            msg := sprintf("Sharing the host namespace is not allowed: %v", [input.review.object.metadata.name])
         }
 
-        input_allow_privilege_escalation(c) {
-            c.securityContext.allowPrivilegeEscalation == true
+        input_share_hostnamespace(o) {
+            o.spec.hostPID
         }
-
-        input_allow_privilege_escalation(c) {
-            not c.securityContext.allowPrivilegeEscalation == false
-            c.securityContext.runAsUser != 0
+        input_share_hostnamespace(o) {
+            o.spec.hostIPC
         }
-        
-        input_allow_privilege_escalation(c) {
-            not c.securityContext.allowPrivilegeEscalation == false
-            not c.securityContext.runAsUser
-            input.review.object.spec.securityContext.runAsUser != 0
-        }
-
         input_containers[c] {
             c := input.review.object.spec.containers[_]
         }
-
         input_containers[c] {
             c := input.review.object.spec.initContainers[_]
         }
-
         input_containers[c] {
-          c := input.review.object.spec.ephemeralContainers[_]
+            c := input.review.object.spec.ephemeralContainers[_]
         }
-
-        input_container_excluded(field) {
-            field == input.parameters.excludedContainers[_]
-        }
-
       libs:
         - |
           package lib.exclude_container_image

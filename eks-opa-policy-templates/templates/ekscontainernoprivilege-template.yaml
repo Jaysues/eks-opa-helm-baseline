@@ -1,51 +1,28 @@
 apiVersion: templates.gatekeeper.sh/v1beta1
 kind: ConstraintTemplate
 metadata:
-  name: eksnoprivilegeescalation
+  name: ekscontainernoprivilege
+  annotations:
+    description: "Controls privilege escalation in containers"
 spec:
   crd:
     spec:
       names:
-        kind: K8sNoPrivilegeEscalation
-      validation:
-        openAPIV3Schema:
-          properties:
-            excludedContainers:
-              type: array
-              items:
-                type: string
-            excludedImages:
-              type: array
-              items:
-                type: string
+        kind: EksContainerNoPrivilege
   targets:
     - target: admission.k8s.gatekeeper.sh
       rego: |
-        package eksnoprivilegeescalation
-
+        package ekscontainernoprivilege
+        
         import data.lib.exclude_container_image.is_excluded
 
         violation[{"msg": msg, "details": {}}] {
+            not input.review.object.spec.nodeSelector["kubernetes.io/os"] == "windows"
             c := input_containers[_]
             not input_container_excluded(c.name)
             not is_excluded(c)
-            input_allow_privilege_escalation(c)
-            msg := sprintf("Privilege escalation container is not allowed: %v", [c.name])
-        }
-
-        input_allow_privilege_escalation(c) {
-            c.securityContext.allowPrivilegeEscalation == true
-        }
-
-        input_allow_privilege_escalation(c) {
-            not c.securityContext.allowPrivilegeEscalation == false
-            c.securityContext.runAsUser != 0
-        }
-        
-        input_allow_privilege_escalation(c) {
-            not c.securityContext.allowPrivilegeEscalation == false
-            not c.securityContext.runAsUser
-            input.review.object.spec.securityContext.runAsUser != 0
+            c.securityContext.privileged
+            msg := sprintf("Privileged container is not allowed: %v, securityContext: %v", [c.name, c.securityContext])
         }
 
         input_containers[c] {
@@ -63,7 +40,6 @@ spec:
         input_container_excluded(field) {
             field == input.parameters.excludedContainers[_]
         }
-
       libs:
         - |
           package lib.exclude_container_image

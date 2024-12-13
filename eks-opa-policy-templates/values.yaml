@@ -1,0 +1,58 @@
+ekscontrolsensitivepermission:
+  defaultClusterRoles:
+    - "cluster-admin"
+    - "admin"
+    - "edit"
+    - "view"
+  eksClusterRoles:
+    - "aws-node"
+    - "eks:podsecuritypolicy:authenticated"
+    - "eks:fargate-scheduler"
+    - "aws-load-balancer-controller"
+    - "ebs-csi-controller-sa"
+    - "eks-vpc-cni"
+    - "cert-manager"
+    - "cluster-autoscaler"
+    - "external-dns"
+    - "aws-cloudwatch-metrics"
+    - "aws-for-fluent-bit"
+    - "aws-cloud-controller-manager"
+    - "aws-ebs-csi-driver"
+    - "aws-efs-csi-driver"
+    - "aws-fsx-csi-driver"
+    - "kube-proxy"
+    - "coredns"
+  gatekeeperRoles:
+    - "gatekeeper-manager-role"
+  sensitiveResources:
+    - "secrets"
+    - "configmaps"
+
+eksenforcesecretaccess:
+  defaultClusterRoles:
+    - "cluster-admin"
+    - "admin"
+    - "edit"
+    - "view"
+  eksClusterRoles:
+    - "aws-node"
+    - "eks:podsecuritypolicy:authenticated"
+    - "eks:fargate-scheduler"
+    - "aws-load-balancer-controller"
+    - "ebs-csi-controller-sa"
+    - "eks-vpc-cni"
+    - "cert-manager"
+    - "cluster-autoscaler"
+    - "external-dns"
+    - "aws-cloudwatch-metrics"
+    - "aws-for-fluent-bit"
+    - "aws-cloud-controller-manager"
+    - "aws-ebs-csi-driver"
+    - "aws-efs-csi-driver"
+    - "aws-fsx-csi-driver"
+    - "kube-proxy"
+    - "coredns"
+  gatekeeperRoles:
+    - "gatekeeper-manager-role"
+  allowedRoles:
+    # Add any additional custom roles that should have secret access

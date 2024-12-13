@@ -6,8 +6,7 @@ constraints:
     excludedImages: []
     labelSelector:
       matchLabels: {}
-
-
+      matchExpressions: []
 eksallowedcapabilitieseffect:
   exemptions:
     excludedContainers: []
@@ -16,41 +15,4 @@ eksallowedcapabilitieseffect:
     requiredDropCapabilities: []
     labelSelector:
       matchLabels: {}
-
-eksallowedimageseffect:
-  exemptions:
-    excludedNamespaces: []
-    allowedRegistries: []
-    labelSelector:
-      matchLabels: {}
-
-eksnoprivilegeescalationeffect:
-  exemptions:
-    excludedNamespaces: []
-    excludedContainers: []
-    excludedImages: []
-    labelSelector:
-      matchLabels: {}
-
-eksenforceprobeseffect:
-  exemptions:
-    excludedNamespaces: []
-    excludedContainers: []
-    excludedImages: []
-    enforceProbes: []
-    labelSelector:
-      matchLabels: {}
-
-eksblockwildcardroleseffect:
-  exemptions:
-    excludedNamespaces: []
-    whitelistedRoles: []
-    labelSelector:
-      matchLabels: {}
-
-eksblockdefaultnamespaceeffect:
-  exemptions:
-    excludedNamespaces: []
-    allowedResources: []
-    labelSelector:
-      matchLabels: {}
+      matchExpressions: []

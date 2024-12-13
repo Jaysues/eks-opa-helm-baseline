@@ -2,36 +2,72 @@ apiVersion: templates.gatekeeper.sh/v1beta1
 kind: ConstraintTemplate
 metadata:
   name: eksallowedimages
+  annotations:
+    description: "Controls allowed image registries and enforces image pull policies (CIS EKS 5.1)"
 spec:
   crd:
     spec:
       names:
-        kind: K8sAllowedImages
+        kind: EksAllowedImages
       validation:
         openAPIV3Schema:
           properties:
-            imageRegex:
-              type: string
-            excludedContainers:
+            allowedRegistries:
+              type: array
+              items:
+                type: string
+            requireDigests:
+              type: boolean
+            allowedPullPolicies:
+              type: array
+              items:
+                type: string
+            excludedNamespaces:
               type: array
               items:
                 type: string
   targets:
     - target: admission.k8s.gatekeeper.sh
       rego: |
-        package k8sallowedimages
+        package eksallowedimages
 
         violation[{"msg": msg}] {
           container := input_containers[_]
-          not input_container_excluded(container.name)
-          not regex.match(input.parameters.imageRegex, container.image)
-          msg := sprintf("Image <%v> for container <%v> does not match allowed registry pattern.", [container.image, container.name])
+          not allowed_registry(container.image)
+          msg := sprintf("Image %v comes from non-allowed registry", [container.image])
+        }
+
+        violation[{"msg": msg}] {
+          container := input_containers[_]
+          input.parameters.requireImagePullPolicy
+          not valid_pull_policy(container)
+          msg := sprintf("Container %v has invalid imagePullPolicy. Allowed policies: %v", [container.name, input.parameters.allowedPullPolicies])
+        }
+
+        violation[{"msg": msg}] {
+          container := input_containers[_]
+          input.parameters.requireDigests
+          not has_digest(container.image)
+          msg := sprintf("Image %v must specify a digest", [container.image])
+        }
+
+        has_digest(image) {
+          contains(image, "@sha256:")
+        }
+
+        allowed_registry(image) {
+          registry := input.parameters.allowedRegistries[_]
+          startswith(image, registry)
+        }
+
+        valid_pull_policy(container) {
+          allowed := input.parameters.allowedPullPolicies[_]
+          container.imagePullPolicy == allowed
         }
 
         input_containers[c] {
           c := input.review.object.spec.containers[_]
         }
-
-        input_container_excluded(name) {
-          name == input.parameters.excludedContainers[_]
+        input_containers[c] {
+          c := input.review.object.spec.initContainers[_]
         }
