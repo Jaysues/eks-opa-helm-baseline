@@ -1,15 +1,17 @@
 apiVersion: constraints.gatekeeper.sh/v1beta1
-kind: EksAllowedImages
+kind: EksNetworkPolicyExists
 metadata:
-  name: allowed-images
+  name: ensure-network-policy
+  annotations:
+    description: "Ensures namespaces have a NetworkPolicy defined"
 spec:
   enforcementAction: {{ .Values.constraints.enforcementAction | default "deny" }}
   match:
     kinds:
       - apiGroups: [""]
-        kinds: ["Pod"]
+        kinds: ["Namespace"]
     {{- $baselineNamespaces := .Values.baselines.excludedNamespaces | default list }}
-    {{- $customExemptions := .Values.constraints.eksallowedimages.exemptions | default dict }}
+    {{- $customExemptions := .Values.constraints.eksnetworkpolicyexists.exemptions | default dict }}
     {{- $customNamespaces := $customExemptions.excludedNamespaces | default list }}
     excludedNamespaces: {{ concat $baselineNamespaces $customNamespaces | toYaml | nindent 6 }}
     labelSelector:
@@ -23,9 +25,5 @@ spec:
         {{ toYaml $combinedMatchLabels | nindent 8 }}
       {{- end }}
   parameters:
-    {{- $allowedRegistries := $customExemptions.allowedRegistries | default list }}
-    allowedRegistries: {{ toYaml $allowedRegistries | nindent 6 }}
-    {{- $excludedContainers := $customExemptions.excludedContainers | default list }}
-    excludedContainers: {{ toYaml $excludedContainers | nindent 6 }}
-    {{- $excludedImages := $customExemptions.excludedImages | default list }}
-    excludedImages: {{ toYaml $excludedImages | nindent 6 }}
+    exemptWithAnnotation: "network.policy.skip/servicemesh"
+    exemptWithLabel: "network.policy.skip"

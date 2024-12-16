@@ -1,0 +1,27 @@
+constraints:
+  enforcementAction: "dryrun" # Default enforcement for development
+  exemptions:
+    excludedNamespaces: []
+    excludedContainers: []
+    excludedImages: []
+    labelSelector:
+      matchLabels: {}
+
+eksallowedcapabilities:
+  exemptions:
+    excludedContainers: []
+    excludedImages: []
+    allowedCapabilities: []
+    requiredDropCapabilities: []
+    labelSelector:
+      matchLabels: {}
+
+  ekscontainernoprivilege:
+    exemptions:
+      excludedNamespaces: []
+      excludedContainers: []
+      excludedImages: []
+      labelSelector:
+        matchLabels: {}
+        matchExpressions: []
+      items: []

@@ -3,18 +3,71 @@ kind: ConstraintTemplate
 metadata:
   name: ekscontainernoprivilege
   annotations:
-    description: "Controls privilege escalation in containers"
+    description: "Controls privilege escalation in containers (CIS EKS 5.2.1)"
 spec:
   crd:
     spec:
       names:
         kind: EksContainerNoPrivilege
+      validation:
+        openAPIV3Schema:
+          properties:
+            excludedContainers:
+              type: array
+              items:
+                type: string
+            excludedImages:
+              type: array
+              items:
+                type: string
+            excludedNamespaces:
+              type: array
+              items:
+                type: string
+            labelSelector:
+              type: object
+              properties:
+                matchLabels:
+                  type: object
+                  additionalProperties:
+                    type: string
+                matchExpressions:
+                  type: array
+                  items:
+                    type: object
+                    properties:
+                      key:
+                        type: string
+                      operator:
+                        type: string
+                        enum: ["In", "NotIn", "Exists", "DoesNotExist"]
+                      values:
+                        type: array
+                        items:
+                          type: string
   targets:
     - target: admission.k8s.gatekeeper.sh
       rego: |
         package ekscontainernoprivilege
         
-        import data.lib.exclude_container_image.is_excluded
+        is_excluded(container) {
+            exclude_images := object.get(object.get(input, "parameters", {}), "excludedImages", [])
+            img := container.image
+            some exclusion
+            exclusion = exclude_images[_]
+            _matches_exclusion(img, exclusion)
+        }
+
+        _matches_exclusion(img, exclusion) {
+            not endswith(exclusion, "*")
+            exclusion == img
+        }
+
+        _matches_exclusion(img, exclusion) {
+            endswith(exclusion, "*")
+            prefix := trim_suffix(exclusion, "*")
+            startswith(img, prefix)
+        }
 
         violation[{"msg": msg, "details": {}}] {
             not input.review.object.spec.nodeSelector["kubernetes.io/os"] == "windows"
@@ -40,21 +93,3 @@ spec:
         input_container_excluded(field) {
             field == input.parameters.excludedContainers[_]
         }
-      libs:
-        - |
-          package lib.exclude_container_image
-          is_excluded(container) {
-              exclude_images := object.get(object.get(input, "parameters", {}), "excludedImages", [])
-              img := container.image
-              exclusion := exclude_images[_]
-              _matches_exclusion(img, exclusion)
-          }
-          _matches_exclusion(img, exclusion) {
-              not endswith(exclusion, "*")
-              exclusion == img
-          }
-          _matches_exclusion(img, exclusion) {
-              endswith(exclusion, "*")
-              prefix := trim_suffix(exclusion, "*")
-              startswith(img, prefix)
-          }

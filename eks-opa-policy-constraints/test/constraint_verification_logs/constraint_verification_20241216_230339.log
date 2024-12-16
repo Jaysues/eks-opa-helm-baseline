@@ -1,0 +1,2698 @@
+[1;33mStarting constraint verification...[0m
+Timestamp: Mon 16 Dec 2024 23:03:39 AEDT
+----------------------------------------
+
+[0;32mListing all constraints:[0m
+NAME                                                            ENFORCEMENT-ACTION   TOTAL-VIOLATIONS
+eksadminaccess.constraints.gatekeeper.sh/admin-access-control   dryrun               0
+
+NAME                                                                    ENFORCEMENT-ACTION   TOTAL-VIOLATIONS
+eksallowedcapabilities.constraints.gatekeeper.sh/allowed-capabilities   dryrun               5
+
+NAME                                                        ENFORCEMENT-ACTION   TOTAL-VIOLATIONS
+eksallowedimages.constraints.gatekeeper.sh/allowed-images   dryrun               29
+
+NAME                                                                            ENFORCEMENT-ACTION   TOTAL-VIOLATIONS
+eksblockautomounttoken.constraints.gatekeeper.sh/disallow-automount-api-token   dryrun               22
+
+NAME                                                                         ENFORCEMENT-ACTION   TOTAL-VIOLATIONS
+eksblockdefaultnamespace.constraints.gatekeeper.sh/block-default-namespace   dryrun               0
+
+NAME                                                                               ENFORCEMENT-ACTION   TOTAL-VIOLATIONS
+ekscontainernoprivilege.constraints.gatekeeper.sh/disallow-privileged-containers   dryrun               0
+
+NAME                                                        ENFORCEMENT-ACTION   TOTAL-VIOLATIONS
+eksenforceprobes.constraints.gatekeeper.sh/enforce-probes   dryrun               0
+
+NAME                                                                     ENFORCEMENT-ACTION   TOTAL-VIOLATIONS
+eksenforcesecretaccess.constraints.gatekeeper.sh/enforce-secret-access   dryrun               66
+
+NAME                                                             ENFORCEMENT-ACTION   TOTAL-VIOLATIONS
+eksforbiddensysctl.constraints.gatekeeper.sh/forbidden-sysctls   dryrun               0
+
+NAME                                                                     ENFORCEMENT-ACTION   TOTAL-VIOLATIONS
+ekslimitsensitiveverbs.constraints.gatekeeper.sh/limit-sensitive-verbs   dryrun               4
+
+NAME                                                                 ENFORCEMENT-ACTION   TOTAL-VIOLATIONS
+eksminimisewildcard.constraints.gatekeeper.sh/block-wildcard-roles   dryrun               5
+
+NAME                                                            ENFORCEMENT-ACTION   TOTAL-VIOLATIONS
+eksmountedsecrets.constraints.gatekeeper.sh/eksmountedsecrets   dryrun               6
+
+NAME                                                                     ENFORCEMENT-ACTION   TOTAL-VIOLATIONS
+eksnetworkpolicyexists.constraints.gatekeeper.sh/ensure-network-policy   dryrun               8
+
+NAME                                                                         ENFORCEMENT-ACTION   TOTAL-VIOLATIONS
+eksnoprivilegeescalation.constraints.gatekeeper.sh/no-privilege-escalation   dryrun               4
+
+NAME                                                                 ENFORCEMENT-ACTION   TOTAL-VIOLATIONS
+ekspsphostfilesystem.constraints.gatekeeper.sh/psp-host-filesystem   dryrun               15
+
+NAME                                                               ENFORCEMENT-ACTION   TOTAL-VIOLATIONS
+ekspsphostnamespace.constraints.gatekeeper.sh/psp-host-namespace   dryrun               15
+
+NAME                                                                        ENFORCEMENT-ACTION   TOTAL-VIOLATIONS
+eksreadonlyfilesystem.constraints.gatekeeper.sh/read-only-root-filesystem   dryrun               5
+
+NAME                                                          ENFORCEMENT-ACTION   TOTAL-VIOLATIONS
+eksresourcelimits.constraints.gatekeeper.sh/resource-limits   dryrun               28
+
+NAME                                                                 ENFORCEMENT-ACTION   TOTAL-VIOLATIONS
+eksrestrictdefaultsa.constraints.gatekeeper.sh/restrict-default-sa   dryrun               0
+
+[0;32mChecking constraint status:[0m
+NAME                             STATUS   ENFORCEMENT
+admin-access-control             0        dryrun
+allowed-capabilities             5        dryrun
+allowed-images                   29       dryrun
+disallow-automount-api-token     22       dryrun
+block-default-namespace          0        dryrun
+disallow-privileged-containers   0        dryrun
+enforce-probes                   0        dryrun
+enforce-secret-access            66       dryrun
+forbidden-sysctls                0        dryrun
+limit-sensitive-verbs            4        dryrun
+block-wildcard-roles             5        dryrun
+eksmountedsecrets                6        dryrun
+ensure-network-policy            8        dryrun
+no-privilege-escalation          4        dryrun
+psp-host-filesystem              15       dryrun
+psp-host-namespace               15       dryrun
+read-only-root-filesystem        5        dryrun
+resource-limits                  28       dryrun
+restrict-default-sa              0        dryrun
+
+[0;32mDetailed constraint verification:[0m
+
+[1;33mVerifying eksadminaccess.constraints.gatekeeper.sh/admin-access-control:[0m
+Enforcement Action: dryrun
+Excluded Namespaces:
+[
+  "kube-system",
+  "amazon-cloudwatch",
+  "gatekeeper-system",
+  "amazon-guardduty"
+]
+Parameters:
+{}
+Status:
+{
+  "auditTimestamp": "2024-12-16T12:03:17Z",
+  "byPod": [
+    {
+      "constraintUID": "503ce822-cb55-4ae6-9cc9-ddb446567285",
+      "enforced": true,
+      "id": "gatekeeper-audit-6bbc9cc955-r5259",
+      "observedGeneration": 1,
+      "operations": [
+        "audit",
+        "generate",
+        "mutation-status",
+        "status"
+      ]
+    },
+    {
+      "constraintUID": "503ce822-cb55-4ae6-9cc9-ddb446567285",
+      "enforced": true,
+      "id": "gatekeeper-controller-manager-7d7f66bf68-lf9l5",
+      "observedGeneration": 1,
+      "operations": [
+        "mutation-webhook",
+        "webhook"
+      ]
+    },
+    {
+      "constraintUID": "503ce822-cb55-4ae6-9cc9-ddb446567285",
+      "enforced": true,
+      "id": "gatekeeper-controller-manager-7d7f66bf68-t4bh6",
+      "observedGeneration": 1,
+      "operations": [
+        "mutation-webhook",
+        "webhook"
+      ]
+    },
+    {
+      "constraintUID": "503ce822-cb55-4ae6-9cc9-ddb446567285",
+      "enforced": true,
+      "id": "gatekeeper-controller-manager-7d7f66bf68-tgzpr",
+      "observedGeneration": 1,
+      "operations": [
+        "mutation-webhook",
+        "webhook"
+      ]
+    }
+  ],
+  "totalViolations": 0
+}
+----------------------------------------
+
+[1;33mVerifying eksallowedcapabilities.constraints.gatekeeper.sh/allowed-capabilities:[0m
+Enforcement Action: dryrun
+Excluded Namespaces:
+[
+  "kube-system",
+  "amazon-cloudwatch",
+  "gatekeeper-system",
+  "amazon-guardduty"
+]
+Parameters:
+{
+  "allowedCapabilities": [],
+  "excludedContainers": [],
+  "excludedImages": [],
+  "requiredDropCapabilities": []
+}
+Status:
+{
+  "auditTimestamp": "2024-12-16T12:03:17Z",
+  "byPod": [
+    {
+      "constraintUID": "d28aab99-4e8b-4df9-b6dd-00e173f4b698",
+      "enforced": true,
+      "id": "gatekeeper-audit-6bbc9cc955-r5259",
+      "observedGeneration": 1,
+      "operations": [
+        "audit",
+        "generate",
+        "mutation-status",
+        "status"
+      ]
+    },
+    {
+      "constraintUID": "d28aab99-4e8b-4df9-b6dd-00e173f4b698",
+      "enforced": true,
+      "id": "gatekeeper-controller-manager-7d7f66bf68-lf9l5",
+      "observedGeneration": 1,
+      "operations": [
+        "mutation-webhook",
+        "webhook"
+      ]
+    },
+    {
+      "constraintUID": "d28aab99-4e8b-4df9-b6dd-00e173f4b698",
+      "enforced": true,
+      "id": "gatekeeper-controller-manager-7d7f66bf68-t4bh6",
+      "observedGeneration": 1,
+      "operations": [
+        "mutation-webhook",
+        "webhook"
+      ]
+    },
+    {
+      "constraintUID": "d28aab99-4e8b-4df9-b6dd-00e173f4b698",
+      "enforced": true,
+      "id": "gatekeeper-controller-manager-7d7f66bf68-tgzpr",
+      "observedGeneration": 1,
+      "operations": [
+        "mutation-webhook",
+        "webhook"
+      ]
+    }
+  ],
+  "totalViolations": 5,
+  "violations": [
+    {
+      "enforcementAction": "dryrun",
+      "group": "",
+      "kind": "Pod",
+      "message": "Container <speaker> has disallowed capabilities. Allowed capabilities are []",
+      "name": "speaker-xq8fb",
+      "namespace": "metallb-system",
+      "version": "v1"
+    },
+    {
+      "enforcementAction": "dryrun",
+      "group": "",
+      "kind": "Pod",
+      "message": "Container <speaker> has disallowed capabilities. Allowed capabilities are []",
+      "name": "speaker-t44xg",
+      "namespace": "metallb-system",
+      "version": "v1"
+    },
+    {
+      "enforcementAction": "dryrun",
+      "group": "",
+      "kind": "Pod",
+      "message": "Container <speaker> has disallowed capabilities. Allowed capabilities are []",
+      "name": "speaker-s6wzs",
+      "namespace": "metallb-system",
+      "version": "v1"
+    },
+    {
+      "enforcementAction": "dryrun",
+      "group": "",
+      "kind": "Pod",
+      "message": "Container <speaker> has disallowed capabilities. Allowed capabilities are []",
+      "name": "speaker-f8wrb",
+      "namespace": "metallb-system",
+      "version": "v1"
+    },
+    {
+      "enforcementAction": "dryrun",
+      "group": "",
+      "kind": "Pod",
+      "message": "Container <speaker> has disallowed capabilities. Allowed capabilities are []",
+      "name": "speaker-5rqln",
+      "namespace": "metallb-system",
+      "version": "v1"
+    }
+  ]
+}
+----------------------------------------
+
+[1;33mVerifying eksallowedimages.constraints.gatekeeper.sh/allowed-images:[0m
+Enforcement Action: dryrun
+Excluded Namespaces:
+[
+  "kube-system",
+  "amazon-cloudwatch",
+  "gatekeeper-system",
+  "amazon-guardduty"
+]
+Parameters:
+{
+  "allowedRegistries": [],
+  "excludedContainers": [],
+  "excludedImages": []
+}
+Status:
+{
+  "auditTimestamp": "2024-12-16T12:03:17Z",
+  "byPod": [
+    {
+      "constraintUID": "649b7e0d-c3ed-4ede-9d02-f8a0dc5fae63",
+      "enforced": true,
+      "id": "gatekeeper-audit-6bbc9cc955-r5259",
+      "observedGeneration": 1,
+      "operations": [
+        "audit",
+        "generate",
+        "mutation-status",
+        "status"
+      ]
+    },
+    {
+      "constraintUID": "649b7e0d-c3ed-4ede-9d02-f8a0dc5fae63",
+      "enforced": true,
+      "id": "gatekeeper-controller-manager-7d7f66bf68-lf9l5",
+      "observedGeneration": 1,
+      "operations": [
+        "mutation-webhook",
+        "webhook"
+      ]
+    },
+    {
+      "constraintUID": "649b7e0d-c3ed-4ede-9d02-f8a0dc5fae63",
+      "enforced": true,
+      "id": "gatekeeper-controller-manager-7d7f66bf68-t4bh6",
+      "observedGeneration": 1,
+      "operations": [
+        "mutation-webhook",
+        "webhook"
+      ]
+    },
+    {
+      "constraintUID": "649b7e0d-c3ed-4ede-9d02-f8a0dc5fae63",
+      "enforced": true,
+      "id": "gatekeeper-controller-manager-7d7f66bf68-tgzpr",
+      "observedGeneration": 1,
+      "operations": [
+        "mutation-webhook",
+        "webhook"
+      ]
+    }
+  ],
+  "totalViolations": 29,
+  "violations": [
+    {
+      "enforcementAction": "dryrun",
+      "group": "",
+      "kind": "Pod",
+      "message": "Image registry.k8s.io/kube-state-metrics/kube-state-metrics:v2.14.0 comes from non-allowed registry",
+      "name": "prometheus-kube-state-metrics-86969d697f-xpjnd",
+      "namespace": "monitoring",
+      "version": "v1"
+    },
+    {
+      "enforcementAction": "dryrun",
+      "group": "",
+      "kind": "Pod",
+      "message": "Image quay.io/prometheus/alertmanager:v0.27.0 comes from non-allowed registry",
+      "name": "prometheus-alertmanager-0",
+      "namespace": "monitoring",
+      "version": "v1"
+    },
+    {
+      "enforcementAction": "dryrun",
+      "group": "",
+      "kind": "Pod",
+      "message": "Image docker.io/grafana/grafana:11.4.0 comes from non-allowed registry",
+      "name": "grafana-5b9b7bc6df-ggwt7",
+      "namespace": "monitoring",
+      "version": "v1"
+    },
+    {
+      "enforcementAction": "dryrun",
+      "group": "",
+      "kind": "Pod",
+      "message": "Image quay.io/metallb/speaker:v0.14.8 comes from non-allowed registry",
+      "name": "speaker-xq8fb",
+      "namespace": "metallb-system",
+      "version": "v1"
+    },
+    {
+      "enforcementAction": "dryrun",
+      "group": "",
+      "kind": "Pod",
+      "message": "Image quay.io/metallb/speaker:v0.14.8 comes from non-allowed registry",
+      "name": "speaker-t44xg",
+      "namespace": "metallb-system",
+      "version": "v1"
+    },
+    {
+      "enforcementAction": "dryrun",
+      "group": "",
+      "kind": "Pod",
+      "message": "Image quay.io/metallb/speaker:v0.14.8 comes from non-allowed registry",
+      "name": "speaker-s6wzs",
+      "namespace": "metallb-system",
+      "version": "v1"
+    },
+    {
+      "enforcementAction": "dryrun",
+      "group": "",
+      "kind": "Pod",
+      "message": "Image quay.io/metallb/speaker:v0.14.8 comes from non-allowed registry",
+      "name": "speaker-f8wrb",
+      "namespace": "metallb-system",
+      "version": "v1"
+    },
+    {
+      "enforcementAction": "dryrun",
+      "group": "",
+      "kind": "Pod",
+      "message": "Image quay.io/metallb/speaker:v0.14.8 comes from non-allowed registry",
+      "name": "speaker-5rqln",
+      "namespace": "metallb-system",
+      "version": "v1"
+    },
+    {
+      "enforcementAction": "dryrun",
+      "group": "",
+      "kind": "Pod",
+      "message": "Image quay.io/metallb/controller:v0.14.8 comes from non-allowed registry",
+      "name": "controller-6dd967fdc7-f7tkz",
+      "namespace": "metallb-system",
+      "version": "v1"
+    },
+    {
+      "enforcementAction": "dryrun",
+      "group": "",
+      "kind": "Pod",
+      "message": "Image quay.io/jetstack/cert-manager-webhook:v1.16.2 comes from non-allowed registry",
+      "name": "cert-manager-webhook-b8cdf84f-l9hn6",
+      "namespace": "cert-manager",
+      "version": "v1"
+    },
+    {
+      "enforcementAction": "dryrun",
+      "group": "",
+      "kind": "Pod",
+      "message": "Image quay.io/jetstack/cert-manager-cainjector:v1.16.2 comes from non-allowed registry",
+      "name": "cert-manager-cainjector-6687cc685b-h56lq",
+      "namespace": "cert-manager",
+      "version": "v1"
+    },
+    {
+      "enforcementAction": "dryrun",
+      "group": "",
+      "kind": "Pod",
+      "message": "Image quay.io/jetstack/cert-manager-controller:v1.16.2 comes from non-allowed registry",
+      "name": "cert-manager-974688dfd-s46l4",
+      "namespace": "cert-manager",
+      "version": "v1"
+    },
+    {
+      "enforcementAction": "dryrun",
+      "group": "",
+      "kind": "Pod",
+      "message": "Image quay.io/argoproj/argocd:v2.13.2 comes from non-allowed registry",
+      "name": "argocd-server-6b4bf5c579-86q85",
+      "namespace": "argocd",
+      "version": "v1"
+    },
+    {
+      "enforcementAction": "dryrun",
+      "group": "",
+      "kind": "Pod",
+      "message": "Image quay.io/argoproj/argocd:v2.13.2 comes from non-allowed registry",
+      "name": "argocd-repo-server-96fc4895b-5gq5n",
+      "namespace": "argocd",
+      "version": "v1"
+    },
+    {
+      "enforcementAction": "dryrun",
+      "group": "",
+      "kind": "Pod",
+      "message": "Image public.ecr.aws/docker/library/redis:7.4.1-alpine comes from non-allowed registry",
+      "name": "argocd-redis-5c67786686-sg4wg",
+      "namespace": "argocd",
+      "version": "v1"
+    },
+    {
+      "enforcementAction": "dryrun",
+      "group": "",
+      "kind": "Pod",
+      "message": "Image quay.io/argoproj/argocd:v2.13.2 comes from non-allowed registry",
+      "name": "argocd-notifications-controller-764b9d6597-x4mwb",
+      "namespace": "argocd",
+      "version": "v1"
+    },
+    {
+      "enforcementAction": "dryrun",
+      "group": "",
+      "kind": "Pod",
+      "message": "Image quay.io/argoproj/argocd:v2.13.2 comes from non-allowed registry",
+      "name": "argocd-dex-server-7999ccc6f8-hn24l",
+      "namespace": "argocd",
+      "version": "v1"
+    },
+    {
+      "enforcementAction": "dryrun",
+      "group": "",
+      "kind": "Pod",
+      "message": "Image ghcr.io/dexidp/dex:v2.41.1 comes from non-allowed registry",
+      "name": "argocd-dex-server-7999ccc6f8-hn24l",
+      "namespace": "argocd",
+      "version": "v1"
+    },
+    {
+      "enforcementAction": "dryrun",
+      "group": "",
+      "kind": "Pod",
+      "message": "Image quay.io/argoproj/argocd:v2.13.2 comes from non-allowed registry",
+      "name": "argocd-applicationset-controller-5cd9fdc649-cnzn2",
+      "namespace": "argocd",
+      "version": "v1"
+    },
+    {
+      "enforcementAction": "dryrun",
+      "group": "",
+      "kind": "Pod",
+      "message": "Image quay.io/argoproj/argocd:v2.13.2 comes from non-allowed registry",
+      "name": "argocd-application-controller-0",
+      "namespace": "argocd",
+      "version": "v1"
+    }
+  ]
+}
+----------------------------------------
+
+[1;33mVerifying eksblockautomounttoken.constraints.gatekeeper.sh/disallow-automount-api-token:[0m
+Enforcement Action: dryrun
+Excluded Namespaces:
+[
+  "kube-system",
+  "amazon-cloudwatch",
+  "gatekeeper-system",
+  "amazon-guardduty"
+]
+Parameters:
+{
+  "excludedImages": []
+}
+Status:
+{
+  "auditTimestamp": "2024-12-16T12:03:17Z",
+  "byPod": [
+    {
+      "constraintUID": "66986162-fb42-40c2-8680-3fe7177cc3a1",
+      "enforced": true,
+      "id": "gatekeeper-audit-6bbc9cc955-r5259",
+      "observedGeneration": 1,
+      "operations": [
+        "audit",
+        "generate",
+        "mutation-status",
+        "status"
+      ]
+    },
+    {
+      "constraintUID": "66986162-fb42-40c2-8680-3fe7177cc3a1",
+      "enforced": true,
+      "id": "gatekeeper-controller-manager-7d7f66bf68-lf9l5",
+      "observedGeneration": 1,
+      "operations": [
+        "mutation-webhook",
+        "webhook"
+      ]
+    },
+    {
+      "constraintUID": "66986162-fb42-40c2-8680-3fe7177cc3a1",
+      "enforced": true,
+      "id": "gatekeeper-controller-manager-7d7f66bf68-t4bh6",
+      "observedGeneration": 1,
+      "operations": [
+        "mutation-webhook",
+        "webhook"
+      ]
+    },
+    {
+      "constraintUID": "66986162-fb42-40c2-8680-3fe7177cc3a1",
+      "enforced": true,
+      "id": "gatekeeper-controller-manager-7d7f66bf68-tgzpr",
+      "observedGeneration": 1,
+      "operations": [
+        "mutation-webhook",
+        "webhook"
+      ]
+    }
+  ],
+  "totalViolations": 22,
+  "violations": [
+    {
+      "enforcementAction": "dryrun",
+      "group": "",
+      "kind": "Pod",
+      "message": "Automounting service account token is disallowed, pod: prometheus-prometheus-pushgateway-85b7d9fbfc-vzcb8",
+      "name": "prometheus-prometheus-pushgateway-85b7d9fbfc-vzcb8",
+      "namespace": "monitoring",
+      "version": "v1"
+    },
+    {
+      "enforcementAction": "dryrun",
+      "group": "",
+      "kind": "Pod",
+      "message": "Automounting service account token is disallowed, pod: prometheus-kube-state-metrics-86969d697f-xpjnd",
+      "name": "prometheus-kube-state-metrics-86969d697f-xpjnd",
+      "namespace": "monitoring",
+      "version": "v1"
+    },
+    {
+      "enforcementAction": "dryrun",
+      "group": "",
+      "kind": "Pod",
+      "message": "Automounting service account token is disallowed, pod: prometheus-alertmanager-0",
+      "name": "prometheus-alertmanager-0",
+      "namespace": "monitoring",
+      "version": "v1"
+    },
+    {
+      "enforcementAction": "dryrun",
+      "group": "",
+      "kind": "Pod",
+      "message": "Automounting service account token is disallowed, pod: grafana-5b9b7bc6df-ggwt7",
+      "name": "grafana-5b9b7bc6df-ggwt7",
+      "namespace": "monitoring",
+      "version": "v1"
+    },
+    {
+      "enforcementAction": "dryrun",
+      "group": "",
+      "kind": "Pod",
+      "message": "Automounting service account token is disallowed, pod: speaker-xq8fb",
+      "name": "speaker-xq8fb",
+      "namespace": "metallb-system",
+      "version": "v1"
+    },
+    {
+      "enforcementAction": "dryrun",
+      "group": "",
+      "kind": "Pod",
+      "message": "Automounting service account token is disallowed, pod: speaker-t44xg",
+      "name": "speaker-t44xg",
+      "namespace": "metallb-system",
+      "version": "v1"
+    },
+    {
+      "enforcementAction": "dryrun",
+      "group": "",
+      "kind": "Pod",
+      "message": "Automounting service account token is disallowed, pod: speaker-s6wzs",
+      "name": "speaker-s6wzs",
+      "namespace": "metallb-system",
+      "version": "v1"
+    },
+    {
+      "enforcementAction": "dryrun",
+      "group": "",
+      "kind": "Pod",
+      "message": "Automounting service account token is disallowed, pod: speaker-f8wrb",
+      "name": "speaker-f8wrb",
+      "namespace": "metallb-system",
+      "version": "v1"
+    },
+    {
+      "enforcementAction": "dryrun",
+      "group": "",
+      "kind": "Pod",
+      "message": "Automounting service account token is disallowed, pod: speaker-5rqln",
+      "name": "speaker-5rqln",
+      "namespace": "metallb-system",
+      "version": "v1"
+    },
+    {
+      "enforcementAction": "dryrun",
+      "group": "",
+      "kind": "Pod",
+      "message": "Automounting service account token is disallowed, pod: controller-6dd967fdc7-f7tkz",
+      "name": "controller-6dd967fdc7-f7tkz",
+      "namespace": "metallb-system",
+      "version": "v1"
+    },
+    {
+      "enforcementAction": "dryrun",
+      "group": "",
+      "kind": "Pod",
+      "message": "Automounting service account token is disallowed, pod: cert-manager-webhook-b8cdf84f-l9hn6",
+      "name": "cert-manager-webhook-b8cdf84f-l9hn6",
+      "namespace": "cert-manager",
+      "version": "v1"
+    },
+    {
+      "enforcementAction": "dryrun",
+      "group": "",
+      "kind": "Pod",
+      "message": "Automounting service account token is disallowed, pod: cert-manager-cainjector-6687cc685b-h56lq",
+      "name": "cert-manager-cainjector-6687cc685b-h56lq",
+      "namespace": "cert-manager",
+      "version": "v1"
+    },
+    {
+      "enforcementAction": "dryrun",
+      "group": "",
+      "kind": "Pod",
+      "message": "Automounting service account token is disallowed, pod: cert-manager-974688dfd-s46l4",
+      "name": "cert-manager-974688dfd-s46l4",
+      "namespace": "cert-manager",
+      "version": "v1"
+    },
+    {
+      "enforcementAction": "dryrun",
+      "group": "",
+      "kind": "Pod",
+      "message": "Automounting service account token is disallowed, pod: argocd-server-6b4bf5c579-86q85",
+      "name": "argocd-server-6b4bf5c579-86q85",
+      "namespace": "argocd",
+      "version": "v1"
+    },
+    {
+      "enforcementAction": "dryrun",
+      "group": "",
+      "kind": "Pod",
+      "message": "Automounting service account token is disallowed, pod: argocd-repo-server-96fc4895b-5gq5n",
+      "name": "argocd-repo-server-96fc4895b-5gq5n",
+      "namespace": "argocd",
+      "version": "v1"
+    },
+    {
+      "enforcementAction": "dryrun",
+      "group": "",
+      "kind": "Pod",
+      "message": "Automounting service account token is disallowed, pod: argocd-redis-5c67786686-sg4wg",
+      "name": "argocd-redis-5c67786686-sg4wg",
+      "namespace": "argocd",
+      "version": "v1"
+    },
+    {
+      "enforcementAction": "dryrun",
+      "group": "",
+      "kind": "Pod",
+      "message": "Automounting service account token is disallowed, pod: argocd-notifications-controller-764b9d6597-x4mwb",
+      "name": "argocd-notifications-controller-764b9d6597-x4mwb",
+      "namespace": "argocd",
+      "version": "v1"
+    },
+    {
+      "enforcementAction": "dryrun",
+      "group": "",
+      "kind": "Pod",
+      "message": "Automounting service account token is disallowed, pod: argocd-dex-server-7999ccc6f8-hn24l",
+      "name": "argocd-dex-server-7999ccc6f8-hn24l",
+      "namespace": "argocd",
+      "version": "v1"
+    },
+    {
+      "enforcementAction": "dryrun",
+      "group": "",
+      "kind": "Pod",
+      "message": "Automounting service account token is disallowed, pod: argocd-applicationset-controller-5cd9fdc649-cnzn2",
+      "name": "argocd-applicationset-controller-5cd9fdc649-cnzn2",
+      "namespace": "argocd",
+      "version": "v1"
+    },
+    {
+      "enforcementAction": "dryrun",
+      "group": "",
+      "kind": "Pod",
+      "message": "Automounting service account token is disallowed, pod: argocd-application-controller-0",
+      "name": "argocd-application-controller-0",
+      "namespace": "argocd",
+      "version": "v1"
+    }
+  ]
+}
+----------------------------------------
+
+[1;33mVerifying eksblockdefaultnamespace.constraints.gatekeeper.sh/block-default-namespace:[0m
+Enforcement Action: dryrun
+Excluded Namespaces:
+[
+  "kube-system",
+  "amazon-cloudwatch",
+  "gatekeeper-system",
+  "amazon-guardduty"
+]
+Parameters:
+{
+  "allowedResources": []
+}
+Status:
+{
+  "auditTimestamp": "2024-12-16T12:03:17Z",
+  "byPod": [
+    {
+      "constraintUID": "8c12af0a-c729-46e6-ada4-e17ba4de4f9e",
+      "enforced": true,
+      "id": "gatekeeper-audit-6bbc9cc955-r5259",
+      "observedGeneration": 1,
+      "operations": [
+        "audit",
+        "generate",
+        "mutation-status",
+        "status"
+      ]
+    },
+    {
+      "constraintUID": "8c12af0a-c729-46e6-ada4-e17ba4de4f9e",
+      "enforced": true,
+      "id": "gatekeeper-controller-manager-7d7f66bf68-lf9l5",
+      "observedGeneration": 1,
+      "operations": [
+        "mutation-webhook",
+        "webhook"
+      ]
+    },
+    {
+      "constraintUID": "8c12af0a-c729-46e6-ada4-e17ba4de4f9e",
+      "enforced": true,
+      "id": "gatekeeper-controller-manager-7d7f66bf68-t4bh6",
+      "observedGeneration": 1,
+      "operations": [
+        "mutation-webhook",
+        "webhook"
+      ]
+    },
+    {
+      "constraintUID": "8c12af0a-c729-46e6-ada4-e17ba4de4f9e",
+      "enforced": true,
+      "id": "gatekeeper-controller-manager-7d7f66bf68-tgzpr",
+      "observedGeneration": 1,
+      "operations": [
+        "mutation-webhook",
+        "webhook"
+      ]
+    }
+  ],
+  "totalViolations": 0
+}
+----------------------------------------
+
+[1;33mVerifying ekscontainernoprivilege.constraints.gatekeeper.sh/disallow-privileged-containers:[0m
+Enforcement Action: dryrun
+Excluded Namespaces:
+[
+  "kube-system",
+  "amazon-cloudwatch",
+  "gatekeeper-system",
+  "amazon-guardduty"
+]
+Parameters:
+{
+  "excludedContainers": [],
+  "excludedImages": []
+}
+Status:
+{
+  "auditTimestamp": "2024-12-16T12:03:17Z",
+  "byPod": [
+    {
+      "constraintUID": "a41c107e-b90b-4bcf-99a3-794dd2cd3f11",
+      "enforced": true,
+      "id": "gatekeeper-audit-6bbc9cc955-r5259",
+      "observedGeneration": 1,
+      "operations": [
+        "audit",
+        "generate",
+        "mutation-status",
+        "status"
+      ]
+    },
+    {
+      "constraintUID": "a41c107e-b90b-4bcf-99a3-794dd2cd3f11",
+      "enforced": true,
+      "id": "gatekeeper-controller-manager-7d7f66bf68-lf9l5",
+      "observedGeneration": 1,
+      "operations": [
+        "mutation-webhook",
+        "webhook"
+      ]
+    },
+    {
+      "constraintUID": "a41c107e-b90b-4bcf-99a3-794dd2cd3f11",
+      "enforced": true,
+      "id": "gatekeeper-controller-manager-7d7f66bf68-t4bh6",
+      "observedGeneration": 1,
+      "operations": [
+        "mutation-webhook",
+        "webhook"
+      ]
+    },
+    {
+      "constraintUID": "a41c107e-b90b-4bcf-99a3-794dd2cd3f11",
+      "enforced": true,
+      "id": "gatekeeper-controller-manager-7d7f66bf68-tgzpr",
+      "observedGeneration": 1,
+      "operations": [
+        "mutation-webhook",
+        "webhook"
+      ]
+    }
+  ],
+  "totalViolations": 0
+}
+----------------------------------------
+
+[1;33mVerifying eksenforceprobes.constraints.gatekeeper.sh/enforce-probes:[0m
+Enforcement Action: dryrun
+Excluded Namespaces:
+[
+  "kube-system",
+  "amazon-cloudwatch",
+  "gatekeeper-system",
+  "amazon-guardduty"
+]
+Parameters:
+{
+  "enforceProbes": [],
+  "excludedContainers": [],
+  "excludedImages": []
+}
+Status:
+{
+  "auditTimestamp": "2024-12-16T12:03:17Z",
+  "byPod": [
+    {
+      "constraintUID": "634472c4-06fb-4007-a953-ba71d9985703",
+      "enforced": true,
+      "id": "gatekeeper-audit-6bbc9cc955-r5259",
+      "observedGeneration": 1,
+      "operations": [
+        "audit",
+        "generate",
+        "mutation-status",
+        "status"
+      ]
+    },
+    {
+      "constraintUID": "634472c4-06fb-4007-a953-ba71d9985703",
+      "enforced": true,
+      "id": "gatekeeper-controller-manager-7d7f66bf68-lf9l5",
+      "observedGeneration": 1,
+      "operations": [
+        "mutation-webhook",
+        "webhook"
+      ]
+    },
+    {
+      "constraintUID": "634472c4-06fb-4007-a953-ba71d9985703",
+      "enforced": true,
+      "id": "gatekeeper-controller-manager-7d7f66bf68-t4bh6",
+      "observedGeneration": 1,
+      "operations": [
+        "mutation-webhook",
+        "webhook"
+      ]
+    },
+    {
+      "constraintUID": "634472c4-06fb-4007-a953-ba71d9985703",
+      "enforced": true,
+      "id": "gatekeeper-controller-manager-7d7f66bf68-tgzpr",
+      "observedGeneration": 1,
+      "operations": [
+        "mutation-webhook",
+        "webhook"
+      ]
+    }
+  ],
+  "totalViolations": 0
+}
+----------------------------------------
+
+[1;33mVerifying eksenforcesecretaccess.constraints.gatekeeper.sh/enforce-secret-access:[0m
+Enforcement Action: dryrun
+Excluded Namespaces:
+[
+  "kube-system",
+  "amazon-cloudwatch",
+  "gatekeeper-system",
+  "amazon-guardduty"
+]
+Parameters:
+{
+  "excludedRoles": []
+}
+Status:
+{
+  "auditTimestamp": "2024-12-16T12:03:17Z",
+  "byPod": [
+    {
+      "constraintUID": "0abc725f-6678-4f3a-9140-069d000ec41e",
+      "enforced": true,
+      "id": "gatekeeper-audit-6bbc9cc955-r5259",
+      "observedGeneration": 1,
+      "operations": [
+        "audit",
+        "generate",
+        "mutation-status",
+        "status"
+      ]
+    },
+    {
+      "constraintUID": "0abc725f-6678-4f3a-9140-069d000ec41e",
+      "enforced": true,
+      "id": "gatekeeper-controller-manager-7d7f66bf68-lf9l5",
+      "observedGeneration": 1,
+      "operations": [
+        "mutation-webhook",
+        "webhook"
+      ]
+    },
+    {
+      "constraintUID": "0abc725f-6678-4f3a-9140-069d000ec41e",
+      "enforced": true,
+      "id": "gatekeeper-controller-manager-7d7f66bf68-t4bh6",
+      "observedGeneration": 1,
+      "operations": [
+        "mutation-webhook",
+        "webhook"
+      ]
+    },
+    {
+      "constraintUID": "0abc725f-6678-4f3a-9140-069d000ec41e",
+      "enforced": true,
+      "id": "gatekeeper-controller-manager-7d7f66bf68-tgzpr",
+      "observedGeneration": 1,
+      "operations": [
+        "mutation-webhook",
+        "webhook"
+      ]
+    }
+  ],
+  "totalViolations": 66,
+  "violations": [
+    {
+      "enforcementAction": "dryrun",
+      "group": "rbac.authorization.k8s.io",
+      "kind": "ClusterRole",
+      "message": "Role 'cert-manager-controller-issuers' has sensitive access (list) to secrets",
+      "name": "cert-manager-controller-issuers",
+      "version": "v1"
+    },
+    {
+      "enforcementAction": "dryrun",
+      "group": "rbac.authorization.k8s.io",
+      "kind": "ClusterRole",
+      "message": "Role 'cert-manager-controller-issuers' has sensitive access (get) to secrets",
+      "name": "cert-manager-controller-issuers",
+      "version": "v1"
+    },
+    {
+      "enforcementAction": "dryrun",
+      "group": "rbac.authorization.k8s.io",
+      "kind": "ClusterRole",
+      "message": "Role 'cert-manager-controller-clusterissuers' has sensitive access (watch) to secrets",
+      "name": "cert-manager-controller-clusterissuers",
+      "version": "v1"
+    },
+    {
+      "enforcementAction": "dryrun",
+      "group": "rbac.authorization.k8s.io",
+      "kind": "ClusterRole",
+      "message": "Role 'cert-manager-controller-clusterissuers' has sensitive access (list) to secrets",
+      "name": "cert-manager-controller-clusterissuers",
+      "version": "v1"
+    },
+    {
+      "enforcementAction": "dryrun",
+      "group": "rbac.authorization.k8s.io",
+      "kind": "ClusterRole",
+      "message": "Role 'cert-manager-controller-clusterissuers' has sensitive access (get) to secrets",
+      "name": "cert-manager-controller-clusterissuers",
+      "version": "v1"
+    },
+    {
+      "enforcementAction": "dryrun",
+      "group": "rbac.authorization.k8s.io",
+      "kind": "ClusterRole",
+      "message": "Role 'cert-manager-controller-challenges' has sensitive access (watch) to secrets",
+      "name": "cert-manager-controller-challenges",
+      "version": "v1"
+    },
+    {
+      "enforcementAction": "dryrun",
+      "group": "rbac.authorization.k8s.io",
+      "kind": "ClusterRole",
+      "message": "Role 'cert-manager-controller-challenges' has sensitive access (list) to secrets",
+      "name": "cert-manager-controller-challenges",
+      "version": "v1"
+    },
+    {
+      "enforcementAction": "dryrun",
+      "group": "rbac.authorization.k8s.io",
+      "kind": "ClusterRole",
+      "message": "Role 'cert-manager-controller-challenges' has sensitive access (get) to secrets",
+      "name": "cert-manager-controller-challenges",
+      "version": "v1"
+    },
+    {
+      "enforcementAction": "dryrun",
+      "group": "rbac.authorization.k8s.io",
+      "kind": "ClusterRole",
+      "message": "Role 'cert-manager-controller-certificates' has sensitive access (watch) to secrets",
+      "name": "cert-manager-controller-certificates",
+      "version": "v1"
+    },
+    {
+      "enforcementAction": "dryrun",
+      "group": "rbac.authorization.k8s.io",
+      "kind": "ClusterRole",
+      "message": "Role 'cert-manager-controller-certificates' has sensitive access (list) to secrets",
+      "name": "cert-manager-controller-certificates",
+      "version": "v1"
+    },
+    {
+      "enforcementAction": "dryrun",
+      "group": "rbac.authorization.k8s.io",
+      "kind": "ClusterRole",
+      "message": "Role 'cert-manager-controller-certificates' has sensitive access (get) to secrets",
+      "name": "cert-manager-controller-certificates",
+      "version": "v1"
+    },
+    {
+      "enforcementAction": "dryrun",
+      "group": "rbac.authorization.k8s.io",
+      "kind": "ClusterRole",
+      "message": "Role 'cert-manager-cainjector' has sensitive access (watch) to secrets",
+      "name": "cert-manager-cainjector",
+      "version": "v1"
+    },
+    {
+      "enforcementAction": "dryrun",
+      "group": "rbac.authorization.k8s.io",
+      "kind": "ClusterRole",
+      "message": "Role 'cert-manager-cainjector' has sensitive access (list) to secrets",
+      "name": "cert-manager-cainjector",
+      "version": "v1"
+    },
+    {
+      "enforcementAction": "dryrun",
+      "group": "rbac.authorization.k8s.io",
+      "kind": "ClusterRole",
+      "message": "Role 'cert-manager-cainjector' has sensitive access (get) to secrets",
+      "name": "cert-manager-cainjector",
+      "version": "v1"
+    },
+    {
+      "enforcementAction": "dryrun",
+      "group": "rbac.authorization.k8s.io",
+      "kind": "ClusterRole",
+      "message": "Role 'argocd-notifications-controller' has sensitive access (watch) to secrets",
+      "name": "argocd-notifications-controller",
+      "version": "v1"
+    },
+    {
+      "enforcementAction": "dryrun",
+      "group": "rbac.authorization.k8s.io",
+      "kind": "ClusterRole",
+      "message": "Role 'argocd-notifications-controller' has sensitive access (list) to secrets",
+      "name": "argocd-notifications-controller",
+      "version": "v1"
+    },
+    {
+      "enforcementAction": "dryrun",
+      "group": "rbac.authorization.k8s.io",
+      "kind": "ClusterRole",
+      "message": "Role 'argocd-notifications-controller' has sensitive access (get) to secrets",
+      "name": "argocd-notifications-controller",
+      "version": "v1"
+    },
+    {
+      "enforcementAction": "dryrun",
+      "group": "rbac.authorization.k8s.io",
+      "kind": "ClusterRole",
+      "message": "Role 'admin' has sensitive access (watch) to secrets",
+      "name": "admin",
+      "version": "v1"
+    },
+    {
+      "enforcementAction": "dryrun",
+      "group": "rbac.authorization.k8s.io",
+      "kind": "ClusterRole",
+      "message": "Role 'admin' has sensitive access (list) to secrets",
+      "name": "admin",
+      "version": "v1"
+    },
+    {
+      "enforcementAction": "dryrun",
+      "group": "rbac.authorization.k8s.io",
+      "kind": "ClusterRole",
+      "message": "Role 'admin' has sensitive access (get) to secrets",
+      "name": "admin",
+      "version": "v1"
+    }
+  ]
+}
+----------------------------------------
+
+[1;33mVerifying eksforbiddensysctl.constraints.gatekeeper.sh/forbidden-sysctls:[0m
+Enforcement Action: dryrun
+Excluded Namespaces:
+[
+  "kube-system",
+  "amazon-cloudwatch",
+  "gatekeeper-system",
+  "amazon-guardduty"
+]
+Parameters:
+{
+  "allowedSysctls": [
+    "net.ipv4.ip_local_port_range",
+    "net.ipv4.tcp_syncookies",
+    "net.ipv4.ping_group_range",
+    "net.core.somaxconn"
+  ],
+  "excludedImages": [],
+  "forbiddenSysctls": [
+    "*",
+    "kernel."
+  ]
+}
+Status:
+{
+  "auditTimestamp": "2024-12-16T12:03:17Z",
+  "byPod": [
+    {
+      "constraintUID": "bb91ad1a-1f4f-4dcf-8bff-77c948eadcc7",
+      "enforced": true,
+      "id": "gatekeeper-audit-6bbc9cc955-r5259",
+      "observedGeneration": 1,
+      "operations": [
+        "audit",
+        "generate",
+        "mutation-status",
+        "status"
+      ]
+    },
+    {
+      "constraintUID": "bb91ad1a-1f4f-4dcf-8bff-77c948eadcc7",
+      "enforced": true,
+      "id": "gatekeeper-controller-manager-7d7f66bf68-lf9l5",
+      "observedGeneration": 1,
+      "operations": [
+        "mutation-webhook",
+        "webhook"
+      ]
+    },
+    {
+      "constraintUID": "bb91ad1a-1f4f-4dcf-8bff-77c948eadcc7",
+      "enforced": true,
+      "id": "gatekeeper-controller-manager-7d7f66bf68-t4bh6",
+      "observedGeneration": 1,
+      "operations": [
+        "mutation-webhook",
+        "webhook"
+      ]
+    },
+    {
+      "constraintUID": "bb91ad1a-1f4f-4dcf-8bff-77c948eadcc7",
+      "enforced": true,
+      "id": "gatekeeper-controller-manager-7d7f66bf68-tgzpr",
+      "observedGeneration": 1,
+      "operations": [
+        "mutation-webhook",
+        "webhook"
+      ]
+    }
+  ],
+  "totalViolations": 0
+}
+----------------------------------------
+
+[1;33mVerifying ekslimitsensitiveverbs.constraints.gatekeeper.sh/limit-sensitive-verbs:[0m
+Enforcement Action: dryrun
+Excluded Namespaces:
+[
+  "kube-system",
+  "amazon-cloudwatch",
+  "gatekeeper-system",
+  "amazon-guardduty"
+]
+Parameters:
+{
+  "excludedRoles": []
+}
+Status:
+{
+  "auditTimestamp": "2024-12-16T12:03:17Z",
+  "byPod": [
+    {
+      "constraintUID": "2ea3d461-7e03-4cd3-9108-2e02c49aff47",
+      "enforced": true,
+      "id": "gatekeeper-audit-6bbc9cc955-r5259",
+      "observedGeneration": 1,
+      "operations": [
+        "audit",
+        "generate",
+        "mutation-status",
+        "status"
+      ]
+    },
+    {
+      "constraintUID": "2ea3d461-7e03-4cd3-9108-2e02c49aff47",
+      "enforced": true,
+      "id": "gatekeeper-controller-manager-7d7f66bf68-lf9l5",
+      "observedGeneration": 1,
+      "operations": [
+        "mutation-webhook",
+        "webhook"
+      ]
+    },
+    {
+      "constraintUID": "2ea3d461-7e03-4cd3-9108-2e02c49aff47",
+      "enforced": true,
+      "id": "gatekeeper-controller-manager-7d7f66bf68-t4bh6",
+      "observedGeneration": 1,
+      "operations": [
+        "mutation-webhook",
+        "webhook"
+      ]
+    },
+    {
+      "constraintUID": "2ea3d461-7e03-4cd3-9108-2e02c49aff47",
+      "enforced": true,
+      "id": "gatekeeper-controller-manager-7d7f66bf68-tgzpr",
+      "observedGeneration": 1,
+      "operations": [
+        "mutation-webhook",
+        "webhook"
+      ]
+    }
+  ],
+  "totalViolations": 4,
+  "violations": [
+    {
+      "enforcementAction": "dryrun",
+      "group": "rbac.authorization.k8s.io",
+      "kind": "ClusterRole",
+      "message": "Role 'system:controller:clusterrole-aggregation-controller' contains sensitive verb 'escalate' which allows privilege escalation",
+      "name": "system:controller:clusterrole-aggregation-controller",
+      "version": "v1"
+    },
+    {
+      "enforcementAction": "dryrun",
+      "group": "rbac.authorization.k8s.io",
+      "kind": "ClusterRole",
+      "message": "Role 'system:aggregate-to-edit' contains sensitive verb 'impersonate' which allows privilege escalation",
+      "name": "system:aggregate-to-edit",
+      "version": "v1"
+    },
+    {
+      "enforcementAction": "dryrun",
+      "group": "rbac.authorization.k8s.io",
+      "kind": "ClusterRole",
+      "message": "Role 'edit' contains sensitive verb 'impersonate' which allows privilege escalation",
+      "name": "edit",
+      "version": "v1"
+    },
+    {
+      "enforcementAction": "dryrun",
+      "group": "rbac.authorization.k8s.io",
+      "kind": "ClusterRole",
+      "message": "Role 'admin' contains sensitive verb 'impersonate' which allows privilege escalation",
+      "name": "admin",
+      "version": "v1"
+    }
+  ]
+}
+----------------------------------------
+
+[1;33mVerifying eksminimisewildcard.constraints.gatekeeper.sh/block-wildcard-roles:[0m
+Enforcement Action: dryrun
+Excluded Namespaces:
+[
+  "kube-system",
+  "amazon-cloudwatch",
+  "gatekeeper-system",
+  "amazon-guardduty"
+]
+Parameters:
+{
+  "whitelistedRoles": []
+}
+Status:
+{
+  "auditTimestamp": "2024-12-16T12:03:17Z",
+  "byPod": [
+    {
+      "constraintUID": "94cebf7d-1ac8-41c7-9fdb-2a1ba191440f",
+      "enforced": true,
+      "id": "gatekeeper-audit-6bbc9cc955-r5259",
+      "observedGeneration": 1,
+      "operations": [
+        "audit",
+        "generate",
+        "mutation-status",
+        "status"
+      ]
+    },
+    {
+      "constraintUID": "94cebf7d-1ac8-41c7-9fdb-2a1ba191440f",
+      "enforced": true,
+      "id": "gatekeeper-controller-manager-7d7f66bf68-lf9l5",
+      "observedGeneration": 1,
+      "operations": [
+        "mutation-webhook",
+        "webhook"
+      ]
+    },
+    {
+      "constraintUID": "94cebf7d-1ac8-41c7-9fdb-2a1ba191440f",
+      "enforced": true,
+      "id": "gatekeeper-controller-manager-7d7f66bf68-t4bh6",
+      "observedGeneration": 1,
+      "operations": [
+        "mutation-webhook",
+        "webhook"
+      ]
+    },
+    {
+      "constraintUID": "94cebf7d-1ac8-41c7-9fdb-2a1ba191440f",
+      "enforced": true,
+      "id": "gatekeeper-controller-manager-7d7f66bf68-tgzpr",
+      "observedGeneration": 1,
+      "operations": [
+        "mutation-webhook",
+        "webhook"
+      ]
+    }
+  ],
+  "totalViolations": 5,
+  "violations": [
+    {
+      "enforcementAction": "dryrun",
+      "group": "rbac.authorization.k8s.io",
+      "kind": "ClusterRole",
+      "message": "ClusterRole metallb-system:speaker should not use wildcard '*'",
+      "name": "metallb-system:speaker",
+      "version": "v1"
+    },
+    {
+      "enforcementAction": "dryrun",
+      "group": "rbac.authorization.k8s.io",
+      "kind": "ClusterRole",
+      "message": "ClusterRole local-path-provisioner-role should not use wildcard '*'",
+      "name": "local-path-provisioner-role",
+      "version": "v1"
+    },
+    {
+      "enforcementAction": "dryrun",
+      "group": "rbac.authorization.k8s.io",
+      "kind": "ClusterRole",
+      "message": "ClusterRole k3s-cloud-controller-manager should not use wildcard '*'",
+      "name": "k3s-cloud-controller-manager",
+      "version": "v1"
+    },
+    {
+      "enforcementAction": "dryrun",
+      "group": "rbac.authorization.k8s.io",
+      "kind": "ClusterRole",
+      "message": "ClusterRole argocd-server should not use wildcard '*'",
+      "name": "argocd-server",
+      "version": "v1"
+    },
+    {
+      "enforcementAction": "dryrun",
+      "group": "rbac.authorization.k8s.io",
+      "kind": "ClusterRole",
+      "message": "ClusterRole argocd-application-controller should not use wildcard '*'",
+      "name": "argocd-application-controller",
+      "version": "v1"
+    }
+  ]
+}
+----------------------------------------
+
+[1;33mVerifying eksmountedsecrets.constraints.gatekeeper.sh/eksmountedsecrets:[0m
+Enforcement Action: dryrun
+Excluded Namespaces:
+[
+  "kube-system",
+  "amazon-cloudwatch",
+  "gatekeeper-system",
+  "amazon-guardduty"
+]
+Parameters:
+{
+  "allowedSecrets": [],
+  "excludedImages": []
+}
+Status:
+{
+  "auditTimestamp": "2024-12-16T12:03:17Z",
+  "byPod": [
+    {
+      "constraintUID": "264b03a4-f3f8-4362-9733-c37f027d8cd8",
+      "enforced": true,
+      "id": "gatekeeper-audit-6bbc9cc955-r5259",
+      "observedGeneration": 1,
+      "operations": [
+        "audit",
+        "generate",
+        "mutation-status",
+        "status"
+      ]
+    },
+    {
+      "constraintUID": "264b03a4-f3f8-4362-9733-c37f027d8cd8",
+      "enforced": true,
+      "id": "gatekeeper-controller-manager-7d7f66bf68-lf9l5",
+      "observedGeneration": 1,
+      "operations": [
+        "mutation-webhook",
+        "webhook"
+      ]
+    },
+    {
+      "constraintUID": "264b03a4-f3f8-4362-9733-c37f027d8cd8",
+      "enforced": true,
+      "id": "gatekeeper-controller-manager-7d7f66bf68-t4bh6",
+      "observedGeneration": 1,
+      "operations": [
+        "mutation-webhook",
+        "webhook"
+      ]
+    },
+    {
+      "constraintUID": "264b03a4-f3f8-4362-9733-c37f027d8cd8",
+      "enforced": true,
+      "id": "gatekeeper-controller-manager-7d7f66bf68-tgzpr",
+      "observedGeneration": 1,
+      "operations": [
+        "mutation-webhook",
+        "webhook"
+      ]
+    }
+  ],
+  "totalViolations": 6,
+  "violations": [
+    {
+      "enforcementAction": "dryrun",
+      "group": "",
+      "kind": "Pod",
+      "message": "Container 'traefik' in pod 'traefik-5c9b4bd4cd-s6mr9' uses non-exempted secret 'cloudflare-api-token-secret' as environment variable. Use secret volumes instead.",
+      "name": "traefik-5c9b4bd4cd-s6mr9",
+      "namespace": "traefik",
+      "version": "v1"
+    },
+    {
+      "enforcementAction": "dryrun",
+      "group": "",
+      "kind": "Pod",
+      "message": "Container 'grafana' in pod 'grafana-5b9b7bc6df-ggwt7' uses non-exempted secret 'grafana' as environment variable. Use secret volumes instead.",
+      "name": "grafana-5b9b7bc6df-ggwt7",
+      "namespace": "monitoring",
+      "version": "v1"
+    },
+    {
+      "enforcementAction": "dryrun",
+      "group": "",
+      "kind": "Pod",
+      "message": "Container 'server' in pod 'argocd-server-6b4bf5c579-86q85' uses non-exempted secret 'argocd-redis' as environment variable. Use secret volumes instead.",
+      "name": "argocd-server-6b4bf5c579-86q85",
+      "namespace": "argocd",
+      "version": "v1"
+    },
+    {
+      "enforcementAction": "dryrun",
+      "group": "",
+      "kind": "Pod",
+      "message": "Container 'repo-server' in pod 'argocd-repo-server-96fc4895b-5gq5n' uses non-exempted secret 'argocd-redis' as environment variable. Use secret volumes instead.",
+      "name": "argocd-repo-server-96fc4895b-5gq5n",
+      "namespace": "argocd",
+      "version": "v1"
+    },
+    {
+      "enforcementAction": "dryrun",
+      "group": "",
+      "kind": "Pod",
+      "message": "Container 'redis' in pod 'argocd-redis-5c67786686-sg4wg' uses non-exempted secret 'argocd-redis' as environment variable. Use secret volumes instead.",
+      "name": "argocd-redis-5c67786686-sg4wg",
+      "namespace": "argocd",
+      "version": "v1"
+    },
+    {
+      "enforcementAction": "dryrun",
+      "group": "",
+      "kind": "Pod",
+      "message": "Container 'application-controller' in pod 'argocd-application-controller-0' uses non-exempted secret 'argocd-redis' as environment variable. Use secret volumes instead.",
+      "name": "argocd-application-controller-0",
+      "namespace": "argocd",
+      "version": "v1"
+    }
+  ]
+}
+----------------------------------------
+
+[1;33mVerifying eksnetworkpolicyexists.constraints.gatekeeper.sh/ensure-network-policy:[0m
+Enforcement Action: dryrun
+Excluded Namespaces:
+[
+  "kube-system",
+  "amazon-cloudwatch",
+  "gatekeeper-system",
+  "amazon-guardduty"
+]
+Parameters:
+{
+  "exemptWithAnnotation": "network.policy.skip/servicemesh",
+  "exemptWithLabel": "network.policy.skip"
+}
+Status:
+{
+  "auditTimestamp": "2024-12-16T12:03:17Z",
+  "byPod": [
+    {
+      "constraintUID": "b690ae32-818e-4a75-a645-80b2fad4e064",
+      "enforced": true,
+      "id": "gatekeeper-audit-6bbc9cc955-r5259",
+      "observedGeneration": 1,
+      "operations": [
+        "audit",
+        "generate",
+        "mutation-status",
+        "status"
+      ]
+    },
+    {
+      "constraintUID": "b690ae32-818e-4a75-a645-80b2fad4e064",
+      "enforced": true,
+      "id": "gatekeeper-controller-manager-7d7f66bf68-lf9l5",
+      "observedGeneration": 1,
+      "operations": [
+        "mutation-webhook",
+        "webhook"
+      ]
+    },
+    {
+      "constraintUID": "b690ae32-818e-4a75-a645-80b2fad4e064",
+      "enforced": true,
+      "id": "gatekeeper-controller-manager-7d7f66bf68-t4bh6",
+      "observedGeneration": 1,
+      "operations": [
+        "mutation-webhook",
+        "webhook"
+      ]
+    },
+    {
+      "constraintUID": "b690ae32-818e-4a75-a645-80b2fad4e064",
+      "enforced": true,
+      "id": "gatekeeper-controller-manager-7d7f66bf68-tgzpr",
+      "observedGeneration": 1,
+      "operations": [
+        "mutation-webhook",
+        "webhook"
+      ]
+    }
+  ],
+  "totalViolations": 8,
+  "violations": [
+    {
+      "enforcementAction": "dryrun",
+      "group": "",
+      "kind": "Namespace",
+      "message": "Namespace 'traefik' does not have a NetworkPolicy defined",
+      "name": "traefik",
+      "version": "v1"
+    },
+    {
+      "enforcementAction": "dryrun",
+      "group": "",
+      "kind": "Namespace",
+      "message": "Namespace 'monitoring' does not have a NetworkPolicy defined",
+      "name": "monitoring",
+      "version": "v1"
+    },
+    {
+      "enforcementAction": "dryrun",
+      "group": "",
+      "kind": "Namespace",
+      "message": "Namespace 'metallb-system' does not have a NetworkPolicy defined",
+      "name": "metallb-system",
+      "version": "v1"
+    },
+    {
+      "enforcementAction": "dryrun",
+      "group": "",
+      "kind": "Namespace",
+      "message": "Namespace 'kube-public' does not have a NetworkPolicy defined",
+      "name": "kube-public",
+      "version": "v1"
+    },
+    {
+      "enforcementAction": "dryrun",
+      "group": "",
+      "kind": "Namespace",
+      "message": "Namespace 'kube-node-lease' does not have a NetworkPolicy defined",
+      "name": "kube-node-lease",
+      "version": "v1"
+    },
+    {
+      "enforcementAction": "dryrun",
+      "group": "",
+      "kind": "Namespace",
+      "message": "Namespace 'default' does not have a NetworkPolicy defined",
+      "name": "default",
+      "version": "v1"
+    },
+    {
+      "enforcementAction": "dryrun",
+      "group": "",
+      "kind": "Namespace",
+      "message": "Namespace 'cert-manager' does not have a NetworkPolicy defined",
+      "name": "cert-manager",
+      "version": "v1"
+    },
+    {
+      "enforcementAction": "dryrun",
+      "group": "",
+      "kind": "Namespace",
+      "message": "Namespace 'argocd' does not have a NetworkPolicy defined",
+      "name": "argocd",
+      "version": "v1"
+    }
+  ]
+}
+----------------------------------------
+
+[1;33mVerifying eksnoprivilegeescalation.constraints.gatekeeper.sh/no-privilege-escalation:[0m
+Enforcement Action: dryrun
+Excluded Namespaces:
+[
+  "kube-system",
+  "amazon-cloudwatch",
+  "gatekeeper-system",
+  "amazon-guardduty"
+]
+Parameters:
+{
+  "excludedContainers": [],
+  "excludedImages": []
+}
+Status:
+{
+  "auditTimestamp": "2024-12-16T12:03:17Z",
+  "byPod": [
+    {
+      "constraintUID": "ccb28f29-6ef8-4f2e-88f1-571e04ca26a6",
+      "enforced": true,
+      "id": "gatekeeper-audit-6bbc9cc955-r5259",
+      "observedGeneration": 1,
+      "operations": [
+        "audit",
+        "generate",
+        "mutation-status",
+        "status"
+      ]
+    },
+    {
+      "constraintUID": "ccb28f29-6ef8-4f2e-88f1-571e04ca26a6",
+      "enforced": true,
+      "id": "gatekeeper-controller-manager-7d7f66bf68-lf9l5",
+      "observedGeneration": 1,
+      "operations": [
+        "mutation-webhook",
+        "webhook"
+      ]
+    },
+    {
+      "constraintUID": "ccb28f29-6ef8-4f2e-88f1-571e04ca26a6",
+      "enforced": true,
+      "id": "gatekeeper-controller-manager-7d7f66bf68-t4bh6",
+      "observedGeneration": 1,
+      "operations": [
+        "mutation-webhook",
+        "webhook"
+      ]
+    },
+    {
+      "constraintUID": "ccb28f29-6ef8-4f2e-88f1-571e04ca26a6",
+      "enforced": true,
+      "id": "gatekeeper-controller-manager-7d7f66bf68-tgzpr",
+      "observedGeneration": 1,
+      "operations": [
+        "mutation-webhook",
+        "webhook"
+      ]
+    }
+  ],
+  "totalViolations": 4,
+  "violations": [
+    {
+      "enforcementAction": "dryrun",
+      "group": "",
+      "kind": "Pod",
+      "message": "Privilege escalation container is not allowed: prometheus-server-configmap-reload",
+      "name": "prometheus-server-585d68b98b-lnhql",
+      "namespace": "monitoring",
+      "version": "v1"
+    },
+    {
+      "enforcementAction": "dryrun",
+      "group": "",
+      "kind": "Pod",
+      "message": "Privilege escalation container is not allowed: prometheus-server",
+      "name": "prometheus-server-585d68b98b-lnhql",
+      "namespace": "monitoring",
+      "version": "v1"
+    },
+    {
+      "enforcementAction": "dryrun",
+      "group": "",
+      "kind": "Pod",
+      "message": "Privilege escalation container is not allowed: pushgateway",
+      "name": "prometheus-prometheus-pushgateway-85b7d9fbfc-vzcb8",
+      "namespace": "monitoring",
+      "version": "v1"
+    },
+    {
+      "enforcementAction": "dryrun",
+      "group": "",
+      "kind": "Pod",
+      "message": "Privilege escalation container is not allowed: alertmanager",
+      "name": "prometheus-alertmanager-0",
+      "namespace": "monitoring",
+      "version": "v1"
+    }
+  ]
+}
+----------------------------------------
+
+[1;33mVerifying ekspsphostfilesystem.constraints.gatekeeper.sh/psp-host-filesystem:[0m
+Enforcement Action: dryrun
+Excluded Namespaces:
+[
+  "kube-system",
+  "amazon-cloudwatch",
+  "gatekeeper-system",
+  "amazon-guardduty"
+]
+Parameters:
+{
+  "allowedHostPaths": [
+    {
+      "pathPrefix": "/var/log",
+      "readOnly": true
+    },
+    {
+      "pathPrefix": "/var/lib/kubelet/pods",
+      "readOnly": true
+    }
+  ],
+  "excludedImages": []
+}
+Status:
+{
+  "auditTimestamp": "2024-12-16T12:03:17Z",
+  "byPod": [
+    {
+      "constraintUID": "81fc99cb-bfd9-4be2-b492-fd6ad4360027",
+      "enforced": true,
+      "id": "gatekeeper-audit-6bbc9cc955-r5259",
+      "observedGeneration": 1,
+      "operations": [
+        "audit",
+        "generate",
+        "mutation-status",
+        "status"
+      ]
+    },
+    {
+      "constraintUID": "81fc99cb-bfd9-4be2-b492-fd6ad4360027",
+      "enforced": true,
+      "id": "gatekeeper-controller-manager-7d7f66bf68-lf9l5",
+      "observedGeneration": 1,
+      "operations": [
+        "mutation-webhook",
+        "webhook"
+      ]
+    },
+    {
+      "constraintUID": "81fc99cb-bfd9-4be2-b492-fd6ad4360027",
+      "enforced": true,
+      "id": "gatekeeper-controller-manager-7d7f66bf68-t4bh6",
+      "observedGeneration": 1,
+      "operations": [
+        "mutation-webhook",
+        "webhook"
+      ]
+    },
+    {
+      "constraintUID": "81fc99cb-bfd9-4be2-b492-fd6ad4360027",
+      "enforced": true,
+      "id": "gatekeeper-controller-manager-7d7f66bf68-tgzpr",
+      "observedGeneration": 1,
+      "operations": [
+        "mutation-webhook",
+        "webhook"
+      ]
+    }
+  ],
+  "totalViolations": 15,
+  "violations": [
+    {
+      "enforcementAction": "dryrun",
+      "group": "",
+      "kind": "Pod",
+      "message": "Pod 'prometheus-prometheus-node-exporter-lwkgb' has forbidden hostPath volume 'sys': /sys",
+      "name": "prometheus-prometheus-node-exporter-lwkgb",
+      "namespace": "monitoring",
+      "version": "v1"
+    },
+    {
+      "enforcementAction": "dryrun",
+      "group": "",
+      "kind": "Pod",
+      "message": "Pod 'prometheus-prometheus-node-exporter-lwkgb' has forbidden hostPath volume 'root': /",
+      "name": "prometheus-prometheus-node-exporter-lwkgb",
+      "namespace": "monitoring",
+      "version": "v1"
+    },
+    {
+      "enforcementAction": "dryrun",
+      "group": "",
+      "kind": "Pod",
+      "message": "Pod 'prometheus-prometheus-node-exporter-lwkgb' has forbidden hostPath volume 'proc': /proc",
+      "name": "prometheus-prometheus-node-exporter-lwkgb",
+      "namespace": "monitoring",
+      "version": "v1"
+    },
+    {
+      "enforcementAction": "dryrun",
+      "group": "",
+      "kind": "Pod",
+      "message": "Pod 'prometheus-prometheus-node-exporter-fjwhx' has forbidden hostPath volume 'sys': /sys",
+      "name": "prometheus-prometheus-node-exporter-fjwhx",
+      "namespace": "monitoring",
+      "version": "v1"
+    },
+    {
+      "enforcementAction": "dryrun",
+      "group": "",
+      "kind": "Pod",
+      "message": "Pod 'prometheus-prometheus-node-exporter-fjwhx' has forbidden hostPath volume 'root': /",
+      "name": "prometheus-prometheus-node-exporter-fjwhx",
+      "namespace": "monitoring",
+      "version": "v1"
+    },
+    {
+      "enforcementAction": "dryrun",
+      "group": "",
+      "kind": "Pod",
+      "message": "Pod 'prometheus-prometheus-node-exporter-fjwhx' has forbidden hostPath volume 'proc': /proc",
+      "name": "prometheus-prometheus-node-exporter-fjwhx",
+      "namespace": "monitoring",
+      "version": "v1"
+    },
+    {
+      "enforcementAction": "dryrun",
+      "group": "",
+      "kind": "Pod",
+      "message": "Pod 'prometheus-prometheus-node-exporter-f8j2w' has forbidden hostPath volume 'sys': /sys",
+      "name": "prometheus-prometheus-node-exporter-f8j2w",
+      "namespace": "monitoring",
+      "version": "v1"
+    },
+    {
+      "enforcementAction": "dryrun",
+      "group": "",
+      "kind": "Pod",
+      "message": "Pod 'prometheus-prometheus-node-exporter-f8j2w' has forbidden hostPath volume 'root': /",
+      "name": "prometheus-prometheus-node-exporter-f8j2w",
+      "namespace": "monitoring",
+      "version": "v1"
+    },
+    {
+      "enforcementAction": "dryrun",
+      "group": "",
+      "kind": "Pod",
+      "message": "Pod 'prometheus-prometheus-node-exporter-f8j2w' has forbidden hostPath volume 'proc': /proc",
+      "name": "prometheus-prometheus-node-exporter-f8j2w",
+      "namespace": "monitoring",
+      "version": "v1"
+    },
+    {
+      "enforcementAction": "dryrun",
+      "group": "",
+      "kind": "Pod",
+      "message": "Pod 'prometheus-prometheus-node-exporter-57qt9' has forbidden hostPath volume 'sys': /sys",
+      "name": "prometheus-prometheus-node-exporter-57qt9",
+      "namespace": "monitoring",
+      "version": "v1"
+    },
+    {
+      "enforcementAction": "dryrun",
+      "group": "",
+      "kind": "Pod",
+      "message": "Pod 'prometheus-prometheus-node-exporter-57qt9' has forbidden hostPath volume 'root': /",
+      "name": "prometheus-prometheus-node-exporter-57qt9",
+      "namespace": "monitoring",
+      "version": "v1"
+    },
+    {
+      "enforcementAction": "dryrun",
+      "group": "",
+      "kind": "Pod",
+      "message": "Pod 'prometheus-prometheus-node-exporter-57qt9' has forbidden hostPath volume 'proc': /proc",
+      "name": "prometheus-prometheus-node-exporter-57qt9",
+      "namespace": "monitoring",
+      "version": "v1"
+    },
+    {
+      "enforcementAction": "dryrun",
+      "group": "",
+      "kind": "Pod",
+      "message": "Pod 'prometheus-prometheus-node-exporter-2xjqg' has forbidden hostPath volume 'sys': /sys",
+      "name": "prometheus-prometheus-node-exporter-2xjqg",
+      "namespace": "monitoring",
+      "version": "v1"
+    },
+    {
+      "enforcementAction": "dryrun",
+      "group": "",
+      "kind": "Pod",
+      "message": "Pod 'prometheus-prometheus-node-exporter-2xjqg' has forbidden hostPath volume 'root': /",
+      "name": "prometheus-prometheus-node-exporter-2xjqg",
+      "namespace": "monitoring",
+      "version": "v1"
+    },
+    {
+      "enforcementAction": "dryrun",
+      "group": "",
+      "kind": "Pod",
+      "message": "Pod 'prometheus-prometheus-node-exporter-2xjqg' has forbidden hostPath volume 'proc': /proc",
+      "name": "prometheus-prometheus-node-exporter-2xjqg",
+      "namespace": "monitoring",
+      "version": "v1"
+    }
+  ]
+}
+----------------------------------------
+
+[1;33mVerifying ekspsphostnamespace.constraints.gatekeeper.sh/psp-host-namespace:[0m
+Enforcement Action: dryrun
+Excluded Namespaces:
+[
+  "kube-system",
+  "amazon-cloudwatch",
+  "gatekeeper-system",
+  "amazon-guardduty"
+]
+Parameters:
+{
+  "excludedImages": []
+}
+Status:
+{
+  "auditTimestamp": "2024-12-16T12:03:17Z",
+  "byPod": [
+    {
+      "constraintUID": "0f0d8657-93c9-4900-84e6-6b460a9471fe",
+      "enforced": true,
+      "id": "gatekeeper-audit-6bbc9cc955-r5259",
+      "observedGeneration": 1,
+      "operations": [
+        "audit",
+        "generate",
+        "mutation-status",
+        "status"
+      ]
+    },
+    {
+      "constraintUID": "0f0d8657-93c9-4900-84e6-6b460a9471fe",
+      "enforced": true,
+      "id": "gatekeeper-controller-manager-7d7f66bf68-lf9l5",
+      "observedGeneration": 1,
+      "operations": [
+        "mutation-webhook",
+        "webhook"
+      ]
+    },
+    {
+      "constraintUID": "0f0d8657-93c9-4900-84e6-6b460a9471fe",
+      "enforced": true,
+      "id": "gatekeeper-controller-manager-7d7f66bf68-t4bh6",
+      "observedGeneration": 1,
+      "operations": [
+        "mutation-webhook",
+        "webhook"
+      ]
+    },
+    {
+      "constraintUID": "0f0d8657-93c9-4900-84e6-6b460a9471fe",
+      "enforced": true,
+      "id": "gatekeeper-controller-manager-7d7f66bf68-tgzpr",
+      "observedGeneration": 1,
+      "operations": [
+        "mutation-webhook",
+        "webhook"
+      ]
+    }
+  ],
+  "totalViolations": 15,
+  "violations": [
+    {
+      "enforcementAction": "dryrun",
+      "group": "",
+      "kind": "Pod",
+      "message": "Pod 'prometheus-prometheus-node-exporter-lwkgb' is not allowed to share the host network namespace",
+      "name": "prometheus-prometheus-node-exporter-lwkgb",
+      "namespace": "monitoring",
+      "version": "v1"
+    },
+    {
+      "enforcementAction": "dryrun",
+      "group": "",
+      "kind": "Pod",
+      "message": "Pod 'prometheus-prometheus-node-exporter-lwkgb' is not allowed to share the host PID namespace",
+      "name": "prometheus-prometheus-node-exporter-lwkgb",
+      "namespace": "monitoring",
+      "version": "v1"
+    },
+    {
+      "enforcementAction": "dryrun",
+      "group": "",
+      "kind": "Pod",
+      "message": "Pod 'prometheus-prometheus-node-exporter-fjwhx' is not allowed to share the host network namespace",
+      "name": "prometheus-prometheus-node-exporter-fjwhx",
+      "namespace": "monitoring",
+      "version": "v1"
+    },
+    {
+      "enforcementAction": "dryrun",
+      "group": "",
+      "kind": "Pod",
+      "message": "Pod 'prometheus-prometheus-node-exporter-fjwhx' is not allowed to share the host PID namespace",
+      "name": "prometheus-prometheus-node-exporter-fjwhx",
+      "namespace": "monitoring",
+      "version": "v1"
+    },
+    {
+      "enforcementAction": "dryrun",
+      "group": "",
+      "kind": "Pod",
+      "message": "Pod 'prometheus-prometheus-node-exporter-f8j2w' is not allowed to share the host network namespace",
+      "name": "prometheus-prometheus-node-exporter-f8j2w",
+      "namespace": "monitoring",
+      "version": "v1"
+    },
+    {
+      "enforcementAction": "dryrun",
+      "group": "",
+      "kind": "Pod",
+      "message": "Pod 'prometheus-prometheus-node-exporter-f8j2w' is not allowed to share the host PID namespace",
+      "name": "prometheus-prometheus-node-exporter-f8j2w",
+      "namespace": "monitoring",
+      "version": "v1"
+    },
+    {
+      "enforcementAction": "dryrun",
+      "group": "",
+      "kind": "Pod",
+      "message": "Pod 'prometheus-prometheus-node-exporter-57qt9' is not allowed to share the host network namespace",
+      "name": "prometheus-prometheus-node-exporter-57qt9",
+      "namespace": "monitoring",
+      "version": "v1"
+    },
+    {
+      "enforcementAction": "dryrun",
+      "group": "",
+      "kind": "Pod",
+      "message": "Pod 'prometheus-prometheus-node-exporter-57qt9' is not allowed to share the host PID namespace",
+      "name": "prometheus-prometheus-node-exporter-57qt9",
+      "namespace": "monitoring",
+      "version": "v1"
+    },
+    {
+      "enforcementAction": "dryrun",
+      "group": "",
+      "kind": "Pod",
+      "message": "Pod 'prometheus-prometheus-node-exporter-2xjqg' is not allowed to share the host network namespace",
+      "name": "prometheus-prometheus-node-exporter-2xjqg",
+      "namespace": "monitoring",
+      "version": "v1"
+    },
+    {
+      "enforcementAction": "dryrun",
+      "group": "",
+      "kind": "Pod",
+      "message": "Pod 'prometheus-prometheus-node-exporter-2xjqg' is not allowed to share the host PID namespace",
+      "name": "prometheus-prometheus-node-exporter-2xjqg",
+      "namespace": "monitoring",
+      "version": "v1"
+    },
+    {
+      "enforcementAction": "dryrun",
+      "group": "",
+      "kind": "Pod",
+      "message": "Pod 'speaker-xq8fb' is not allowed to share the host network namespace",
+      "name": "speaker-xq8fb",
+      "namespace": "metallb-system",
+      "version": "v1"
+    },
+    {
+      "enforcementAction": "dryrun",
+      "group": "",
+      "kind": "Pod",
+      "message": "Pod 'speaker-t44xg' is not allowed to share the host network namespace",
+      "name": "speaker-t44xg",
+      "namespace": "metallb-system",
+      "version": "v1"
+    },
+    {
+      "enforcementAction": "dryrun",
+      "group": "",
+      "kind": "Pod",
+      "message": "Pod 'speaker-s6wzs' is not allowed to share the host network namespace",
+      "name": "speaker-s6wzs",
+      "namespace": "metallb-system",
+      "version": "v1"
+    },
+    {
+      "enforcementAction": "dryrun",
+      "group": "",
+      "kind": "Pod",
+      "message": "Pod 'speaker-f8wrb' is not allowed to share the host network namespace",
+      "name": "speaker-f8wrb",
+      "namespace": "metallb-system",
+      "version": "v1"
+    },
+    {
+      "enforcementAction": "dryrun",
+      "group": "",
+      "kind": "Pod",
+      "message": "Pod 'speaker-5rqln' is not allowed to share the host network namespace",
+      "name": "speaker-5rqln",
+      "namespace": "metallb-system",
+      "version": "v1"
+    }
+  ]
+}
+----------------------------------------
+
+[1;33mVerifying eksreadonlyfilesystem.constraints.gatekeeper.sh/read-only-root-filesystem:[0m
+Enforcement Action: dryrun
+Excluded Namespaces:
+[
+  "kube-system",
+  "amazon-cloudwatch",
+  "gatekeeper-system",
+  "amazon-guardduty"
+]
+Parameters:
+{
+  "excludedContainers": [],
+  "excludedImages": []
+}
+Status:
+{
+  "auditTimestamp": "2024-12-16T12:03:17Z",
+  "byPod": [
+    {
+      "constraintUID": "31a34016-07ee-4d25-9f89-1bac4f1d9283",
+      "enforced": true,
+      "id": "gatekeeper-audit-6bbc9cc955-r5259",
+      "observedGeneration": 1,
+      "operations": [
+        "audit",
+        "generate",
+        "mutation-status",
+        "status"
+      ]
+    },
+    {
+      "constraintUID": "31a34016-07ee-4d25-9f89-1bac4f1d9283",
+      "enforced": true,
+      "id": "gatekeeper-controller-manager-7d7f66bf68-lf9l5",
+      "observedGeneration": 1,
+      "operations": [
+        "mutation-webhook",
+        "webhook"
+      ]
+    },
+    {
+      "constraintUID": "31a34016-07ee-4d25-9f89-1bac4f1d9283",
+      "enforced": true,
+      "id": "gatekeeper-controller-manager-7d7f66bf68-t4bh6",
+      "observedGeneration": 1,
+      "operations": [
+        "mutation-webhook",
+        "webhook"
+      ]
+    },
+    {
+      "constraintUID": "31a34016-07ee-4d25-9f89-1bac4f1d9283",
+      "enforced": true,
+      "id": "gatekeeper-controller-manager-7d7f66bf68-tgzpr",
+      "observedGeneration": 1,
+      "operations": [
+        "mutation-webhook",
+        "webhook"
+      ]
+    }
+  ],
+  "totalViolations": 5,
+  "violations": [
+    {
+      "enforcementAction": "dryrun",
+      "group": "",
+      "kind": "Pod",
+      "message": "Readonly root filesystem is required for container. pod:'prometheus-server-585d68b98b-lnhql', container:'prometheus-server-configmap-reload'",
+      "name": "prometheus-server-585d68b98b-lnhql",
+      "namespace": "monitoring",
+      "version": "v1"
+    },
+    {
+      "enforcementAction": "dryrun",
+      "group": "",
+      "kind": "Pod",
+      "message": "Readonly root filesystem is required for container. pod:'prometheus-server-585d68b98b-lnhql', container:'prometheus-server'",
+      "name": "prometheus-server-585d68b98b-lnhql",
+      "namespace": "monitoring",
+      "version": "v1"
+    },
+    {
+      "enforcementAction": "dryrun",
+      "group": "",
+      "kind": "Pod",
+      "message": "Readonly root filesystem is required for container. pod:'prometheus-prometheus-pushgateway-85b7d9fbfc-vzcb8', container:'pushgateway'",
+      "name": "prometheus-prometheus-pushgateway-85b7d9fbfc-vzcb8",
+      "namespace": "monitoring",
+      "version": "v1"
+    },
+    {
+      "enforcementAction": "dryrun",
+      "group": "",
+      "kind": "Pod",
+      "message": "Readonly root filesystem is required for container. pod:'prometheus-alertmanager-0', container:'alertmanager'",
+      "name": "prometheus-alertmanager-0",
+      "namespace": "monitoring",
+      "version": "v1"
+    },
+    {
+      "enforcementAction": "dryrun",
+      "group": "",
+      "kind": "Pod",
+      "message": "Readonly root filesystem is required for container. pod:'grafana-5b9b7bc6df-ggwt7', container:'grafana'",
+      "name": "grafana-5b9b7bc6df-ggwt7",
+      "namespace": "monitoring",
+      "version": "v1"
+    }
+  ]
+}
+----------------------------------------
+
+[1;33mVerifying eksresourcelimits.constraints.gatekeeper.sh/resource-limits:[0m
+Enforcement Action: dryrun
+Excluded Namespaces:
+[
+  "kube-system",
+  "amazon-cloudwatch",
+  "gatekeeper-system",
+  "amazon-guardduty"
+]
+Parameters:
+{
+  "defaultCpuLimit": "300m",
+  "defaultMemoryLimit": "512Mi",
+  "excludedImages": []
+}
+Status:
+{
+  "auditTimestamp": "2024-12-16T12:03:17Z",
+  "byPod": [
+    {
+      "constraintUID": "bf331e0e-f943-481e-aff4-d0c904debc6e",
+      "enforced": true,
+      "id": "gatekeeper-audit-6bbc9cc955-r5259",
+      "observedGeneration": 1,
+      "operations": [
+        "audit",
+        "generate",
+        "mutation-status",
+        "status"
+      ]
+    },
+    {
+      "constraintUID": "bf331e0e-f943-481e-aff4-d0c904debc6e",
+      "enforced": true,
+      "id": "gatekeeper-controller-manager-7d7f66bf68-lf9l5",
+      "observedGeneration": 1,
+      "operations": [
+        "mutation-webhook",
+        "webhook"
+      ]
+    },
+    {
+      "constraintUID": "bf331e0e-f943-481e-aff4-d0c904debc6e",
+      "enforced": true,
+      "id": "gatekeeper-controller-manager-7d7f66bf68-t4bh6",
+      "observedGeneration": 1,
+      "operations": [
+        "mutation-webhook",
+        "webhook"
+      ]
+    },
+    {
+      "constraintUID": "bf331e0e-f943-481e-aff4-d0c904debc6e",
+      "enforced": true,
+      "id": "gatekeeper-controller-manager-7d7f66bf68-tgzpr",
+      "observedGeneration": 1,
+      "operations": [
+        "mutation-webhook",
+        "webhook"
+      ]
+    }
+  ],
+  "totalViolations": 28,
+  "violations": [
+    {
+      "enforcementAction": "dryrun",
+      "group": "",
+      "kind": "Pod",
+      "message": "Container 'kube-state-metrics' in pod 'prometheus-kube-state-metrics-86969d697f-xpjnd' must specify resource limits",
+      "name": "prometheus-kube-state-metrics-86969d697f-xpjnd",
+      "namespace": "monitoring",
+      "version": "v1"
+    },
+    {
+      "enforcementAction": "dryrun",
+      "group": "",
+      "kind": "Pod",
+      "message": "Container 'alertmanager' in pod 'prometheus-alertmanager-0' must specify resource limits",
+      "name": "prometheus-alertmanager-0",
+      "namespace": "monitoring",
+      "version": "v1"
+    },
+    {
+      "enforcementAction": "dryrun",
+      "group": "",
+      "kind": "Pod",
+      "message": "Container 'speaker' in pod 'speaker-xq8fb' must specify resource limits",
+      "name": "speaker-xq8fb",
+      "namespace": "metallb-system",
+      "version": "v1"
+    },
+    {
+      "enforcementAction": "dryrun",
+      "group": "",
+      "kind": "Pod",
+      "message": "Container 'speaker' in pod 'speaker-t44xg' must specify resource limits",
+      "name": "speaker-t44xg",
+      "namespace": "metallb-system",
+      "version": "v1"
+    },
+    {
+      "enforcementAction": "dryrun",
+      "group": "",
+      "kind": "Pod",
+      "message": "Container 'speaker' in pod 'speaker-s6wzs' must specify resource limits",
+      "name": "speaker-s6wzs",
+      "namespace": "metallb-system",
+      "version": "v1"
+    },
+    {
+      "enforcementAction": "dryrun",
+      "group": "",
+      "kind": "Pod",
+      "message": "Container 'speaker' in pod 'speaker-f8wrb' must specify resource limits",
+      "name": "speaker-f8wrb",
+      "namespace": "metallb-system",
+      "version": "v1"
+    },
+    {
+      "enforcementAction": "dryrun",
+      "group": "",
+      "kind": "Pod",
+      "message": "Container 'speaker' in pod 'speaker-5rqln' must specify resource limits",
+      "name": "speaker-5rqln",
+      "namespace": "metallb-system",
+      "version": "v1"
+    },
+    {
+      "enforcementAction": "dryrun",
+      "group": "",
+      "kind": "Pod",
+      "message": "Container 'controller' in pod 'controller-6dd967fdc7-f7tkz' must specify resource limits",
+      "name": "controller-6dd967fdc7-f7tkz",
+      "namespace": "metallb-system",
+      "version": "v1"
+    },
+    {
+      "enforcementAction": "dryrun",
+      "group": "",
+      "kind": "Pod",
+      "message": "Container 'cert-manager-webhook' in pod 'cert-manager-webhook-b8cdf84f-l9hn6' must specify resource limits",
+      "name": "cert-manager-webhook-b8cdf84f-l9hn6",
+      "namespace": "cert-manager",
+      "version": "v1"
+    },
+    {
+      "enforcementAction": "dryrun",
+      "group": "",
+      "kind": "Pod",
+      "message": "Container 'cert-manager-cainjector' in pod 'cert-manager-cainjector-6687cc685b-h56lq' must specify resource limits",
+      "name": "cert-manager-cainjector-6687cc685b-h56lq",
+      "namespace": "cert-manager",
+      "version": "v1"
+    },
+    {
+      "enforcementAction": "dryrun",
+      "group": "",
+      "kind": "Pod",
+      "message": "Container 'cert-manager-controller' in pod 'cert-manager-974688dfd-s46l4' must specify resource limits",
+      "name": "cert-manager-974688dfd-s46l4",
+      "namespace": "cert-manager",
+      "version": "v1"
+    },
+    {
+      "enforcementAction": "dryrun",
+      "group": "",
+      "kind": "Pod",
+      "message": "Container 'server' in pod 'argocd-server-6b4bf5c579-86q85' must specify resource limits",
+      "name": "argocd-server-6b4bf5c579-86q85",
+      "namespace": "argocd",
+      "version": "v1"
+    },
+    {
+      "enforcementAction": "dryrun",
+      "group": "",
+      "kind": "Pod",
+      "message": "Container 'repo-server' in pod 'argocd-repo-server-96fc4895b-5gq5n' must specify resource limits",
+      "name": "argocd-repo-server-96fc4895b-5gq5n",
+      "namespace": "argocd",
+      "version": "v1"
+    },
+    {
+      "enforcementAction": "dryrun",
+      "group": "",
+      "kind": "Pod",
+      "message": "Container 'copyutil' in pod 'argocd-repo-server-96fc4895b-5gq5n' must specify resource limits",
+      "name": "argocd-repo-server-96fc4895b-5gq5n",
+      "namespace": "argocd",
+      "version": "v1"
+    },
+    {
+      "enforcementAction": "dryrun",
+      "group": "",
+      "kind": "Pod",
+      "message": "Container 'redis' in pod 'argocd-redis-5c67786686-sg4wg' must specify resource limits",
+      "name": "argocd-redis-5c67786686-sg4wg",
+      "namespace": "argocd",
+      "version": "v1"
+    },
+    {
+      "enforcementAction": "dryrun",
+      "group": "",
+      "kind": "Pod",
+      "message": "Container 'notifications-controller' in pod 'argocd-notifications-controller-764b9d6597-x4mwb' must specify resource limits",
+      "name": "argocd-notifications-controller-764b9d6597-x4mwb",
+      "namespace": "argocd",
+      "version": "v1"
+    },
+    {
+      "enforcementAction": "dryrun",
+      "group": "",
+      "kind": "Pod",
+      "message": "Container 'dex-server' in pod 'argocd-dex-server-7999ccc6f8-hn24l' must specify resource limits",
+      "name": "argocd-dex-server-7999ccc6f8-hn24l",
+      "namespace": "argocd",
+      "version": "v1"
+    },
+    {
+      "enforcementAction": "dryrun",
+      "group": "",
+      "kind": "Pod",
+      "message": "Container 'copyutil' in pod 'argocd-dex-server-7999ccc6f8-hn24l' must specify resource limits",
+      "name": "argocd-dex-server-7999ccc6f8-hn24l",
+      "namespace": "argocd",
+      "version": "v1"
+    },
+    {
+      "enforcementAction": "dryrun",
+      "group": "",
+      "kind": "Pod",
+      "message": "Container 'applicationset-controller' in pod 'argocd-applicationset-controller-5cd9fdc649-cnzn2' must specify resource limits",
+      "name": "argocd-applicationset-controller-5cd9fdc649-cnzn2",
+      "namespace": "argocd",
+      "version": "v1"
+    },
+    {
+      "enforcementAction": "dryrun",
+      "group": "",
+      "kind": "Pod",
+      "message": "Container 'application-controller' in pod 'argocd-application-controller-0' must specify resource limits",
+      "name": "argocd-application-controller-0",
+      "namespace": "argocd",
+      "version": "v1"
+    }
+  ]
+}
+----------------------------------------
+
+[1;33mVerifying eksrestrictdefaultsa.constraints.gatekeeper.sh/restrict-default-sa:[0m
+Enforcement Action: dryrun
+Excluded Namespaces:
+[
+  "kube-system",
+  "amazon-cloudwatch",
+  "gatekeeper-system",
+  "amazon-guardduty"
+]
+Parameters:
+Status:
+{
+  "auditTimestamp": "2024-12-16T12:03:17Z",
+  "byPod": [
+    {
+      "constraintUID": "e9a79226-c2c2-4483-95c9-a5ab08cb0483",
+      "enforced": true,
+      "id": "gatekeeper-audit-6bbc9cc955-r5259",
+      "observedGeneration": 1,
+      "operations": [
+        "audit",
+        "generate",
+        "mutation-status",
+        "status"
+      ]
+    },
+    {
+      "constraintUID": "e9a79226-c2c2-4483-95c9-a5ab08cb0483",
+      "enforced": true,
+      "id": "gatekeeper-controller-manager-7d7f66bf68-lf9l5",
+      "observedGeneration": 1,
+      "operations": [
+        "mutation-webhook",
+        "webhook"
+      ]
+    },
+    {
+      "constraintUID": "e9a79226-c2c2-4483-95c9-a5ab08cb0483",
+      "enforced": true,
+      "id": "gatekeeper-controller-manager-7d7f66bf68-t4bh6",
+      "observedGeneration": 1,
+      "operations": [
+        "mutation-webhook",
+        "webhook"
+      ]
+    },
+    {
+      "constraintUID": "e9a79226-c2c2-4483-95c9-a5ab08cb0483",
+      "enforced": true,
+      "id": "gatekeeper-controller-manager-7d7f66bf68-tgzpr",
+      "observedGeneration": 1,
+      "operations": [
+        "mutation-webhook",
+        "webhook"
+      ]
+    }
+  ],
+  "totalViolations": 0
+}
+----------------------------------------
+
+[0;32mVerification Summary:[0m
+Total Constraints: 19
+Constraints with Violations: 13
+
+[0;32mRecent Gatekeeper Audit Logs:[0m
+{"level":"info","ts":1734350601.2377346,"logger":"controller","msg":"constraint","process":"audit","audit_id":"2024-12-16T12:03:17Z","resource kind":"EksResourceLimits"}
+{"level":"info","ts":1734350601.241788,"logger":"controller","msg":"constraint","process":"audit","audit_id":"2024-12-16T12:03:17Z","count of constraints":1}
+{"level":"info","ts":1734350601.2418156,"logger":"controller","msg":"constraint","process":"audit","audit_id":"2024-12-16T12:03:17Z","resource kind":"EksForbiddenSysctl"}
+{"level":"info","ts":1734350601.2455614,"logger":"controller","msg":"constraint","process":"audit","audit_id":"2024-12-16T12:03:17Z","count of constraints":1}
+{"level":"info","ts":1734350601.2456903,"logger":"controller","msg":"starting update constraints loop","process":"audit","audit_id":"2024-12-16T12:03:17Z","constraints to update":"map[{constraints.gatekeeper.sh EksAdminAccess v1beta1  admin-access-control}:{} {constraints.gatekeeper.sh EksAllowedCapabilities v1beta1  allowed-capabilities}:{} {constraints.gatekeeper.sh EksAllowedImages v1beta1  allowed-images}:{} {constraints.gatekeeper.sh EksBlockAutomountToken v1beta1  disallow-automount-api-token}:{} {constraints.gatekeeper.sh EksBlockDefaultNamespace v1beta1  block-default-namespace}:{} {constraints.gatekeeper.sh EksContainerNoPrivilege v1beta1  disallow-privileged-containers}:{} {constraints.gatekeeper.sh EksEnforceProbes v1beta1  enforce-probes}:{} {constraints.gatekeeper.sh EksEnforceSecretAccess v1beta1  enforce-secret-access}:{} {constraints.gatekeeper.sh EksForbiddenSysctl v1beta1  forbidden-sysctls}:{} {constraints.gatekeeper.sh EksLimitSensitiveVerbs v1beta1  limit-sensitive-verbs}:{} {constraints.gatekeeper.sh EksMinimiseWildcard v1beta1  block-wildcard-roles}:{} {constraints.gatekeeper.sh EksMountedSecrets v1beta1  eksmountedsecrets}:{} {constraints.gatekeeper.sh EksNetworkPolicyExists v1beta1  ensure-network-policy}:{} {constraints.gatekeeper.sh EksNoPrivilegeEscalation v1beta1  no-privilege-escalation}:{} {constraints.gatekeeper.sh EksPspHostFilesystem v1beta1  psp-host-filesystem}:{} {constraints.gatekeeper.sh EksPspHostNamespace v1beta1  psp-host-namespace}:{} {constraints.gatekeeper.sh EksReadOnlyFilesystem v1beta1  read-only-root-filesystem}:{} {constraints.gatekeeper.sh EksResourceLimits v1beta1  resource-limits}:{} {constraints.gatekeeper.sh EksRestrictDefaultSA v1beta1  restrict-default-sa}:{}]"}
+{"level":"info","ts":1734350601.2492123,"logger":"controller","msg":"updating constraint status","process":"audit","audit_id":"2024-12-16T12:03:17Z","constraintName":"eksmountedsecrets"}
+{"level":"info","ts":1734350601.249286,"logger":"controller","msg":"constraint status update","process":"audit","audit_id":"2024-12-16T12:03:17Z","object":{"apiVersion":"constraints.gatekeeper.sh/v1beta1","kind":"EksMountedSecrets","name":"eksmountedsecrets"}}
+{"level":"info","ts":1734350601.258952,"logger":"controller","msg":"updated constraint status violations","process":"audit","audit_id":"2024-12-16T12:03:17Z","constraintName":"eksmountedsecrets","count":6}
+{"level":"info","ts":1734350601.2655418,"logger":"controller","msg":"updating constraint status","process":"audit","audit_id":"2024-12-16T12:03:17Z","constraintName":"enforce-secret-access"}
+{"level":"info","ts":1734350601.2659597,"logger":"controller","msg":"constraint status update","process":"audit","audit_id":"2024-12-16T12:03:17Z","object":{"apiVersion":"constraints.gatekeeper.sh/v1beta1","kind":"EksEnforceSecretAccess","name":"enforce-secret-access"}}
+{"level":"info","ts":1734350601.2808855,"logger":"controller","msg":"updated constraint status violations","process":"audit","audit_id":"2024-12-16T12:03:17Z","constraintName":"enforce-secret-access","count":20}
+{"level":"info","ts":1734350601.2900198,"logger":"controller","msg":"updating constraint status","process":"audit","audit_id":"2024-12-16T12:03:17Z","constraintName":"block-default-namespace"}
+{"level":"info","ts":1734350601.3074398,"logger":"controller","msg":"updating constraint status","process":"audit","audit_id":"2024-12-16T12:03:17Z","constraintName":"no-privilege-escalation"}
+{"level":"info","ts":1734350601.3075275,"logger":"controller","msg":"constraint status update","process":"audit","audit_id":"2024-12-16T12:03:17Z","object":{"apiVersion":"constraints.gatekeeper.sh/v1beta1","kind":"EksNoPrivilegeEscalation","name":"no-privilege-escalation"}}
+{"level":"info","ts":1734350601.3214388,"logger":"controller","msg":"updated constraint status violations","process":"audit","audit_id":"2024-12-16T12:03:17Z","constraintName":"no-privilege-escalation","count":4}
+{"level":"info","ts":1734350601.32678,"logger":"controller","msg":"updating constraint status","process":"audit","audit_id":"2024-12-16T12:03:17Z","constraintName":"psp-host-filesystem"}
+{"level":"info","ts":1734350601.326966,"logger":"controller","msg":"constraint status update","process":"audit","audit_id":"2024-12-16T12:03:17Z","object":{"apiVersion":"constraints.gatekeeper.sh/v1beta1","kind":"EksPspHostFilesystem","name":"psp-host-filesystem"}}
+{"level":"info","ts":1734350601.340189,"logger":"controller","msg":"updated constraint status violations","process":"audit","audit_id":"2024-12-16T12:03:17Z","constraintName":"psp-host-filesystem","count":15}
+{"level":"info","ts":1734350601.3449256,"logger":"controller","msg":"updating constraint status","process":"audit","audit_id":"2024-12-16T12:03:17Z","constraintName":"resource-limits"}
+{"level":"info","ts":1734350601.3455663,"logger":"controller","msg":"constraint status update","process":"audit","audit_id":"2024-12-16T12:03:17Z","object":{"apiVersion":"constraints.gatekeeper.sh/v1beta1","kind":"EksResourceLimits","name":"resource-limits"}}
+{"level":"info","ts":1734350601.3604934,"logger":"controller","msg":"updated constraint status violations","process":"audit","audit_id":"2024-12-16T12:03:17Z","constraintName":"resource-limits","count":20}
+{"level":"info","ts":1734350601.364517,"logger":"controller","msg":"updating constraint status","process":"audit","audit_id":"2024-12-16T12:03:17Z","constraintName":"restrict-default-sa"}
+{"level":"info","ts":1734350601.37973,"logger":"controller","msg":"updating constraint status","process":"audit","audit_id":"2024-12-16T12:03:17Z","constraintName":"psp-host-namespace"}
+{"level":"info","ts":1734350601.3798952,"logger":"controller","msg":"constraint status update","process":"audit","audit_id":"2024-12-16T12:03:17Z","object":{"apiVersion":"constraints.gatekeeper.sh/v1beta1","kind":"EksPspHostNamespace","name":"psp-host-namespace"}}
+{"level":"info","ts":1734350601.392407,"logger":"controller","msg":"updated constraint status violations","process":"audit","audit_id":"2024-12-16T12:03:17Z","constraintName":"psp-host-namespace","count":15}
+{"level":"info","ts":1734350601.3973136,"logger":"controller","msg":"updating constraint status","process":"audit","audit_id":"2024-12-16T12:03:17Z","constraintName":"disallow-automount-api-token"}
+{"level":"info","ts":1734350601.3975403,"logger":"controller","msg":"constraint status update","process":"audit","audit_id":"2024-12-16T12:03:17Z","object":{"apiVersion":"constraints.gatekeeper.sh/v1beta1","kind":"EksBlockAutomountToken","name":"disallow-automount-api-token"}}
+{"level":"info","ts":1734350601.4086304,"logger":"controller","msg":"updated constraint status violations","process":"audit","audit_id":"2024-12-16T12:03:17Z","constraintName":"disallow-automount-api-token","count":20}
+{"level":"info","ts":1734350601.4146013,"logger":"controller","msg":"updating constraint status","process":"audit","audit_id":"2024-12-16T12:03:17Z","constraintName":"allowed-images"}
+{"level":"info","ts":1734350601.4152098,"logger":"controller","msg":"constraint status update","process":"audit","audit_id":"2024-12-16T12:03:17Z","object":{"apiVersion":"constraints.gatekeeper.sh/v1beta1","kind":"EksAllowedImages","name":"allowed-images"}}
+{"level":"info","ts":1734350601.4264777,"logger":"controller","msg":"updated constraint status violations","process":"audit","audit_id":"2024-12-16T12:03:17Z","constraintName":"allowed-images","count":20}
+{"level":"info","ts":1734350601.4313366,"logger":"controller","msg":"updating constraint status","process":"audit","audit_id":"2024-12-16T12:03:17Z","constraintName":"block-wildcard-roles"}
+{"level":"info","ts":1734350601.4314723,"logger":"controller","msg":"constraint status update","process":"audit","audit_id":"2024-12-16T12:03:17Z","object":{"apiVersion":"constraints.gatekeeper.sh/v1beta1","kind":"EksMinimiseWildcard","name":"block-wildcard-roles"}}
+{"level":"info","ts":1734350601.4416177,"logger":"controller","msg":"updated constraint status violations","process":"audit","audit_id":"2024-12-16T12:03:17Z","constraintName":"block-wildcard-roles","count":5}
+{"level":"info","ts":1734350601.4459696,"logger":"controller","msg":"updating constraint status","process":"audit","audit_id":"2024-12-16T12:03:17Z","constraintName":"ensure-network-policy"}
+{"level":"info","ts":1734350601.4460487,"logger":"controller","msg":"constraint status update","process":"audit","audit_id":"2024-12-16T12:03:17Z","object":{"apiVersion":"constraints.gatekeeper.sh/v1beta1","kind":"EksNetworkPolicyExists","name":"ensure-network-policy"}}
+{"level":"info","ts":1734350601.456721,"logger":"controller","msg":"updated constraint status violations","process":"audit","audit_id":"2024-12-16T12:03:17Z","constraintName":"ensure-network-policy","count":8}
+{"level":"info","ts":1734350601.4625552,"logger":"controller","msg":"updating constraint status","process":"audit","audit_id":"2024-12-16T12:03:17Z","constraintName":"disallow-privileged-containers"}
+{"level":"info","ts":1734350601.4783413,"logger":"controller","msg":"updating constraint status","process":"audit","audit_id":"2024-12-16T12:03:17Z","constraintName":"admin-access-control"}
+{"level":"info","ts":1734350601.4917655,"logger":"controller","msg":"updating constraint status","process":"audit","audit_id":"2024-12-16T12:03:17Z","constraintName":"limit-sensitive-verbs"}
+{"level":"info","ts":1734350601.4918683,"logger":"controller","msg":"constraint status update","process":"audit","audit_id":"2024-12-16T12:03:17Z","object":{"apiVersion":"constraints.gatekeeper.sh/v1beta1","kind":"EksLimitSensitiveVerbs","name":"limit-sensitive-verbs"}}
+{"level":"info","ts":1734350601.5025704,"logger":"controller","msg":"updated constraint status violations","process":"audit","audit_id":"2024-12-16T12:03:17Z","constraintName":"limit-sensitive-verbs","count":4}
+{"level":"info","ts":1734350601.507751,"logger":"controller","msg":"updating constraint status","process":"audit","audit_id":"2024-12-16T12:03:17Z","constraintName":"allowed-capabilities"}
+{"level":"info","ts":1734350601.5078547,"logger":"controller","msg":"constraint status update","process":"audit","audit_id":"2024-12-16T12:03:17Z","object":{"apiVersion":"constraints.gatekeeper.sh/v1beta1","kind":"EksAllowedCapabilities","name":"allowed-capabilities"}}
+{"level":"info","ts":1734350601.520627,"logger":"controller","msg":"updated constraint status violations","process":"audit","audit_id":"2024-12-16T12:03:17Z","constraintName":"allowed-capabilities","count":5}
+{"level":"info","ts":1734350601.527828,"logger":"controller","msg":"updating constraint status","process":"audit","audit_id":"2024-12-16T12:03:17Z","constraintName":"read-only-root-filesystem"}
+{"level":"info","ts":1734350601.5279489,"logger":"controller","msg":"constraint status update","process":"audit","audit_id":"2024-12-16T12:03:17Z","object":{"apiVersion":"constraints.gatekeeper.sh/v1beta1","kind":"EksReadOnlyFilesystem","name":"read-only-root-filesystem"}}
+{"level":"info","ts":1734350601.5415137,"logger":"controller","msg":"updated constraint status violations","process":"audit","audit_id":"2024-12-16T12:03:17Z","constraintName":"read-only-root-filesystem","count":5}
+{"level":"info","ts":1734350601.5457723,"logger":"controller","msg":"updating constraint status","process":"audit","audit_id":"2024-12-16T12:03:17Z","constraintName":"enforce-probes"}
+{"level":"info","ts":1734350601.5650816,"logger":"controller","msg":"updating constraint status","process":"audit","audit_id":"2024-12-16T12:03:17Z","constraintName":"forbidden-sysctls"}

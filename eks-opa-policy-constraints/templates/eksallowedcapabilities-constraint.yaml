@@ -1,7 +1,9 @@
 apiVersion: constraints.gatekeeper.sh/v1beta1
-kind: EksAllowedImages
+kind: EksAllowedCapabilities
 metadata:
-  name: allowed-images
+  name: allowed-capabilities
+  annotations:
+    description: "Controls allowed container capabilities and required capability drops (CIS EKS 5.2.8, 5.2.9)"
 spec:
   enforcementAction: {{ .Values.constraints.enforcementAction | default "deny" }}
   match:
@@ -9,7 +11,7 @@ spec:
       - apiGroups: [""]
         kinds: ["Pod"]
     {{- $baselineNamespaces := .Values.baselines.excludedNamespaces | default list }}
-    {{- $customExemptions := .Values.constraints.eksallowedimages.exemptions | default dict }}
+    {{- $customExemptions := .Values.constraints.eksallowedcapabilities.exemptions | default dict }}
     {{- $customNamespaces := $customExemptions.excludedNamespaces | default list }}
     excludedNamespaces: {{ concat $baselineNamespaces $customNamespaces | toYaml | nindent 6 }}
     labelSelector:
@@ -23,8 +25,10 @@ spec:
         {{ toYaml $combinedMatchLabels | nindent 8 }}
       {{- end }}
   parameters:
-    {{- $allowedRegistries := $customExemptions.allowedRegistries | default list }}
-    allowedRegistries: {{ toYaml $allowedRegistries | nindent 6 }}
+    {{- $allowedCapabilities := $customExemptions.allowedCapabilities | default list }}
+    allowedCapabilities: {{ toYaml $allowedCapabilities | nindent 6 }}
+    {{- $requiredDropCapabilities := $customExemptions.requiredDropCapabilities | default list }}
+    requiredDropCapabilities: {{ toYaml $requiredDropCapabilities | nindent 6 }}
     {{- $excludedContainers := $customExemptions.excludedContainers | default list }}
     excludedContainers: {{ toYaml $excludedContainers | nindent 6 }}
     {{- $excludedImages := $customExemptions.excludedImages | default list }}

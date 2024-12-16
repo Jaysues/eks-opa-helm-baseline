@@ -2,11 +2,13 @@ apiVersion: templates.gatekeeper.sh/v1beta1
 kind: ConstraintTemplate
 metadata:
   name: eksenforceprobes
+  annotations:
+    description: "Enforces configuration of container probes in EKS clusters (CIS EKS 5.2.7)"
 spec:
   crd:
     spec:
       names:
-        kind: K8sEnforceProbes
+        kind: EksEnforceProbes
       validation:
         openAPIV3Schema:
           properties:
@@ -18,12 +20,58 @@ spec:
               type: array
               items:
                 type: string
+            excludedImages:
+              type: array
+              items:
+                type: string
+            excludedNamespaces:
+              type: array
+              items:
+                type: string
+            labelSelector:
+              type: object
+              properties:
+                matchLabels:
+                  type: object
+                  additionalProperties:
+                    type: string
+                matchExpressions:
+                  type: array
+                  items:
+                    type: object
+                    properties:
+                      key:
+                        type: string
+                      operator:
+                        type: string
+                        enum: ["In", "NotIn", "Exists", "DoesNotExist"]
+                      values:
+                        type: array
+                        items:
+                          type: string
   targets:
     - target: admission.k8s.gatekeeper.sh
       rego: |
         package eksenforceprobes
 
-        import data.lib.exclude_container_image.is_excluded
+        is_excluded(container) {
+            exclude_images := object.get(object.get(input, "parameters", {}), "excludedImages", [])
+            img := container.image
+            some exclusion
+            exclusion = exclude_images[_]
+            _matches_exclusion(img, exclusion)
+        }
+
+        _matches_exclusion(img, exclusion) {
+            not endswith(exclusion, "*")
+            exclusion == img
+        }
+
+        _matches_exclusion(img, exclusion) {
+            endswith(exclusion, "*")
+            prefix := trim_suffix(exclusion, "*")
+            startswith(img, prefix)
+        }
         
         probe_type_set = probe_types {
           probe_types := {type | type := ["tcpSocket", "httpGet", "exec"][_]}
@@ -57,21 +105,3 @@ spec:
         input_container_excluded(field) {
           field == input.parameters.excludedContainers[_]
         }
-      libs:
-        - |
-          package lib.exclude_container_image
-          is_excluded(container) {
-              exclude_images := object.get(object.get(input, "parameters", {}), "excludedImages", [])
-              img := container.image
-              exclusion := exclude_images[_]
-              _matches_exclusion(img, exclusion)
-          }
-          _matches_exclusion(img, exclusion) {
-              not endswith(exclusion, "*")
-              exclusion == img
-          }
-          _matches_exclusion(img, exclusion) {
-              endswith(exclusion, "*")
-              prefix := trim_suffix(exclusion, "*")
-              startswith(img, prefix)
-          }

@@ -2,11 +2,13 @@ apiVersion: templates.gatekeeper.sh/v1beta1
 kind: ConstraintTemplate
 metadata:
   name: eksnoprivilegeescalation
+  annotations:
+    description: "Prevents privilege escalation in containers (CIS EKS 5.2.5)"
 spec:
   crd:
     spec:
       names:
-        kind: K8sNoPrivilegeEscalation
+        kind: EksNoPrivilegeEscalation
       validation:
         openAPIV3Schema:
           properties:
@@ -18,12 +20,54 @@ spec:
               type: array
               items:
                 type: string
+            excludedNamespaces:
+              type: array
+              items:
+                type: string
+            labelSelector:
+              type: object
+              properties:
+                matchLabels:
+                  type: object
+                  additionalProperties:
+                    type: string
+                matchExpressions:
+                  type: array
+                  items:
+                    type: object
+                    properties:
+                      key:
+                        type: string
+                      operator:
+                        type: string
+                        enum: ["In", "NotIn", "Exists", "DoesNotExist"]
+                      values:
+                        type: array
+                        items:
+                          type: string
   targets:
     - target: admission.k8s.gatekeeper.sh
       rego: |
         package eksnoprivilegeescalation
 
-        import data.lib.exclude_container_image.is_excluded
+        is_excluded(container) {
+            exclude_images := object.get(object.get(input, "parameters", {}), "excludedImages", [])
+            img := container.image
+            some exclusion
+            exclusion = exclude_images[_]
+            _matches_exclusion(img, exclusion)
+        }
+
+        _matches_exclusion(img, exclusion) {
+            not endswith(exclusion, "*")
+            exclusion == img
+        }
+
+        _matches_exclusion(img, exclusion) {
+            endswith(exclusion, "*")
+            prefix := trim_suffix(exclusion, "*")
+            startswith(img, prefix)
+        }
 
         violation[{"msg": msg, "details": {}}] {
             c := input_containers[_]
@@ -64,21 +108,3 @@ spec:
             field == input.parameters.excludedContainers[_]
         }
 
-      libs:
-        - |
-          package lib.exclude_container_image
-          is_excluded(container) {
-              exclude_images := object.get(object.get(input, "parameters", {}), "excludedImages", [])
-              img := container.image
-              exclusion := exclude_images[_]
-              _matches_exclusion(img, exclusion)
-          }
-          _matches_exclusion(img, exclusion) {
-              not endswith(exclusion, "*")
-              exclusion == img
-          }
-          _matches_exclusion(img, exclusion) {
-              endswith(exclusion, "*")
-              prefix := trim_suffix(exclusion, "*")
-              startswith(img, prefix)
-          }

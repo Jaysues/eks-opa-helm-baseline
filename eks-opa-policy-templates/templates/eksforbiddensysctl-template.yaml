@@ -1,18 +1,18 @@
 apiVersion: templates.gatekeeper.sh/v1beta1
 kind: ConstraintTemplate
 metadata:
-  name: eksmountedsecrets
+  name: eksforbiddensysctl
   annotations:
-    description: "Prevents using secrets as environment variables (CIS EKS 4.4.1)"
+    description: "Prevents pods from using unsafe sysctls (CIS EKS 4.5.2)"
 spec:
   crd:
     spec:
       names:
-        kind: EksMountedSecrets
+        kind: EksForbiddenSysctl
       validation:
         openAPIV3Schema:
           properties:
-            allowedSecrets:
+            forbiddenSysctls:
               type: array
               items:
                 type: string
@@ -45,58 +45,42 @@ spec:
                         type: array
                         items:
                           type: string
+            allowedSysctls:
+              type: array
+              items:
+                type: string
   targets:
     - target: admission.k8s.gatekeeper.sh
       rego: |
-        package eksmountedsecrets
+        package eksforbiddensysctl
 
         violation[{"msg": msg, "details": {}}] {
           not excluded_namespace
-          container := input_containers[_]
-          not is_excluded(container)
+          not is_excluded(input.review.object.spec)
           
-          env := container.env[_]
-          secret_ref := env.valueFrom.secretKeyRef
-          not allowed_secret(secret_ref.name)
+          sysctl := input.review.object.spec.securityContext.sysctls[_]
+          forbidden_sysctl(sysctl.name)
+          not allowed_sysctl(sysctl.name)
 
-          msg := sprintf("Container '%v' in pod '%v' uses non-exempted secret '%v' as environment variable. Use secret volumes instead.", [container.name, input.review.object.metadata.name, secret_ref.name])
+          msg := sprintf("Pod '%v' has forbidden sysctl '%v' configured. Sysctls are restricted by default.", [input.review.object.metadata.name, sysctl.name])
         }
 
-        violation[{"msg": msg, "details": {}}] {
-          not excluded_namespace
-          container := input_containers[_]
-          not is_excluded(container)
-          
-          envFrom := container.envFrom[_]
-          secret_ref := envFrom.secretRef
-          not allowed_secret(secret_ref.name)
-
-          msg := sprintf("Container '%v' in pod '%v' uses non-exempted secret '%v' as environment variable. Use secret volumes instead.", [container.name, input.review.object.metadata.name, secret_ref.name])
+        forbidden_sysctl(name) {
+          forbidden := input.parameters.forbiddenSysctls[_]
+          startswith(name, forbidden)
         }
 
-        allowed_secret(name) {
-          name == input.parameters.allowedSecrets[_]
-        }
-
-        input_containers[c] {
-          c := input.review.object.spec.containers[_]
-        }
-
-        input_containers[c] {
-          c := input.review.object.spec.initContainers[_]
-        }
-
-        input_containers[c] {
-          c := input.review.object.spec.ephemeralContainers[_]
+        allowed_sysctl(name) {
+          name == input.parameters.allowedSysctls[_]
         }
 
         excluded_namespace {
           input.review.object.metadata.namespace == input.parameters.excludedNamespaces[_]
         }
 
-        is_excluded(container) {
+        is_excluded(spec) {
           exclude_images := object.get(object.get(input, "parameters", {}), "excludedImages", [])
-          img := container.image
+          img := spec.containers[_].image
           some exclusion
           exclusion = exclude_images[_]
           _matches_exclusion(img, exclusion)

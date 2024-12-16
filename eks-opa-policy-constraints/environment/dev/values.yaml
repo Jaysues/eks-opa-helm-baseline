@@ -1,26 +1,5 @@
-baselines:
-  excludedNamespaces:
-  - kube-system
-  - amazon-cloudwatch
-  - gatekeeper-system
-  - amazon-guardduty
-
-  whitelistedRoles:
-  - "admin"
-  - "system:*"
-  - "eks:*"
-  - "cluster-admin"
-  - "gatekeeper-manager-role"
-  - "system:masters"
-  - "system:controller:clusterrole-aggregation-controller"
-  - "system:controller:expand-controller"
-  - "system:controller:generic-garbage-collector"
-  - "system:controller:namespace-controller"
-  - "system:controller:persistent-volume-binder"
-  - "system:kube-controller-manager"
-
 constraints:
-  enforcementAction: []
+  enforcementAction: "dryrun"
 
   eksallowedcapabilities:
     exemptions:
@@ -67,19 +46,7 @@ constraints:
   eksminimisewildcard:
     exemptions:
       excludedNamespaces: []
-      whitelistedRoles:
-      - "admin"
-      - "system:*"
-      - "eks:*"
-      - "cluster-admin"
-      - "gatekeeper-manager-role"
-      - "system:masters"
-      - "system:controller:clusterrole-aggregation-controller"
-      - "system:controller:expand-controller"
-      - "system:controller:generic-garbage-collector"
-      - "system:controller:namespace-controller"
-      - "system:controller:persistent-volume-binder"
-      - "system:kube-controller-manager"
+      whitelistedRoles: []
       labelSelector:
         matchLabels: {}
         matchExpressions: []
@@ -121,19 +88,7 @@ constraints:
   ekslimitsensitiveverbs:
     exemptions:
       excludedNamespaces: []
-      excludedRoles:
-      - "admin"
-      - "system:*"
-      - "eks:*"
-      - "cluster-admin"
-      - "gatekeeper-manager-role"
-      - "system:masters"
-      - "system:controller:clusterrole-aggregation-controller"
-      - "system:controller:expand-controller"
-      - "system:controller:generic-garbage-collector"
-      - "system:controller:namespace-controller"
-      - "system:controller:persistent-volume-binder"
-      - "system:kube-controller-manager"
+      excludedRoles: []
       labelSelector:
         matchLabels: {}
         matchExpressions: []
@@ -141,19 +96,7 @@ constraints:
   eksenforcesecretaccess:
     exemptions:
       excludedNamespaces: []
-      excludedRoles:
-      - "admin"
-      - "system:*"
-      - "eks:*"
-      - "cluster-admin"
-      - "gatekeeper-manager-role"
-      - "system:masters"
-      - "system:controller:clusterrole-aggregation-controller"
-      - "system:controller:expand-controller"
-      - "system:controller:generic-garbage-collector"
-      - "system:controller:namespace-controller"
-      - "system:controller:persistent-volume-binder"
-      - "system:kube-controller-manager"
+      excludedRoles: []
       labelSelector:
         matchLabels: {}
         matchExpressions: []
@@ -203,19 +146,7 @@ constraints:
   eksadminaccess:
     exemptions:
       excludedNamespaces: []
-      allowedRoles:
-      - "admin"
-      - "system:*"
-      - "eks:*"
-      - "cluster-admin"
-      - "gatekeeper-manager-role"
-      - "system:masters"
-      - "system:controller:clusterrole-aggregation-controller"
-      - "system:controller:expand-controller"
-      - "system:controller:generic-garbage-collector"
-      - "system:controller:namespace-controller"
-      - "system:controller:persistent-volume-binder"
-      - "system:kube-controller-manager"
+      allowedRoles: []
       labelSelector:
         matchLabels: {}
         matchExpressions: []

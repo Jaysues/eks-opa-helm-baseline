@@ -3,7 +3,7 @@ kind: ConstraintTemplate
 metadata:
   name: ekspsphostnamespace
   annotations:
-    description: "Prevents sharing of host namespaces"
+    description: "Prevents containers from sharing host namespaces (CIS EKS 4.2.2, 4.2.3, 4.2.4)"
 spec:
   crd:
     spec:
@@ -12,55 +12,93 @@ spec:
       validation:
         openAPIV3Schema:
           properties:
+            excludedNamespaces:
+              type: array
+              items:
+                type: string
             excludedImages:
               type: array
               items:
                 type: string
+            labelSelector:
+              type: object
+              properties:
+                matchLabels:
+                  type: object
+                  additionalProperties:
+                    type: string
+                matchExpressions:
+                  type: array
+                  items:
+                    type: object
+                    properties:
+                      key:
+                        type: string
+                      operator:
+                        type: string
+                        enum: ["In", "NotIn", "Exists", "DoesNotExist"]
+                      values:
+                        type: array
+                        items:
+                          type: string
   targets:
     - target: admission.k8s.gatekeeper.sh
       rego: |
         package ekspsphostnamespace
-        
-        import data.lib.exclude_container_image.is_excluded
 
-        violation[{"msg": msg, "details": {}}] {
-            not input.review.object.spec.nodeSelector["kubernetes.io/os"] == "windows"
-            containers := input_containers[_]
-            not is_excluded(containers)
-            input_share_hostnamespace(input.review.object)
-            msg := sprintf("Sharing the host namespace is not allowed: %v", [input.review.object.metadata.name])
+        violation[{"msg": msg}] {
+          not excluded_namespace
+          c := input_containers[_]
+          not is_excluded(c)
+          input.review.object.spec.hostPID
+          msg := sprintf("Pod '%v' is not allowed to share the host PID namespace", [input.review.object.metadata.name])
         }
 
-        input_share_hostnamespace(o) {
-            o.spec.hostPID
+        violation[{"msg": msg}] {
+          not excluded_namespace
+          c := input_containers[_]
+          not is_excluded(c)
+          input.review.object.spec.hostIPC
+          msg := sprintf("Pod '%v' is not allowed to share the host IPC namespace", [input.review.object.metadata.name])
         }
-        input_share_hostnamespace(o) {
-            o.spec.hostIPC
+
+        violation[{"msg": msg}] {
+          not excluded_namespace
+          c := input_containers[_]
+          not is_excluded(c)
+          input.review.object.spec.hostNetwork
+          msg := sprintf("Pod '%v' is not allowed to share the host network namespace", [input.review.object.metadata.name])
+        }
+
+        excluded_namespace {
+          input.review.object.metadata.namespace == input.parameters.excludedNamespaces[_]
+        }
+
+        is_excluded(container) {
+          exclude_images := object.get(object.get(input, "parameters", {}), "excludedImages", [])
+          img := container.image
+          some exclusion
+          exclusion = exclude_images[_]
+          _matches_exclusion(img, exclusion)
+        }
+
+        _matches_exclusion(img, exclusion) {
+          not endswith(exclusion, "*")
+          exclusion == img
+        }
+
+        _matches_exclusion(img, exclusion) {
+          endswith(exclusion, "*")
+          prefix := trim_suffix(exclusion, "*")
+          startswith(img, prefix)
+        }
+
+        input_containers[c] {
+          c := input.review.object.spec.containers[_]
         }
         input_containers[c] {
-            c := input.review.object.spec.containers[_]
+          c := input.review.object.spec.initContainers[_]
         }
         input_containers[c] {
-            c := input.review.object.spec.initContainers[_]
+          c := input.review.object.spec.ephemeralContainers[_]
         }
-        input_containers[c] {
-            c := input.review.object.spec.ephemeralContainers[_]
-        }
-      libs:
-        - |
-          package lib.exclude_container_image
-          is_excluded(container) {
-              exclude_images := object.get(object.get(input, "parameters", {}), "excludedImages", [])
-              img := container.image
-              exclusion := exclude_images[_]
-              _matches_exclusion(img, exclusion)
-          }
-          _matches_exclusion(img, exclusion) {
-              not endswith(exclusion, "*")
-              exclusion == img
-          }
-          _matches_exclusion(img, exclusion) {
-              endswith(exclusion, "*")
-              prefix := trim_suffix(exclusion, "*")
-              startswith(img, prefix)
-          }

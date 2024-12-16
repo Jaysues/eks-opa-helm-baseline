@@ -1,0 +1,66 @@
+apiVersion: templates.gatekeeper.sh/v1beta1
+kind: ConstraintTemplate
+metadata:
+  name: eksrestrictdefaultsa
+  annotations:
+    description: "Ensures default service accounts are not actively used (CIS EKS 4.1.5)"
+spec:
+  crd:
+    spec:
+      names:
+        kind: EksRestrictDefaultSA
+      validation:
+        openAPIV3Schema:
+          properties:
+            excludedNamespaces:
+              type: array
+              items:
+                type: string
+            labelSelector:
+              type: object
+              properties:
+                matchLabels:
+                  type: object
+                  additionalProperties:
+                    type: string
+  targets:
+    - target: admission.k8s.gatekeeper.sh
+      rego: |
+        package eksrestrictdefaultsa
+
+        violation[{"msg": msg}] {
+          not excluded_namespace
+          input.review.kind == "Pod"
+          sa := input.review.object.spec.serviceAccountName
+          sa == "default"
+          
+          msg := sprintf("Pod '%v' uses the default service account which is not allowed", [
+            input.review.object.metadata.name
+          ])
+        }
+
+        violation[{"msg": msg}] {
+          not excluded_namespace
+          input.review.kind == "Pod"
+          not input.review.object.spec.serviceAccountName
+          not input.review.object.spec.automountServiceAccountToken == false
+          
+          msg := sprintf("Pod '%v' implicitly uses the default service account. Set automountServiceAccountToken: false or specify a non-default serviceAccountName", [
+            input.review.object.metadata.name
+          ])
+        }
+
+        violation[{"msg": msg}] {
+          not excluded_namespace
+          input.review.kind == "ServiceAccount"
+          input.review.object.metadata.name == "default"
+          not input.review.object.automountServiceAccountToken == false
+          
+          msg := sprintf("Default ServiceAccount in namespace '%v' must have automountServiceAccountToken: false", [
+            input.review.object.metadata.namespace
+          ])
+        }
+
+        excluded_namespace {
+          input.review.object.metadata.namespace == input.parameters.excludedNamespaces[_]
+        }

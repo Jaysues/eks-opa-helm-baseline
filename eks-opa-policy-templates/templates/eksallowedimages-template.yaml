@@ -26,6 +26,14 @@ spec:
               type: array
               items:
                 type: string
+            excludedContainers:
+              type: array
+              items:
+                type: string
+            excludedImages:
+              type: array
+              items:
+                type: string
   targets:
     - target: admission.k8s.gatekeeper.sh
       rego: |

@@ -3,72 +3,310 @@
   "$schema": "http://json-schema.org/schema#",
   "type": "object",
   "properties": {
-    "enforcementAction": {
-      "type": "string",
-      "enum": ["deny", "dryrun", "audit"],
-      "description": "Enforcement action to take."
-    },
-    "match": {
+    "constraints": {
       "type": "object",
       "properties": {
-        "kinds": {
+        "enforcementAction": {
+          "type": "string",
+          "enum": ["deny", "dryrun", "audit"],
+          "description": "Global enforcement action to take"
+        },
+        "eksallowedcapabilitieseffect": {
           "type": "object",
+          "allOf": [{ "$ref": "#/definitions/commonMetadata" }],
           "properties": {
-            "apiGroups": {
-              "type": "array",
-              "items": { "type": "string" }
-            },
-            "names": {
-              "type": "array",
-              "items": { "type": "string" }
+            "exemptions": {
+              "type": "object",
+              "allOf": [{ "$ref": "#/definitions/commonExemptions" }],
+              "properties": {
+                "allowedCapabilities": { "type": "array", "items": { "type": "string" }},
+                "requiredDropCapabilities": { "type": "array", "items": { "type": "string" }}
+              }
             }
-          },
-          "required": ["apiGroups", "names"]
+          }
         },
-        "namespaces": {
-          "type": "array",
-          "items": { "type": "string" }
+        "eksallowedimageseffect": {
+          "type": "object",
+          "allOf": [{ "$ref": "#/definitions/commonMetadata" }],
+          "properties": {
+            "exemptions": {
+              "type": "object",
+              "allOf": [{ "$ref": "#/definitions/commonExemptions" }],
+              "properties": {
+                "allowedRegistries": { "type": "array", "items": { "type": "string" }},
+                "requireDigests": { "type": "boolean" },
+                "allowedPullPolicies": {
+                  "type": "array",
+                  "items": {
+                    "type": "string",
+                    "enum": ["Always", "IfNotPresent", "Never"]
+                  }
+                }
+              }
+            }
+          }
         },
+        "eksnoprivilegeescalationeffect": {
+          "type": "object",
+          "allOf": [{ "$ref": "#/definitions/commonMetadata" }],
+          "properties": {
+            "exemptions": {
+              "allOf": [{ "$ref": "#/definitions/commonExemptions" }]
+            }
+          }
+        },
+        "eksenforceprobeseffect": {
+          "type": "object",
+          "allOf": [{ "$ref": "#/definitions/commonMetadata" }],
+          "properties": {
+            "exemptions": {
+              "type": "object",
+              "allOf": [{ "$ref": "#/definitions/commonExemptions" }],
+              "properties": {
+                "enforceProbes": { "type": "array", "items": { "type": "string" }}
+              }
+            }
+          }
+        },
+        "eksminimisewildcardeffect": {
+          "type": "object",
+          "allOf": [{ "$ref": "#/definitions/commonMetadata" }],
+          "properties": {
+            "exemptions": {
+              "type": "object",
+              "allOf": [{ "$ref": "#/definitions/commonExemptions" }],
+              "properties": {
+                "whitelistedRoles": { "type": "array", "items": { "type": "string" }}
+              }
+            }
+          }
+        },
+        "eksblockdefaultnamespaceeffect": {
+          "type": "object",
+          "allOf": [{ "$ref": "#/definitions/commonMetadata" }],
+          "properties": {
+            "exemptions": {
+              "type": "object",
+              "allOf": [{ "$ref": "#/definitions/commonExemptions" }],
+              "properties": {
+                "allowedResources": { "type": "array", "items": { "type": "string" }}
+              }
+            }
+          }
+        },
+        "eksblockautomounttokeneffect": {
+          "type": "object",
+          "allOf": [{ "$ref": "#/definitions/commonMetadata" }],
+          "properties": {
+            "exemptions": {
+              "allOf": [{ "$ref": "#/definitions/commonExemptions" }]
+            }
+          }
+        },
+        "ekscontainernoprivilegeeffect": {
+          "type": "object",
+          "allOf": [{ "$ref": "#/definitions/commonMetadata" }],
+          "properties": {
+            "exemptions": {
+              "allOf": [{ "$ref": "#/definitions/commonExemptions" }]
+            }
+          }
+        },
+        "eksreadonlyfilesystemeffect": {
+          "type": "object",
+          "allOf": [{ "$ref": "#/definitions/commonMetadata" }],
+          "properties": {
+            "exemptions": {
+              "allOf": [{ "$ref": "#/definitions/commonExemptions" }]
+            }
+          }
+        },
+        "ekslimitsensitiveverbs": {
+          "type": "object",
+          "allOf": [{ "$ref": "#/definitions/commonMetadata" }],
+          "properties": {
+            "exemptions": {
+              "type": "object",
+              "allOf": [{ "$ref": "#/definitions/commonExemptions" }],
+              "properties": {
+                "excludedRoles": { "type": "array", "items": { "type": "string" }}
+              }
+            }
+          }
+        },
+        "eksenforcesecretaccess": {
+          "type": "object",
+          "allOf": [{ "$ref": "#/definitions/commonMetadata" }],
+          "properties": {
+            "exemptions": {
+              "type": "object",
+              "allOf": [{ "$ref": "#/definitions/commonExemptions" }],
+              "properties": {
+                "excludedRoles": { "type": "array", "items": { "type": "string" }}
+              }
+            }
+          }
+        },
+        "eksforbiddensysctleffect": {
+          "type": "object",
+          "allOf": [{ "$ref": "#/definitions/commonMetadata" }],
+          "properties": {
+            "exemptions": {
+              "type": "object",
+              "allOf": [{ "$ref": "#/definitions/commonExemptions" }],
+              "properties": {
+                "allowedSysctls": { "type": "array", "items": { "type": "string" }}
+              }
+            }
+          }
+        },
+        "ekssecretsasfileseffect": {
+          "type": "object",
+          "allOf": [{ "$ref": "#/definitions/commonMetadata" }],
+          "properties": {
+            "exemptions": {
+              "type": "object",
+              "allOf": [{ "$ref": "#/definitions/commonExemptions" }],
+              "properties": {
+                "allowedSecrets": { "type": "array", "items": { "type": "string" }}
+              }
+            }
+          }
+        },
+        "eksnetworkpolicyexistseffect": {
+          "type": "object",
+          "allOf": [{ "$ref": "#/definitions/commonMetadata" }],
+          "properties": {
+            "exemptions": {
+              "allOf": [{ "$ref": "#/definitions/commonExemptions" }]
+            }
+          }
+        },
+        "ekspsphostnamespaceeffect": {
+          "type": "object",
+          "allOf": [{ "$ref": "#/definitions/commonMetadata" }],
+          "properties": {
+            "exemptions": {
+              "allOf": [{ "$ref": "#/definitions/commonExemptions" }]
+            }
+          }
+        },
+        "ekspsphostfilesystemeffect": {
+          "type": "object",
+          "allOf": [{ "$ref": "#/definitions/commonMetadata" }],
+          "properties": {
+            "exemptions": {
+              "type": "object",
+              "allOf": [{ "$ref": "#/definitions/commonExemptions" }],
+              "properties": {
+                "allowedHostPaths": {
+                  "type": "array",
+                  "items": {
+                    "type": "object",
+                    "properties": {
+                      "pathPrefix": { "type": "string" },
+                      "readOnly": { "type": "boolean" }
+                    },
+                    "required": ["pathPrefix"]
+                  }
+                }
+              }
+            }
+          }
+        },
+        "eksadminaccesseffect": {
+          "type": "object",
+          "allOf": [{ "$ref": "#/definitions/commonMetadata" }],
+          "properties": {
+            "exemptions": {
+              "type": "object",
+              "allOf": [{ "$ref": "#/definitions/commonExemptions" }],
+              "properties": {
+                "allowedRoles": { "type": "array", "items": { "type": "string" }}
+              }
+            }
+          }
+        },
+        "eksrestrictdefaultsaeffect": {
+          "type": "object",
+          "allOf": [{ "$ref": "#/definitions/commonMetadata" }],
+          "properties": {
+            "exemptions": {
+              "allOf": [{ "$ref": "#/definitions/commonExemptions" }]
+            }
+          }
+        }
+      }
+    }
+  },
+  "definitions": {
+    "commonExemptions": {
+      "type": "object",
+      "properties": {
         "excludedNamespaces": {
           "type": "array",
-          "items": { "type": "string" }
-        },
-        "labelSelector": {
-          "type": "object",
-          "properties": {
-            "matchLabels": {
-              "type": "object",
-              "additionalProperties": { "type": "string" }
-            }
-          },
-          "required": ["matchLabels"]
-        }
-      },
-      "required": ["kinds", "namespaces", "excludedNamespaces", "labelSelector"]
-    },
-    "parameters": {
-      "type": "object",
-      "properties": {
-        "allowedCapabilities": {
-          "type": "array",
-          "items": { "type": "string" }
-        },
-        "requiredDropCapabilities": {
-          "type": "array",
-          "items": { "type": "string" }
+          "items": { "type": "string" },
+          "description": "Namespaces to exclude from policy enforcement"
         },
         "excludedContainers": {
           "type": "array",
-          "items": { "type": "string" }
+          "items": { "type": "string" },
+          "description": "Container names to exclude from policy enforcement"
         },
         "excludedImages": {
           "type": "array",
           "items": { "type": "string" },
-          "description": "List of image patterns to exclude from enforcement. Supports prefix matching with '*'."
+          "description": "Image patterns to exclude from policy enforcement"
+        },
+        "labelSelector": {
+          "type": "object",
+          "properties": {
+            "matchLabels": { 
+              "type": "object",
+              "additionalProperties": { "type": "string" }
+            },
+            "matchExpressions": {
+              "type": "array",
+              "items": {
+                "type": "object",
+                "properties": {
+                  "key": { "type": "string" },
+                  "operator": {
+                    "type": "string",
+                    "enum": ["In", "NotIn", "Exists", "DoesNotExist"]
+                  },
+                  "values": {
+                    "type": "array",
+                    "items": { "type": "string" }
+                  }
+                },
+                "required": ["key", "operator"]
+              }
+            }
+          }
+        }
+      }
+    },
+    "commonMetadata": {
+      "type": "object",
+      "properties": {
+        "cisBenchmark": { "type": "string" },
+        "title": { "type": "string" },
+        "type": { "type": "string" },
+        "enforces": {
+          "type": "array",
+          "items": { "type": "string" }
+        },
+        "remediation": {
+          "type": "array",
+          "items": { "type": "string" }
+        },
+        "implementation": {
+          "type": "array",
+          "items": { "type": "string" }
         }
       },
-      "required": ["allowedCapabilities", "requiredDropCapabilities", "excludedContainers", "excludedImages"]
+      "required": ["title", "type", "enforces", "remediation", "implementation"]
     }
-  },
-  "required": ["enforcementAction", "match", "parameters"]
+  }
 }

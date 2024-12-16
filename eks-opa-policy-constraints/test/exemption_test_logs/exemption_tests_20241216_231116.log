@@ -1,0 +1,9 @@
+[0;32mStarting exemption tests...[0m
+[1;33mCleaning up test resources...[0m
+[1;33mCreating test resources...[0m
+[1;33mVerifying exemptions...[0m
+
+[0;32mChecking constraint violations:[0m
+
+[0;32mChecking test resources:[0m
+[0;32mTests completed. Results saved to: exemption_test_logs/exemption_tests_20241216_231116.log[0m

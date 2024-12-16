@@ -3,7 +3,7 @@ kind: ConstraintTemplate
 metadata:
   name: ekspsphostfilesystem
   annotations:
-    description: "Prevents access to host filesystem"
+    description: "Prevents containers from accessing the host filesystem (CIS EKS 4.5.2)"
 spec:
   crd:
     spec:
@@ -12,7 +12,16 @@ spec:
       validation:
         openAPIV3Schema:
           properties:
-            excludedContainers:
+            allowedHostPaths:
+              type: array
+              items:
+                type: object
+                properties:
+                  pathPrefix:
+                    type: string
+                  readOnly:
+                    type: boolean
+            excludedNamespaces:
               type: array
               items:
                 type: string
@@ -20,59 +29,71 @@ spec:
               type: array
               items:
                 type: string
+            labelSelector:
+              type: object
+              properties:
+                matchLabels:
+                  type: object
+                  additionalProperties:
+                    type: string
+                matchExpressions:
+                  type: array
+                  items:
+                    type: object
+                    properties:
+                      key:
+                        type: string
+                      operator:
+                        type: string
+                        enum: ["In", "NotIn", "Exists", "DoesNotExist"]
+                      values:
+                        type: array
+                        items:
+                          type: string
   targets:
     - target: admission.k8s.gatekeeper.sh
       rego: |
         package ekspsphostfilesystem
-        import data.lib.exclude_container_image.is_excluded
+
+        is_excluded(container) {
+            exclude_images := object.get(object.get(input, "parameters", {}), "excludedImages", [])
+            img := container.image
+            some exclusion
+            exclusion = exclude_images[_]
+            _matches_exclusion(img, exclusion)
+        }
+
+        _matches_exclusion(img, exclusion) {
+            not endswith(exclusion, "*")
+            exclusion == img
+        }
+
+        _matches_exclusion(img, exclusion) {
+            endswith(exclusion, "*")
+            prefix := trim_suffix(exclusion, "*")
+            startswith(img, prefix)
+        }
 
         violation[{"msg": msg, "details": {}}] {
-            not input.review.object.spec.nodeSelector["kubernetes.io/os"] == "windows"
-            c := input_containers[_]
-            not input_container_excluded(c.name)
-            not is_excluded(c)
-            input_read_only_root_fs(c)
-            msg := sprintf("Readonly root filesystem is required for container. pod:'%v', container:'%v'", [input.review.object.metadata.name, c.name])
+          not excluded_namespace
+          not is_excluded(input.review.object.spec)
+          
+          volume := input.review.object.spec.volumes[_]
+          hostPath := volume.hostPath
+          not allowed_host_path(hostPath.path)
+          
+          msg := sprintf("Pod '%v' has forbidden hostPath volume '%v': %v", [
+            input.review.object.metadata.name,
+            volume.name,
+            hostPath.path
+          ])
         }
 
-        input_read_only_root_fs(c) {
-            not has_field(c, "securityContext")
-        }
-        input_read_only_root_fs(c) {
-            not c.securityContext.readOnlyRootFilesystem == true
+        allowed_host_path(requestedPath) {
+          allowedPath := input.parameters.allowedHostPaths[_]
+          startswith(requestedPath, allowedPath.pathPrefix)
         }
 
-        input_containers[c] {
-            c := input.review.object.spec.containers[_]
+        excluded_namespace {
+          input.review.object.metadata.namespace == input.parameters.excludedNamespaces[_]
         }
-        input_containers[c] {
-            c := input.review.object.spec.initContainers[_]
-        }
-        input_containers[c] {
-            c := input.review.object.spec.ephemeralContainers[_]
-        }
-        input_container_excluded(field) {
-            field == input.parameters.excludedContainers[_]
-        }
-
-        has_field(object, field) = true {
-            object[field]
-        }
-      libs:
-        - |
-          package lib.exclude_container_image
-          is_excluded(container) {
-              exclude_images := object.get(object.get(input, "parameters", {}), "excludedImages", [])
-              img := container.image
-              exclusion := exclude_images[_]
-              _matches_exclusion(img, exclusion)
-          }
-          _matches_exclusion(img, exclusion) {
-              not endswith(exclusion, "*")
-              exclusion == img
-          }
-          _matches_exclusion(img, exclusion) {
-              endswith(exclusion, "*")
-              prefix := trim_suffix(exclusion, "*")
-              startswith(img, prefix)
-          }

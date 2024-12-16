@@ -1,0 +1,88 @@
+apiVersion: templates.gatekeeper.sh/v1beta1
+kind: ConstraintTemplate
+metadata:
+  name: eksblockdefaultnamespace
+  annotations:
+    description: "Prevents resources from being created in the default namespace (CIS EKS 5.3.2)"
+spec:
+  crd:
+    spec:
+      names:
+        kind: EksBlockDefaultNamespace
+      validation:
+        openAPIV3Schema:
+          properties:
+            excludedNamespaces:
+              type: array
+              items:
+                type: string
+            allowedResources:
+              type: array
+              items:
+                type: string
+            labelSelector:
+              type: object
+              properties:
+                matchLabels:
+                  type: object
+                  additionalProperties:
+                    type: string
+                matchExpressions:
+                  type: array
+                  items:
+                    type: object
+                    properties:
+                      key:
+                        type: string
+                      operator:
+                        type: string
+                        enum: ["In", "NotIn", "Exists", "DoesNotExist"]
+                      values:
+                        type: array
+                        items:
+                          type: string
+  targets:
+    - target: admission.k8s.gatekeeper.sh
+      rego: |
+        package eksblockdefaultnamespace
+
+        violation[{"msg": msg}] {
+          obj := input.review.object
+          is_default_namespace(obj.metadata)
+          not is_allowed(obj)
+          msg := sprintf("Usage of the default namespace is not allowed, name: %v, kind: %v", [obj.metadata.name, obj.kind])
+        }
+
+        is_default_namespace(metadata) {
+          not metadata.namespace
+        }
+
+        is_default_namespace(metadata) {
+          metadata.namespace == "default"
+        }
+
+        is_allowed(obj) {
+          allowed := input.parameters.allowedResources[_]
+          obj.kind == allowed
+        }
+
+        is_allowed(obj) {
+          obj.kind == "ServiceAccount"
+          obj.metadata.name == "default"
+        }
+
+        is_allowed(obj) {
+          obj.kind == "Secret"
+          obj.type == "kubernetes.io/service-account-token"
+          obj.metadata.annotations["kubernetes.io/service-account.name"] == "default"
+        }
+
+        is_allowed(obj) {
+          obj.kind == "Service"
+          obj.metadata.name == "kubernetes"
+        }
+
+        is_allowed(obj) {
+          obj.kind == "ConfigMap"
+          obj.metadata.name == "kube-root-ca.crt"
+        }

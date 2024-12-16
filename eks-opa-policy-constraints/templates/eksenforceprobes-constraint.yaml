@@ -1,7 +1,9 @@
 apiVersion: constraints.gatekeeper.sh/v1beta1
-kind: K8sEnforceProbesEffect
+kind: EksEnforceProbes
 metadata:
   name: enforce-probes
+  annotations:
+    description: "Enforces configuration of container probes in EKS clusters (CIS EKS 5.2.7)"
 spec:
   enforcementAction: {{ .Values.constraints.enforcementAction | default "deny" }}
   match:

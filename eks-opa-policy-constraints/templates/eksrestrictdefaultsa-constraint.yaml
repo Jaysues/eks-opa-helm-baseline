@@ -1,15 +1,17 @@
 apiVersion: constraints.gatekeeper.sh/v1beta1
-kind: EksAllowedImages
+kind: EksRestrictDefaultSA
 metadata:
-  name: allowed-images
+  name: restrict-default-sa
+  annotations:
+    description: "Ensures default service accounts are not actively used (CIS EKS 4.1.5)"
 spec:
   enforcementAction: {{ .Values.constraints.enforcementAction | default "deny" }}
   match:
     kinds:
       - apiGroups: [""]
-        kinds: ["Pod"]
+        kinds: ["Pod", "ServiceAccount"]
     {{- $baselineNamespaces := .Values.baselines.excludedNamespaces | default list }}
-    {{- $customExemptions := .Values.constraints.eksallowedimages.exemptions | default dict }}
+    {{- $customExemptions := .Values.constraints.eksrestrictdefaultsa.exemptions | default dict }}
     {{- $customNamespaces := $customExemptions.excludedNamespaces | default list }}
     excludedNamespaces: {{ concat $baselineNamespaces $customNamespaces | toYaml | nindent 6 }}
     labelSelector:
@@ -22,10 +24,3 @@ spec:
         {{- $combinedMatchLabels := merge $baselineMatchLabels $customMatchLabels }}
         {{ toYaml $combinedMatchLabels | nindent 8 }}
       {{- end }}
-  parameters:
-    {{- $allowedRegistries := $customExemptions.allowedRegistries | default list }}
-    allowedRegistries: {{ toYaml $allowedRegistries | nindent 6 }}
-    {{- $excludedContainers := $customExemptions.excludedContainers | default list }}
-    excludedContainers: {{ toYaml $excludedContainers | nindent 6 }}
-    {{- $excludedImages := $customExemptions.excludedImages | default list }}
-    excludedImages: {{ toYaml $excludedImages | nindent 6 }}

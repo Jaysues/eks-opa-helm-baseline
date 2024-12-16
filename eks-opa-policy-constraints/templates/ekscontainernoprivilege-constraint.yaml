@@ -1,7 +1,10 @@
 apiVersion: constraints.gatekeeper.sh/v1beta1
-kind: EksAllowedImages
+kind: EksContainerNoPrivilege
 metadata:
-  name: allowed-images
+  name: disallow-privileged-containers
+  annotations:
+    description: "Prevents privileged container creation in EKS clusters (CIS EKS 5.2.1)"
+    cisBenchmark: "5.2.1"
 spec:
   enforcementAction: {{ .Values.constraints.enforcementAction | default "deny" }}
   match:
@@ -9,7 +12,7 @@ spec:
       - apiGroups: [""]
         kinds: ["Pod"]
     {{- $baselineNamespaces := .Values.baselines.excludedNamespaces | default list }}
-    {{- $customExemptions := .Values.constraints.eksallowedimages.exemptions | default dict }}
+    {{- $customExemptions := .Values.constraints.ekscontainernoprivilege.exemptions | default dict }}
     {{- $customNamespaces := $customExemptions.excludedNamespaces | default list }}
     excludedNamespaces: {{ concat $baselineNamespaces $customNamespaces | toYaml | nindent 6 }}
     labelSelector:
@@ -23,8 +26,6 @@ spec:
         {{ toYaml $combinedMatchLabels | nindent 8 }}
       {{- end }}
   parameters:
-    {{- $allowedRegistries := $customExemptions.allowedRegistries | default list }}
-    allowedRegistries: {{ toYaml $allowedRegistries | nindent 6 }}
     {{- $excludedContainers := $customExemptions.excludedContainers | default list }}
     excludedContainers: {{ toYaml $excludedContainers | nindent 6 }}
     {{- $excludedImages := $customExemptions.excludedImages | default list }}

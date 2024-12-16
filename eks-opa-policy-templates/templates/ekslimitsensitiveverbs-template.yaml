@@ -1,14 +1,14 @@
 apiVersion: templates.gatekeeper.sh/v1beta1
 kind: ConstraintTemplate
 metadata:
-  name: eksenforcesecretaccess
+  name: ekslimitsensitiveverbs
   annotations:
-    description: "Minimizes access to secrets in the Kubernetes cluster (CIS EKS 4.1.2)"
+    description: "Limits use of bind, impersonate and escalate permissions in RBAC roles (CIS EKS 4.1.8)"
 spec:
   crd:
     spec:
       names:
-        kind: EksEnforceSecretAccess
+        kind: EksLimitSensitiveVerbs
       validation:
         openAPIV3Schema:
           properties:
@@ -44,23 +44,17 @@ spec:
   targets:
     - target: admission.k8s.gatekeeper.sh
       rego: |
-        package eksenforcesecretaccess
+        package ekslimitsensitiveverbs
 
         violation[{"msg": msg, "details": {}}] {
           not excluded_role
           not excluded_namespace
           
-          # Check for rules that access secrets
-          rule := input.review.object.rules[_]
-          resource := rule.resources[_]
-          resource == "secrets"
-          
-          # Check for sensitive verbs
-          verb := rule.verbs[_]
-          sensitive_verb := ["get", "list", "watch"][_]
+          verb := input.review.object.rules[_].verbs[_]
+          sensitive_verb := ["bind", "impersonate", "escalate"][_]
           verb == sensitive_verb
           
-          msg := sprintf("Role '%v' has sensitive access (%v) to secrets", [input.review.object.metadata.name, verb])
+          msg := sprintf("Role '%v' contains sensitive verb '%v' which allows privilege escalation", [input.review.object.metadata.name, verb])
         }
 
         excluded_role {
@@ -69,4 +63,4 @@ spec:
 
         excluded_namespace {
           input.review.object.metadata.namespace == input.parameters.excludedNamespaces[_]
-        } 
+        }

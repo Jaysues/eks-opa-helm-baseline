@@ -1,53 +1,76 @@
 apiVersion: templates.gatekeeper.sh/v1beta1
 kind: ConstraintTemplate
 metadata:
-  name: eksrestrictclusteradmin
+  name: eksadminaccess
   annotations:
-    description: "Restricts cluster-admin role assignments"
+    description: "Controls cluster-admin role assignments and system:masters group usage (CIS EKS 4.1.1, 4.1.7)"
 spec:
   crd:
     spec:
       names:
-        kind: EksRestrictClusterAdmin
+        kind: EksAdminAccess
       validation:
         openAPIV3Schema:
-          type: object
           properties:
-            allowedUsers:
+            allowedRoles:
               type: array
               items:
                 type: string
+            excludedNamespaces:
+              type: array
+              items:
+                type: string
+            labelSelector:
+              type: object
+              properties:
+                matchLabels:
+                  type: object
+                  additionalProperties:
+                    type: string
   targets:
     - target: admission.k8s.gatekeeper.sh
       rego: |
-        package eksrestrictclusteradmin
+        package eksadminaccess
 
         violation[{"msg": msg}] {
-          kind := input.review.kind.kind
-          name := input.review.object.metadata.name
-          not is_cluster_admin_cluster_role_binding
+          not excluded_namespace
+          input.review.kind == "ClusterRoleBinding"
           input.review.object.roleRef.name == "cluster-admin"
-          input.review.object.roleRef.kind == "ClusterRole"
-          input.review.object.roleRef.apiGroup == "rbac.authorization.k8s.io"
-          msg := sprintf("%s %s should not refer cluster admin cluster role", [kind, name])
+          not allowed_role_binding(input.review.object)
+          
+          msg := sprintf("ClusterRoleBinding '%v' uses cluster-admin role which is restricted", [
+            input.review.object.metadata.name
+          ])
         }
 
         violation[{"msg": msg}] {
-          is_cluster_admin_cluster_role_binding
-          subjects := input.review.object.subjects
-          unexpected_subject := { 1 | subject:=subjects[j]; not is_system_master_group(subject) }
-          count(unexpected_subject) > 0
-          msg := "ClusterRoleBinding cluster-admin has subject other than Group system:masters"
+          not excluded_namespace
+          input.review.kind == "RoleBinding"
+          input.review.object.roleRef.name == "cluster-admin"
+          not allowed_role_binding(input.review.object)
+          
+          msg := sprintf("RoleBinding '%v' uses cluster-admin role which is restricted", [
+            input.review.object.metadata.name
+          ])
         }
 
-        is_system_master_group(subject) {
+        violation[{"msg": msg}] {
+          not excluded_namespace
+          input.review.kind == "ClusterRoleBinding"
+          subject := input.review.object.subjects[_]
           subject.kind == "Group"
           subject.name == "system:masters"
+          
+          msg := sprintf("ClusterRoleBinding '%v' uses restricted system:masters group", [
+            input.review.object.metadata.name
+          ])
         }
 
-        is_cluster_admin_cluster_role_binding {
-          input.review.kind.kind == "ClusterRoleBinding"
-          metadata := input.review.object.metadata
-          metadata.name == "cluster-admin"
-          metadata.labels["kubernetes.io/bootstrapping"] == "rbac-defaults"
+        allowed_role_binding(binding) {
+          allowed := input.parameters.allowedRoles[_]
+          binding.metadata.name == allowed
+        }
+
+        excluded_namespace {
+          input.review.object.metadata.namespace == input.parameters.excludedNamespaces[_]
         }
