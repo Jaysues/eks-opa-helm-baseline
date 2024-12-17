@@ -3,7 +3,8 @@ kind: ConstraintTemplate
 metadata:
   name: eksnetworkpolicyexists
   annotations:
-    description: "Ensures namespaces have a NetworkPolicy defined"
+    description: "Ensures namespaces have a NetworkPolicy defined (CIS EKS 4.3.2, 5.4.4)"
+    version: "1.0.0"
 spec:
   crd:
     spec:

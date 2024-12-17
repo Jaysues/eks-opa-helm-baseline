@@ -1,0 +1,37 @@
+# Namespace selector for applying these policies. By default, applies to all pods in the namespace.
+namespaceSelector: {}
+
+# Allow specific inter-service communication
+serviceAccess:
+# Allow frontend to backend communication
+- name: frontend-to-backend
+  from:
+    matchLabels:
+      app: frontend
+  to:
+    matchLabels:
+      app: backend
+  ports:
+  - protocol: TCP
+    port: 8080
+
+# External services access
+externalAccess:
+# Allow specific pods to access external services
+- name: backend-to-external-api
+  podSelector:
+    matchLabels:
+      app: backend
+  to:
+  - ipBlock:
+      cidr: "10.0.0.0/24"
+  ports:
+  - protocol: TCP
+    port: 443
+
+# DNS configuration
+dns:
+  enabled: true
+  namespace: "kube-system"
+  labels:
+    k8s-app: "kube-dns"

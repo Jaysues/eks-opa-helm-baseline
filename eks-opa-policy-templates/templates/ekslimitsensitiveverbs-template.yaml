@@ -4,6 +4,7 @@ metadata:
   name: ekslimitsensitiveverbs
   annotations:
     description: "Limits use of bind, impersonate and escalate permissions in RBAC roles (CIS EKS 4.1.8)"
+    version: "1.0.0"
 spec:
   crd:
     spec:

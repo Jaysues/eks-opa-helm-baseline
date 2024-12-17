@@ -4,6 +4,7 @@ metadata:
   name: eksresourcelimits
   annotations:
     description: "Enforces resource limits for containers"
+    version: "1.0.0"
 spec:
   crd:
     spec:

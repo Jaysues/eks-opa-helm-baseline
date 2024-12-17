@@ -3,7 +3,8 @@ kind: ConstraintTemplate
 metadata:
   name: eksenforceprobes
   annotations:
-    description: "Enforces configuration of container probes in EKS clusters (CIS EKS 5.2.7)"
+    description: "Enforces configuration of container probes in EKS clusters (CIS EKS 4.5.2)"
+    version: "1.0.0"
 spec:
   crd:
     spec:

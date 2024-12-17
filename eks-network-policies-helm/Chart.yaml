@@ -1,0 +1,6 @@
+apiVersion: v2
+name: eks-network-policies
+description: A Helm chart for default deny and selective allow network policies on EKS
+type: application
+version: 0.1.0
+appVersion: "1.0"

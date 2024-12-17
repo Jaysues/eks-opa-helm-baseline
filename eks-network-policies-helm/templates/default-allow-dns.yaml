@@ -1,0 +1,24 @@
+{{- if .Values.dns.enabled }}
+apiVersion: networking.k8s.io/v1
+kind: NetworkPolicy
+metadata:
+  name: eks-allow-dns
+  labels:
+    app: {{ include "my-network-policies.name" . }}
+spec:
+  podSelector: {{- toYaml .Values.namespaceSelector | nindent 2 }}
+  policyTypes:
+    - Egress
+  egress:
+    - to:
+        - namespaceSelector:
+            matchLabels:
+              kube-system: "true"
+          podSelector:
+            matchLabels: {{- toYaml .Values.dns.labels | nindent 12 }}
+      ports:
+        - protocol: UDP
+          port: 53
+        - protocol: TCP
+          port: 53
+{{- end }}

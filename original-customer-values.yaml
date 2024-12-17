@@ -1,0 +1,391 @@
+constraints:
+
+  eksallowedcapabilities:
+    cisBenchmark: "5.2.8, 5.2.9"
+    title: "Restrict Container Capabilities"
+    type: "container"
+    enforces:
+    - "Restrict capabilities to reduce container attack surface"
+    - "Prevent elevation of privileges"
+    remediation:
+    - "Review capabilities added to containers"
+    - "Drop unneeded capabilities using 'requiredDropCapabilities'"
+    - "Follow exemption process if capabilities are required"
+    implementation:
+    - "Check 'allowedCapabilities' and 'requiredDropCapabilities' in container specs"
+    - "Validate capabilities for all containers and initContainers"
+    exemptions:
+      excludedContainers: []
+      excludedImages: []
+      allowedCapabilities: []
+      requiredDropCapabilities: []
+      labelSelector:
+        matchLabels: {}
+        matchExpressions: []
+
+  eksallowedimages:
+    cisBenchmark: "5.1.4"
+    title: "Ensure Image Provenance"
+    type: "container"
+    enforces:
+    - "Use of approved container registries only"
+    - "Prevention of untrusted image sources"
+    remediation:
+    - "Review image registry being used"
+    - "Switch to an approved registry"
+    implementation:
+    - "Validate container images match approved registries"
+    - "Check both regular and init containers"
+    exemptions:
+      excludedNamespaces: []
+      excludedContainers: []
+      excludedImages: []
+      allowedRegistries: []
+      requireDigests: true
+      allowedPullPolicies:
+      - "Always"
+      - "IfNotPresent"
+      labelSelector:
+        matchLabels: {}
+        matchExpressions: []
+
+  eksnoprivilegeescalation:
+    cisBenchmark: "5.2.5"
+    title: "Prevent Privilege Escalation"
+    type: "container"
+    enforces:
+    - "Disallow privilege escalation in containers"
+    remediation:
+    - "Set 'allowPrivilegeEscalation' to false"
+    - "Avoid running containers as root user"
+    implementation:
+    - "Check securityContext.allowPrivilegeEscalation"
+    - "Ensure securityContext.runAsUser is non-root"
+    exemptions:
+      excludedNamespaces: []
+      excludedContainers: []
+      excludedImages: []
+      labelSelector:
+        matchLabels: {}
+        matchExpressions: []
+
+  eksenforceprobes:
+    cisBenchmark: "5.2.7"
+    title: "Ensure Probes Are Configured"
+    type: "container"
+    enforces:
+    - "Liveness and readiness probes must be configured"
+    remediation:
+    - "Define liveness and readiness probes for all containers"
+    - "Use 'httpGet', 'tcpSocket', or 'exec' probes"
+    implementation:
+    - "Validate 'livenessProbe' and 'readinessProbe' fields in container specs"
+    exemptions:
+      excludedNamespaces: []
+      excludedContainers: []
+      excludedImages: []
+      enforceProbes: []
+      labelSelector:
+        matchLabels: {}
+        matchExpressions: []
+
+  eksminimisewildcard:
+    cisBenchmark: "5.1.2"
+    title: "Block Wildcards in Roles"
+    type: "rbac"
+    enforces:
+    - "Prevent use of wildcards in RBAC roles"
+    remediation:
+    - "Replace wildcards '*' with specific resources or actions"
+    - "Review role permissions for security risks"
+    implementation:
+    - "Validate roles and clusterRoles do not contain wildcards"
+    exemptions:
+      excludedNamespaces: []
+      whitelistedRoles: []
+      labelSelector:
+        matchLabels: {}
+        matchExpressions: []
+
+  eksblockdefaultnamespace:
+    cisBenchmark: "5.3.2"
+    title: "Block Default Namespace Usage"
+    type: "namespace"
+    enforces:
+    - "Prevent resource creation in the 'default' namespace"
+    remediation:
+    - "Specify a namespace other than 'default'"
+    - "Follow namespace isolation best practices"
+    implementation:
+    - "Check if resources are created in the 'default' namespace"
+    exemptions:
+      excludedNamespaces: []
+      allowedResources: []
+      labelSelector:
+        matchLabels: {}
+        matchExpressions: []
+
+  eksblockautomounttoken:
+    cisBenchmark: "5.2.1"
+    title: "Prevent Service Account Token Auto-Mount"
+    type: "pod"
+    enforces:
+    - "Prevents automatic mounting of service account tokens"
+    remediation:
+    - "Set automountServiceAccountToken: false"
+    - "Use explicit service account bindings"
+    implementation:
+    - "Check pod and service account automountServiceAccountToken settings"
+    exemptions:
+      excludedNamespaces: []
+      excludedImages: []
+      labelSelector:
+        matchLabels: {}
+        matchExpressions: []
+
+  ekscontainernoprivilege:
+    cisBenchmark: "5.2.1"
+    title: "Prevent Privileged Containers"
+    type: "container"
+    enforces:
+    - "Prevents creation of privileged containers"
+    - "Ensures container security context is properly configured"
+    remediation:
+    - "Remove privileged: true from container security context"
+    - "Use least privilege principle for container configurations"
+    implementation:
+    - "Check container securityContext.privileged setting"
+    exemptions:
+      excludedNamespaces: []
+      excludedContainers: []
+      excludedImages: []
+      labelSelector:
+        matchLabels: {}
+        matchExpressions: []
+
+  eksreadonlyfilesystem:
+    cisBenchmark: "5.2.6"
+    title: "Enforce Read-Only Root Filesystem"
+    type: "container"
+    enforces:
+    - "Containers must use read-only root filesystem"
+    remediation:
+    - "Set securityContext.readOnlyRootFilesystem to true"
+    - "Use volumes for writable directories when needed"
+    implementation:
+    - "Check container securityContext for readOnlyRootFilesystem setting"
+    exemptions:
+      excludedNamespaces: []
+      excludedContainers: []
+      excludedImages: []
+      labelSelector:
+        matchLabels: {}
+        matchExpressions: []
+
+  ekslimitsensitiveverbs:
+    cisBenchmark: "4.1.8"
+    title: "Limit Sensitive RBAC Permissions"
+    type: "rbac"
+    enforces:
+    - "Prevents use of bind, impersonate, and escalate verbs in RBAC roles"
+    remediation:
+    - "Remove bind, impersonate, and escalate permissions from roles"
+    - "Use specific, limited permissions instead of privilege escalation"
+    implementation:
+    - "Validates RBAC role definitions"
+    - "Checks for sensitive verbs that allow privilege escalation"
+    exemptions:
+      excludedNamespaces: []
+      excludedRoles: []
+      labelSelector:
+        matchLabels: {}
+        matchExpressions: []
+
+  eksenforcesecretaccess:
+    cisBenchmark: "4.1.2"
+    title: "Minimize Access to Secrets"
+    type: "rbac"
+    enforces:
+    - "Prevents unauthorized access to Kubernetes secrets"
+    - "Limits get, list, and watch operations on secrets"
+    remediation:
+    - "Remove unnecessary secret access permissions"
+    - "Use specific, limited permissions instead of broad access"
+    implementation:
+    - "Validates RBAC role definitions"
+    - "Checks for sensitive verbs on secret resources"
+    exemptions:
+      excludedNamespaces: []
+      excludedRoles: []
+      labelSelector:
+        matchLabels: {}
+        matchExpressions: []
+
+  eksforbiddensysctl:
+    cisBenchmark: "4.5.2"
+    title: "Control Sysctl Modifications"
+    type: "pod"
+    enforces:
+    - "Prevents modification of kernel parameters through sysctls"
+    - "Blocks unsafe sysctl configurations"
+    remediation:
+    - "Remove sysctl configurations from pod specifications"
+    - "Use only approved sysctls if required"
+    implementation:
+    - "Validates pod security context"
+    - "Blocks all sysctl modifications by default"
+    exemptions:
+      excludedNamespaces: []
+      excludedImages: []
+      allowedSysctls: []
+      labelSelector:
+        matchLabels: {}
+        matchExpressions: []
+
+  eksmountedsecrets:
+    cisBenchmark: "4.4.1"
+    title: "Enforce Secrets as Files"
+    type: "pod"
+    enforces:
+    - "Prevents using secrets as environment variables"
+    - "Requires secrets to be mounted as volumes"
+    remediation:
+    - "Mount secrets as volumes instead of environment variables"
+    - "Update application code to read secrets from files"
+    implementation:
+    - "Checks for secretKeyRef in environment variables"
+    - "Checks for secretRef in envFrom"
+    exemptions:
+      excludedNamespaces: []
+      excludedImages: []
+      allowedSecrets: []
+      labelSelector:
+        matchLabels: {}
+        matchExpressions: []
+
+  eksnetworkpolicyexists:
+    cisBenchmark: "4.3.2, 5.4.4"
+    title: "Enforce Network Policy Existence"
+    type: "namespace"
+    enforces:
+    - "Ensures each namespace has a NetworkPolicy defined"
+    - "Supports service mesh and single pod exemptions"
+    remediation:
+    - "Apply a NetworkPolicy to the namespace"
+    - "Use service mesh annotation/label if using a service mesh"
+    implementation:
+    - "Checks for NetworkPolicy existence in namespace"
+    - "Allows exemptions via annotations or labels"
+    - "Automatically exempts single-pod namespaces"
+    exemptions:
+      excludedNamespaces: []
+      labelSelector:
+        matchLabels: {}
+        matchExpressions: []
+
+  ekspsphostnamespace:
+    cisBenchmark: "4.2.2, 4.2.3, 4.2.4"
+    title: "Prevent Host Namespace Sharing"
+    type: "pod"
+    enforces:
+    - "Prevents pods from sharing host PID namespace"
+    - "Prevents pods from sharing host IPC namespace"
+    - "Prevents pods from sharing host network namespace"
+    remediation:
+    - "Remove hostPID: true from pod spec"
+    - "Remove hostIPC: true from pod spec"
+    - "Remove hostNetwork: true from pod spec"
+    implementation:
+    - "Validates pod specifications"
+    - "Blocks pods that attempt to share host namespaces"
+    exemptions:
+      excludedNamespaces: []
+      excludedImages: []
+      labelSelector:
+        matchLabels: {}
+        matchExpressions: []
+
+  ekspsphostfilesystem:
+    cisBenchmark: "4.5.2"
+    title: "Prevent Host Filesystem Access"
+    type: "pod"
+    enforces:
+    - "Prevents pods from accessing unauthorized host filesystem paths"
+    - "Controls which host paths can be mounted and how"
+    remediation:
+    - "Remove hostPath volumes or use allowed paths only"
+    - "Use persistent volumes instead of host paths"
+    implementation:
+    - "Validates pod volume specifications"
+    - "Enforces allowed host path prefixes"
+    exemptions:
+      excludedNamespaces: []
+      excludedImages: []
+      allowedHostPaths:
+      - pathPrefix: "/var/log"
+        readOnly: true
+      - pathPrefix: "/var/lib/kubelet/pods"
+        readOnly: true
+      labelSelector:
+        matchLabels: {}
+        matchExpressions: []
+
+  eksadminaccess:
+    cisBenchmark: "4.1.1, 4.1.7"
+    title: "Control Admin Access"
+    type: "rbac"
+    enforces:
+    - "Restricts cluster-admin role assignments"
+    - "Prevents system:masters group usage"
+    remediation:
+    - "Use more specific roles with minimal required permissions"
+    - "Remove system:masters group assignments"
+    implementation:
+    - "Validates ClusterRoleBinding and RoleBinding resources"
+    - "Enforces allowed admin role whitelist"
+    exemptions:
+      excludedNamespaces: []
+      allowedRoles: []
+      labelSelector:
+        matchLabels: {}
+        matchExpressions: []
+
+  eksrestrictdefaultsa:
+    cisBenchmark: "4.1.5"
+    title: "Restrict Default Service Account Usage"
+    type: "pod,serviceaccount"
+    enforces:
+    - "Prevents usage of default service account"
+    - "Ensures default SA has automountServiceAccountToken: false"
+    remediation:
+    - "Create explicit service accounts for workloads"
+    - "Set automountServiceAccountToken: false on default service accounts"
+    - "Specify non-default serviceAccountName in pod specs"
+    implementation:
+    - "Validates Pod and ServiceAccount resources"
+    - "Checks for default service account usage"
+    exemptions:
+      excludedNamespaces: []
+      labelSelector:
+        matchLabels: {}
+        matchExpressions: []
+
+  eksresourcelimits:
+    cisBenchmark: "5.4.1"
+    title: "Enforce Resource Limits"
+    type: "pod"
+    enforces:
+    - "Resource limits are set for all containers"
+    - "Default limits applied when not specified"
+    remediation:
+    - "Set resource limits in container specifications"
+    - "Use LimitRange objects for default limits"
+    implementation:
+    - "Validates container resource specifications"
+    - "Applies default limits when not specified"
+    exemptions:
+      excludedNamespaces: []
+      excludedImages: []
+      labelSelector:
+        matchLabels: {}
+        matchExpressions: []

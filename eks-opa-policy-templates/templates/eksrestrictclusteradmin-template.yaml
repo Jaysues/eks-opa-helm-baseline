@@ -4,6 +4,8 @@ metadata:
   name: eksadminaccess
   annotations:
     description: "Controls cluster-admin role assignments and system:masters group usage (CIS EKS 4.1.1, 4.1.7)"
+    version: "1.0.0"
+
 spec:
   crd:
     spec:

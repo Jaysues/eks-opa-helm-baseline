@@ -1,0 +1,14 @@
+{{- range .Values.externalAccess }}
+apiVersion: networking.k8s.io/v1
+kind: NetworkPolicy
+metadata:
+  name: {{ include "my-network-policies.fullname" $ }}-{{ .name }}
+spec:
+  podSelector:
+    matchLabels: {{- toYaml .podSelector.matchLabels | nindent 4 }}
+  policyTypes:
+    - Egress
+  egress:
+    - to: {{- toYaml .to | nindent 8 }}
+      ports: {{- toYaml .ports | nindent 8 }}
+{{- end }}

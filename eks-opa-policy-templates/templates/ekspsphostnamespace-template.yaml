@@ -4,6 +4,7 @@ metadata:
   name: ekspsphostnamespace
   annotations:
     description: "Prevents containers from sharing host namespaces (CIS EKS 4.2.2, 4.2.3, 4.2.4)"
+    version: "1.0.0"
 spec:
   crd:
     spec:

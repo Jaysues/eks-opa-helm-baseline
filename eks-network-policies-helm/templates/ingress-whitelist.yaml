@@ -1,0 +1,16 @@
+{{- range .Values.serviceAccess }}
+apiVersion: networking.k8s.io/v1
+kind: NetworkPolicy
+metadata:
+  name: {{ include "my-network-policies.fullname" $ }}-{{ .name }}
+spec:
+  podSelector:
+    matchLabels: {{- toYaml .to.matchLabels | nindent 4 }}
+  policyTypes:
+    - Ingress
+  ingress:
+    - from:
+      - podSelector:
+          matchLabels: {{- toYaml .from.matchLabels | nindent 10 }}
+      ports: {{- toYaml .ports | nindent 8 }}
+{{- end }}

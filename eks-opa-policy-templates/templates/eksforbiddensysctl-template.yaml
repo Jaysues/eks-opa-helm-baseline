@@ -4,6 +4,7 @@ metadata:
   name: eksforbiddensysctl
   annotations:
     description: "Prevents pods from using unsafe sysctls (CIS EKS 4.5.2)"
+    version: "1.0.0"
 spec:
   crd:
     spec:

@@ -3,7 +3,8 @@ kind: ConstraintTemplate
 metadata:
   name: ekscontainernoprivilege
   annotations:
-    description: "Controls privilege escalation in containers (CIS EKS 5.2.1)"
+    description: "Controls privilege escalation in containers (CIS EKS 4.5.2, 4.2.5)"
+    version: "1.0.0"
 spec:
   crd:
     spec:

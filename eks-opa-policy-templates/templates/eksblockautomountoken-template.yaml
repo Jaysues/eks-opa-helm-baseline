@@ -3,7 +3,8 @@ kind: ConstraintTemplate
 metadata:
   name: eksblockautomounttoken
   annotations:
-    description: "Prevents pods from automatically mounting service account tokens"
+    description: "Prevents pods from automatically mounting service account tokens (CIS EKS 4.5.2)"
+    version: "1.0.0"
 spec:
   crd:
     spec:

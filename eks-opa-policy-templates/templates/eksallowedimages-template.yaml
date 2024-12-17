@@ -3,7 +3,8 @@ kind: ConstraintTemplate
 metadata:
   name: eksallowedimages
   annotations:
-    description: "Controls allowed image registries and enforces image pull policies (CIS EKS 5.1)"
+    description: "Controls allowed image registries and enforces image pull policies (CIS EKS 4.5.2)"
+    version: "1.0.0"
 spec:
   crd:
     spec:

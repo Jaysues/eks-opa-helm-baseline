@@ -1,0 +1,50 @@
+
+### 1. Container Security
+- **eksallowedcapabilities** (Container capabilities management)
+- **eksallowedimages** (Image policy control)
+- **eksnoprivilegeescalation** (Privilege escalation prevention)
+- **ekscontainernoprivilege** (Container privilege control)
+- **eksreadonlyfilesystem** (Filesystem access control)
+
+### 2. RBAC & Access Control
+- **eksminimisewildcard** (Role permissions)
+- **ekslimitsensitiveverbs** (API verb restrictions)
+- **eksenforcesecretaccess** (Secret access control)
+- **eksadminaccess** (Admin privileges)
+- **eksrestrictdefaultsa** (Service account restrictions)
+
+### 3. Pod Security
+- **eksblockautomounttoken** (Service account token mounting)
+- **eksforbiddensysctl** (Sysctl configurations)
+- **ekspsphostnamespace** (Host namespace access)
+- **ekspsphostfilesystem** (Host filesystem access)
+- **eksresourcelimits** (Resource quota enforcement)
+
+### 4. Namespace Management
+- **eksblockdefaultnamespace** (Default namespace usage)
+- **eksnetworkpolicyexists** (Network policy requirements)
+
+### 5. Workload Configuration
+- **eksenforceprobes** (Probe configuration)
+- **eksmountedsecrets** (Secret mounting control)
+
+### Multi-category Policies
+
+1. **eksenforcesecretaccess**
+   - Fits in: RBAC & Access Control, Pod Security
+   
+2. **eksrestrictdefaultsa**
+   - Fits in: RBAC & Access Control, Pod Security
+
+3. **ekspsphostnamespace** and **ekspsphostfilesystem**
+   - Fits in: Container Security, Pod Security
+
+4. **eksblockautomounttoken**
+   - Fits in: RBAC & Access Control, Pod Security
+
+Each policy includes common parameters like:
+- `excludedNamespaces`
+- `labelSelector`
+- `version`
+
+But they are grouped based on their primary security focus and specific parameters that define their functional area.

@@ -3,7 +3,8 @@ kind: ConstraintTemplate
 metadata:
   name: eksallowedcapabilities
   annotations:
-    description: "Controls allowed container capabilities and required capability drops (CIS EKS 5.2.8, 5.2.9)"
+    description: "Controls allowed container capabilities and required capability drops (CIS EKS 4.5.2)"
+    version: "1.0.0"
 spec:
   crd:
     spec:
@@ -21,7 +22,7 @@ spec:
               items:
                 type: string
             excludedContainers:
-              type: arraycd
+              type: array
               items:
                 type: string
             excludedImages:

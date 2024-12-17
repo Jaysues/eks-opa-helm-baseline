@@ -3,7 +3,8 @@ kind: ConstraintTemplate
 metadata:
   name: eksblockdefaultnamespace
   annotations:
-    description: "Prevents resources from being created in the default namespace (CIS EKS 5.3.2)"
+    description: "Prevents resources from being created in the default namespace (CIS EKS 4.5.3)"
+    version: "1.0.0"
 spec:
   crd:
     spec:

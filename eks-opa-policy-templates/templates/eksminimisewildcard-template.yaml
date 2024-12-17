@@ -3,7 +3,8 @@ kind: ConstraintTemplate
 metadata:
   name: eksminimisewildcard
   annotations:
-    description: "Prevents use of wildcards in RBAC roles (CIS EKS 5.1.2)"
+    description: "Prevents use of wildcards in RBAC roles (CIS EKS 4.1.3)"
+    version: "1.0.0"
 spec:
   crd:
     spec:

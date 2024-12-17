@@ -4,6 +4,7 @@ metadata:
   name: ekspsphostfilesystem
   annotations:
     description: "Prevents containers from accessing the host filesystem (CIS EKS 4.5.2)"
+    version: "1.0.0"
 spec:
   crd:
     spec:
