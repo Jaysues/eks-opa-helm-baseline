@@ -19,10 +19,15 @@ baselines:
   - "system:controller:persistent-volume-binder"
   - "system:kube-controller-manager"
 
+  labelSelector:
+    matchLabels: {}
+    matchExpressions: []
+
 constraints:
   enforcementAction: []
 
   eksallowedcapabilities:
+    version: "1.0.0"
     exemptions:
       excludedNamespaces: []
       excludedContainers: []
@@ -34,6 +39,7 @@ constraints:
         matchExpressions: []
 
   eksallowedimages:
+    version: "1.0.0"
     exemptions:
       excludedNamespaces: []
       excludedContainers: []
@@ -46,6 +52,7 @@ constraints:
         matchExpressions: []
 
   eksnoprivilegeescalation:
+    version: "1.0.0"
     exemptions:
       excludedNamespaces: []
       excludedContainers: []
@@ -55,6 +62,7 @@ constraints:
         matchExpressions: []
 
   eksenforceprobes:
+    version: "1.0.0"
     exemptions:
       excludedNamespaces: []
       excludedContainers: []
@@ -65,26 +73,16 @@ constraints:
         matchExpressions: []
 
   eksminimisewildcard:
+    version: "1.0.0"
     exemptions:
       excludedNamespaces: []
-      whitelistedRoles:
-      - "admin"
-      - "system:*"
-      - "eks:*"
-      - "cluster-admin"
-      - "gatekeeper-manager-role"
-      - "system:masters"
-      - "system:controller:clusterrole-aggregation-controller"
-      - "system:controller:expand-controller"
-      - "system:controller:generic-garbage-collector"
-      - "system:controller:namespace-controller"
-      - "system:controller:persistent-volume-binder"
-      - "system:kube-controller-manager"
+      allowedRoles: []
       labelSelector:
         matchLabels: {}
         matchExpressions: []
 
   eksblockdefaultnamespace:
+    version: "1.0.0"
     exemptions:
       excludedNamespaces: []
       allowedResources: []
@@ -93,6 +91,7 @@ constraints:
         matchExpressions: []
 
   eksblockautomounttoken:
+    version: "1.0.0"
     exemptions:
       excludedNamespaces: []
       excludedImages: []
@@ -101,6 +100,7 @@ constraints:
         matchExpressions: []
 
   ekscontainernoprivilege:
+    version: "1.0.0"
     exemptions:
       excludedNamespaces: []
       excludedContainers: []
@@ -110,6 +110,7 @@ constraints:
         matchExpressions: []
 
   eksreadonlyfilesystem:
+    version: "1.0.0"
     exemptions:
       excludedNamespaces: []
       excludedContainers: []
@@ -119,55 +120,39 @@ constraints:
         matchExpressions: []
 
   ekslimitsensitiveverbs:
+    version: "1.0.0"
     exemptions:
       excludedNamespaces: []
-      excludedRoles:
-      - "admin"
-      - "system:*"
-      - "eks:*"
-      - "cluster-admin"
-      - "gatekeeper-manager-role"
-      - "system:masters"
-      - "system:controller:clusterrole-aggregation-controller"
-      - "system:controller:expand-controller"
-      - "system:controller:generic-garbage-collector"
-      - "system:controller:namespace-controller"
-      - "system:controller:persistent-volume-binder"
-      - "system:kube-controller-manager"
+      allowedRoles: []
       labelSelector:
         matchLabels: {}
         matchExpressions: []
 
   eksenforcesecretaccess:
+    version: "1.0.0"
     exemptions:
       excludedNamespaces: []
-      excludedRoles:
-      - "admin"
-      - "system:*"
-      - "eks:*"
-      - "cluster-admin"
-      - "gatekeeper-manager-role"
-      - "system:masters"
-      - "system:controller:clusterrole-aggregation-controller"
-      - "system:controller:expand-controller"
-      - "system:controller:generic-garbage-collector"
-      - "system:controller:namespace-controller"
-      - "system:controller:persistent-volume-binder"
-      - "system:kube-controller-manager"
+      allowedRoles: []
       labelSelector:
         matchLabels: {}
         matchExpressions: []
 
   eksforbiddensysctl:
+    version: "1.0.0"
     exemptions:
       excludedNamespaces: []
       excludedImages: []
-      allowedSysctls: []
+      allowedSysctls:
+      - "net.ipv4.ip_local_port_range"
+      - "net.ipv4.tcp_syncookies"
+      - "net.ipv4.ping_group_range"
+      - "net.core.somaxconn"
       labelSelector:
         matchLabels: {}
         matchExpressions: []
 
   eksmountedsecrets:
+    version: "1.0.0"
     exemptions:
       excludedNamespaces: []
       excludedImages: []
@@ -177,6 +162,7 @@ constraints:
         matchExpressions: []
 
   eksnetworkpolicyexists:
+    version: "1.0.0"
     exemptions:
       excludedNamespaces: []
       labelSelector:
@@ -184,6 +170,7 @@ constraints:
         matchExpressions: []
 
   ekspsphostnamespace:
+    version: "1.0.0"
     exemptions:
       excludedNamespaces: []
       excludedImages: []
@@ -192,6 +179,7 @@ constraints:
         matchExpressions: []
 
   ekspsphostfilesystem:
+    version: "1.0.0"
     exemptions:
       excludedNamespaces: []
       excludedImages: []
@@ -201,26 +189,16 @@ constraints:
         matchExpressions: []
 
   eksadminaccess:
+    version: "1.0.0"
     exemptions:
       excludedNamespaces: []
-      allowedRoles:
-      - "admin"
-      - "system:*"
-      - "eks:*"
-      - "cluster-admin"
-      - "gatekeeper-manager-role"
-      - "system:masters"
-      - "system:controller:clusterrole-aggregation-controller"
-      - "system:controller:expand-controller"
-      - "system:controller:generic-garbage-collector"
-      - "system:controller:namespace-controller"
-      - "system:controller:persistent-volume-binder"
-      - "system:kube-controller-manager"
+      allowedRoles: []
       labelSelector:
         matchLabels: {}
         matchExpressions: []
 
   eksrestrictdefaultsa:
+    version: "1.0.0"
     exemptions:
       excludedNamespaces: []
       labelSelector:
@@ -228,6 +206,7 @@ constraints:
         matchExpressions: []
 
   eksresourcelimits:
+    version: "1.0.0"
     exemptions:
       excludedNamespaces: []
       excludedImages: []

@@ -3,7 +3,8 @@ kind: EksMinimiseWildcard
 metadata:
   name: block-wildcard-roles
   annotations:
-    description: "Prevents use of wildcards in RBAC roles (CIS EKS 5.1.2)"
+    description: "Prevents use of wildcards in RBAC roles (CIS EKS 4.1.3)"
+    version: "{{ .Values.constraints.eksminimisewildcard.version }}"
 spec:
   enforcementAction: {{ .Values.constraints.enforcementAction | default "deny" }}
   match:
@@ -23,7 +24,12 @@ spec:
         {{- $customMatchLabels := $customLabels.matchLabels | default dict }}
         {{- $combinedMatchLabels := merge $baselineMatchLabels $customMatchLabels }}
         {{ toYaml $combinedMatchLabels | nindent 8 }}
+      matchExpressions:
+        {{- $baselineExpressions := .Values.baselines.labelSelector.matchExpressions | default list }}
+        {{- $customExpressions := .Values.constraints.eksallowedcapabilities.exemptions.labelSelector.matchExpressions | default list }}
+        {{ toYaml (concat $baselineExpressions $customExpressions) | nindent 8 }}
       {{- end }}
   parameters:
-    {{- $whitelistedRoles := $customExemptions.whitelistedRoles | default list }}
-    whitelistedRoles: {{ toYaml $whitelistedRoles | nindent 6 }}
+    {{- $baselineAllowedRoles := .Values.baselines.whitelistedRoles | default list }}
+    {{- $allowedRoles := $customExemptions.allowedRoles | default list }}
+    allowedRoles: {{ concat $baselineAllowedRoles $allowedRoles | toYaml | nindent 6 }}

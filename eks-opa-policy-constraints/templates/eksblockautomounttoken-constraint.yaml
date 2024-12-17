@@ -3,7 +3,8 @@ kind: EksBlockAutomountToken
 metadata:
   name: disallow-automount-api-token
   annotations:
-    description: "Prevents pods from automatically mounting service account tokens"
+    description: "Prevents pods from automatically mounting service account tokens (CIS EKS 4.5.2)"
+    version: "{{ .Values.constraints.eksblockautomounttoken.version }}"
 spec:
   enforcementAction: {{ .Values.constraints.enforcementAction | default "deny" }}
   match:
@@ -23,6 +24,10 @@ spec:
         {{- $customMatchLabels := $customLabels.matchLabels | default dict }}
         {{- $combinedMatchLabels := merge $baselineMatchLabels $customMatchLabels }}
         {{ toYaml $combinedMatchLabels | nindent 8 }}
+      matchExpressions:
+        {{- $baselineExpressions := .Values.baselines.labelSelector.matchExpressions | default list }}
+        {{- $customExpressions := .Values.constraints.eksallowedcapabilities.exemptions.labelSelector.matchExpressions | default list }}
+        {{ toYaml (concat $baselineExpressions $customExpressions) | nindent 8 }}
       {{- end }}
   parameters:
     {{- $excludedImages := $customExemptions.excludedImages | default list }}

@@ -4,6 +4,7 @@ metadata:
   name: admin-access-control
   annotations:
     description: "Controls cluster-admin role assignments and system:masters group usage (CIS EKS 4.1.1, 4.1.7)"
+    version: "{{ .Values.constraints.eksadminaccess.version }}"
 spec:
   enforcementAction: {{ .Values.constraints.enforcementAction | default "deny" }}
   match:
@@ -14,7 +15,21 @@ spec:
     {{- $customExemptions := .Values.constraints.eksadminaccess.exemptions | default dict }}
     {{- $customNamespaces := $customExemptions.excludedNamespaces | default list }}
     excludedNamespaces: {{ concat $baselineNamespaces $customNamespaces | toYaml | nindent 6 }}
+    labelSelector:
+      {{- $baselineLabels := .Values.baselines.labelSelector | default dict }}
+      {{- $customLabels := $customExemptions.labelSelector | default dict }}
+      {{- if or $baselineLabels.matchLabels $customLabels.matchLabels }}
+      matchLabels:
+        {{- $baselineMatchLabels := $baselineLabels.matchLabels | default dict }}
+        {{- $customMatchLabels := $customLabels.matchLabels | default dict }}
+        {{- $combinedMatchLabels := merge $baselineMatchLabels $customMatchLabels }}
+        {{ toYaml $combinedMatchLabels | nindent 8 }}
+      matchExpressions:
+        {{- $baselineExpressions := .Values.baselines.labelSelector.matchExpressions | default list }}
+        {{- $customExpressions := .Values.constraints.eksallowedcapabilities.exemptions.labelSelector.matchExpressions | default list }}
+        {{ toYaml (concat $baselineExpressions $customExpressions) | nindent 8 }}
+      {{- end }}
   parameters:
-    {{- $baselineAllowedRoles := .Values.baselines.allowedAdminRoles | default list }}
+    {{- $baselineAllowedRoles := .Values.baselines.whitelistedRoles | default list }}
     {{- $customAllowedRoles := $customExemptions.allowedRoles | default list }}
     allowedRoles: {{ concat $baselineAllowedRoles $customAllowedRoles | toYaml | nindent 6 }}

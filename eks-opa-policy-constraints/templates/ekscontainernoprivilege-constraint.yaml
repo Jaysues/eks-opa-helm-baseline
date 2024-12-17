@@ -4,7 +4,7 @@ metadata:
   name: disallow-privileged-containers
   annotations:
     description: "Prevents privileged container creation in EKS clusters (CIS EKS 5.2.1)"
-    cisBenchmark: "5.2.1"
+    version: "{{ .Values.constraints.ekscontainernoprivilege.version }}"
 spec:
   enforcementAction: {{ .Values.constraints.enforcementAction | default "deny" }}
   match:
@@ -24,6 +24,10 @@ spec:
         {{- $customMatchLabels := $customLabels.matchLabels | default dict }}
         {{- $combinedMatchLabels := merge $baselineMatchLabels $customMatchLabels }}
         {{ toYaml $combinedMatchLabels | nindent 8 }}
+      matchExpressions:
+        {{- $baselineExpressions := .Values.baselines.labelSelector.matchExpressions | default list }}
+        {{- $customExpressions := .Values.constraints.eksallowedcapabilities.exemptions.labelSelector.matchExpressions | default list }}
+        {{ toYaml (concat $baselineExpressions $customExpressions) | nindent 8 }}
       {{- end }}
   parameters:
     {{- $excludedContainers := $customExemptions.excludedContainers | default list }}

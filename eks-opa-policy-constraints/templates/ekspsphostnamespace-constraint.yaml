@@ -4,6 +4,7 @@ metadata:
   name: psp-host-namespace
   annotations:
     description: "Prevents containers from sharing host namespaces (CIS EKS 4.2.2, 4.2.3, 4.2.4)"
+    version: "{{ .Values.constraints.ekspsphostnamespace.version }}"
 spec:
   enforcementAction: {{ .Values.constraints.enforcementAction | default "deny" }}
   match:
@@ -23,6 +24,10 @@ spec:
         {{- $customMatchLabels := $customLabels.matchLabels | default dict }}
         {{- $combinedMatchLabels := merge $baselineMatchLabels $customMatchLabels }}
         {{ toYaml $combinedMatchLabels | nindent 8 }}
+      matchExpressions:
+        {{- $baselineExpressions := .Values.baselines.labelSelector.matchExpressions | default list }}
+        {{- $customExpressions := .Values.constraints.eksallowedcapabilities.exemptions.labelSelector.matchExpressions | default list }}
+        {{ toYaml (concat $baselineExpressions $customExpressions) | nindent 8 }}
       {{- end }}
   parameters:
     {{- $excludedImages := $customExemptions.excludedImages | default list }}

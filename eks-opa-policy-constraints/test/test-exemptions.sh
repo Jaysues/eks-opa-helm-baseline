@@ -1,197 +1,158 @@
-#!/bin/bash
-# test-exemptions.sh
+#!/usr/bin/env bash
 
-set -e
+set -euo pipefail
 
-# Colors for output
-GREEN='\033[0;32m'
-RED='\033[0;31m'
-YELLOW='\033[1;33m'
-NC='\033[0m'
+# Variables
+POLICY=${POLICY:-"eksallowedcapabilities"} # Set your policy here or pass as env var: POLICY=eksallowedcapabilities ./test_exemption_logic.sh
+CHART_DIR="../" # Adjust if script is placed in test/ directory and chart is up one level
+CUSTOMER_VALUES="${CHART_DIR}/customer/customer-1/values.yaml"
+ENV_VALUES="${CHART_DIR}/environment/dev/values.yaml"
+BASE_VALUES="${CHART_DIR}/values.yaml"
+NAMESPACE="exemption-test"
+LOG_FILE="test_${POLICY}.log"
 
-LOGS_DIR="exemption_test_logs"
-mkdir -p "$LOGS_DIR"
-TIMESTAMP=$(date +"%Y%m%d_%H%M%S")
-LOG_FILE="$LOGS_DIR/exemption_tests_$TIMESTAMP.log"
+# Start logging
+exec > >(tee -i ${LOG_FILE}) 2>&1
 
-log() {
-    echo -e "$1" | tee -a "$LOG_FILE"
+echo "===== Starting Exemption Logic Test for Policy: ${POLICY} ====="
+
+# Ensure namespace doesn't exist
+kubectl delete ns ${NAMESPACE} --ignore-not-found
+
+# A helper function to restore original customer values after test
+restore_customer_values() {
+  echo "Restoring original customer values..."
+  git checkout -- "${CUSTOMER_VALUES}" || true
 }
+trap restore_customer_values EXIT
 
-log_cmd() {
-    echo -e "\n$ $1" >> "$LOG_FILE"
-    eval "$1" 2>&1 | tee -a "$LOG_FILE"
-}
+# Identify the parameters for the given POLICY by inspecting the constraints YAML in templates or from known structure.
+# For simplicity, we assume we know the fields from the given policy.
+# We'll add test values to each exemption parameter.
 
-create_test_cases() {
-    log "${YELLOW}Creating test resources...${NC}"
+# Example test values (adjust these based on the fields your policy supports):
+EXCLUDED_NAMESPACES='["test-exempt-ns"]'
+EXCLUDED_CONTAINERS='["test-exempt-container"]'
+EXCLUDED_IMAGES='["test-image:*"]'
+ALLOWED_CAPABILITIES='["NET_ADMIN"]'
+REQUIRED_DROP_CAPABILITIES='["ALL"]'
+ALLOWED_REGISTRIES='["test-registry.io"]'
+ALLOWED_PULL_POLICIES='["IfNotPresent"]'
+ALLOWED_SECRETS='["test-secret"]'
+ALLOWED_HOST_PATHS='[{"pathPrefix":"/test/exempt-path","readOnly":true}]'
+ALLOWED_ROLES='["system:masters"]'
+EXCLUDED_ROLES='["test-role"]'
+ALLOWED_RESOURCES='["test-resource"]'
+ALLOWED_SYSCTLS='["net.ipv4.ip_local_port_range"]'
+ENFORCE_PROBES='["livenessProbe"]'
 
-    # Create test namespace
-    log "\nCreating test namespace:"
-    cat <<EOF | kubectl apply -f - 2>&1 | tee -a "$LOG_FILE"
-apiVersion: v1
-kind: Namespace
-metadata:
-  name: exemption-test
-  labels:
-    test: "true"
-EOF
+# Label selector logic for testing matchLabels/matchExpressions:
+MATCH_LABELS='{ "exempt-label": "true" }'
+MATCH_EXPRESSIONS='[{"key":"env","operator":"In","values":["test"]}]'
 
-    # Non-exempted test cases
-    log "\nCreating non-exempted test resources:"
-    cat <<EOF | kubectl apply -f - 2>&1 | tee -a "$LOG_FILE"
+echo "Modifying customer values to insert test exemptions for policy: ${POLICY}"
+
+# Use yq to modify the customer values YAML
+
+# General pattern for yq:
+# yq eval '(path.to.field) = value' -i file.yaml
+
+yq eval ".constraints.${POLICY}.exemptions.excludedNamespaces = ${EXCLUDED_NAMESPACES}" -i "${CUSTOMER_VALUES}" || true
+yq eval ".constraints.${POLICY}.exemptions.excludedContainers = ${EXCLUDED_CONTAINERS}" -i "${CUSTOMER_VALUES}" || true
+yq eval ".constraints.${POLICY}.exemptions.excludedImages = ${EXCLUDED_IMAGES}" -i "${CUSTOMER_VALUES}" || true
+yq eval ".constraints.${POLICY}.exemptions.allowedCapabilities = ${ALLOWED_CAPABILITIES}" -i "${CUSTOMER_VALUES}" || true
+yq eval ".constraints.${POLICY}.exemptions.requiredDropCapabilities = ${REQUIRED_DROP_CAPABILITIES}" -i "${CUSTOMER_VALUES}" || true
+yq eval ".constraints.${POLICY}.exemptions.allowedRegistries = ${ALLOWED_REGISTRIES}" -i "${CUSTOMER_VALUES}" || true
+yq eval ".constraints.${POLICY}.exemptions.requireDigests = true" -i "${CUSTOMER_VALUES}" || true
+yq eval ".constraints.${POLICY}.exemptions.allowedPullPolicies = ${ALLOWED_PULL_POLICIES}" -i "${CUSTOMER_VALUES}" || true
+yq eval ".constraints.${POLICY}.exemptions.allowedSecrets = ${ALLOWED_SECRETS}" -i "${CUSTOMER_VALUES}" || true
+yq eval ".constraints.${POLICY}.exemptions.allowedHostPaths = ${ALLOWED_HOST_PATHS}" -i "${CUSTOMER_VALUES}" || true
+yq eval ".constraints.${POLICY}.exemptions.allowedRoles = ${ALLOWED_ROLES}" -i "${CUSTOMER_VALUES}" || true
+yq eval ".constraints.${POLICY}.exemptions.excludedRoles = ${EXCLUDED_ROLES}" -i "${CUSTOMER_VALUES}" || true
+yq eval ".constraints.${POLICY}.exemptions.allowedResources = ${ALLOWED_RESOURCES}" -i "${CUSTOMER_VALUES}" || true
+yq eval ".constraints.${POLICY}.exemptions.allowedSysctls = ${ALLOWED_SYSCTLS}" -i "${CUSTOMER_VALUES}" || true
+yq eval ".constraints.${POLICY}.exemptions.enforceProbes = ${ENFORCE_PROBES}" -i "${CUSTOMER_VALUES}" || true
+yq eval ".constraints.${POLICY}.exemptions.labelSelector.matchLabels = ${MATCH_LABELS}" -i "${CUSTOMER_VALUES}" || true
+yq eval ".constraints.${POLICY}.exemptions.labelSelector.matchExpressions = ${MATCH_EXPRESSIONS}" -i "${CUSTOMER_VALUES}" || true
+
+echo "Deploying Helm chart with updated customer exemptions..."
+helm upgrade --install eks-opa-policy-constraint ${CHART_DIR} \
+  -f ${BASE_VALUES} \
+  -f ${ENV_VALUES} \
+  -f ${CUSTOMER_VALUES} \
+  --namespace gatekeeper-system \
+  --create-namespace
+
+# Wait for constraints to be applied
+echo "Waiting for constraints to be ready..."
+sleep 5
+
+echo "Creating test namespace and resources..."
+kubectl create namespace ${NAMESPACE}
+
+# Deploy a resource that should PASS due to exemptions
+# Matches labelSelector and uses excludedContainers, etc.
+echo "Deploying exempted resource..."
+cat <<EOF | kubectl apply -f -
 apiVersion: v1
 kind: Pod
 metadata:
-  name: capability-test-pod
-  namespace: exemption-test
+  name: exempted-${POLICY}-pod
+  namespace: ${NAMESPACE}
+  labels:
+    exempt-label: "true"
+    env: "test"
 spec:
   containers:
-  - name: test-container
-    image: nginx:latest
+  - name: test-exempt-container
+    image: test-image:latest
     securityContext:
       capabilities:
         add: ["NET_ADMIN"]
----
-apiVersion: v1
-kind: Pod
-metadata:
-  name: image-test-pod
-  namespace: exemption-test
-spec:
-  containers:
-  - name: test-container
-    image: docker.io/nginx:latest
----
-apiVersion: v1
-kind: Pod
-metadata:
-  name: privilege-test-pod
-  namespace: exemption-test
-spec:
-  containers:
-  - name: privileged-container
-    image: nginx:latest
-    securityContext:
-      privileged: true
----
-apiVersion: rbac.authorization.k8s.io/v1
-kind: Role
-metadata:
-  name: test-wildcard-role
-  namespace: exemption-test
-rules:
-- apiGroups: ["*"]
-  resources: ["*"]
-  verbs: ["*"]
+        drop: ["ALL"]
 EOF
 
-    # Exempted test cases
-    log "\nCreating exempted test resources:"
-    cat <<EOF | kubectl apply -f - 2>&1 | tee -a "$LOG_FILE"
+sleep 3
+echo "Verifying exempted resource is running..."
+if kubectl get pod -n ${NAMESPACE} exempted-${POLICY}-pod | grep Running; then
+  echo "SUCCESS: Exempted resource passed as expected."
+else
+  echo "FAILURE: Exempted resource did not run as expected."
+  exit 1
+fi
+
+# Deploy a resource that should FAIL even with exemptions
+# This resource should not match labelSelector or exemptions
+echo "Deploying violating resource..."
+cat <<EOF | kubectl apply -f -
 apiVersion: v1
 kind: Pod
 metadata:
-  name: exempted-capability-pod
-  namespace: exemption-test
+  name: violating-${POLICY}-pod
+  namespace: ${NAMESPACE}
   labels:
-    exemption: "true"
+    exempt-label: "false"
+    env: "prod"
 spec:
   containers:
-  - name: test-container
-    image: nginx:latest
+  - name: non-exempt-container
+    image: nonallowedimage:latest
     securityContext:
       capabilities:
-        add: ["NET_ADMIN"]
----
-apiVersion: v1
-kind: Pod
-metadata:
-  name: exempted-image-pod
-  namespace: exemption-test
-  labels:
-    exemption: "true"
-spec:
-  containers:
-  - name: test-container
-    image: docker.io/nginx:latest
----
-apiVersion: rbac.authorization.k8s.io/v1
-kind: Role
-metadata:
-  name: exempted-wildcard-role
-  namespace: exemption-test
-  labels:
-    exemption: "true"
-rules:
-- apiGroups: ["*"]
-  resources: ["*"]
-  verbs: ["*"]
+        add: ["SYS_ADMIN"] # not allowed if we rely on allowedCapabilities
 EOF
 
-    # Wait for Gatekeeper to evaluate
-    log "\nWaiting for Gatekeeper evaluation..."
-    sleep 10
-}
+sleep 3
+echo "Verifying violating resource is NOT running..."
+if kubectl get pod -n ${NAMESPACE} violating-${POLICY}-pod 2>&1 | grep "Running"; then
+  echo "FAILURE: Violating resource is running when it should not."
+  exit 1
+else
+  echo "SUCCESS: Violating resource was blocked as expected."
+fi
 
-verify_exemptions() {
-    log "\n${YELLOW}Verifying exemptions...${NC}"
+echo "Cleaning up test resources..."
+kubectl delete ns ${NAMESPACE} --ignore-not-found
 
-    # Check constraint violations
-    log "\n${GREEN}Checking constraint violations:${NC}"
-    log_cmd "kubectl get constraints -n gatekeeper-system -o custom-columns=NAME:.metadata.name,VIOLATIONS:.status.totalViolations,ENFORCEMENT:.spec.enforcementAction"
-
-    # Check test resources
-    log "\n${GREEN}Checking test resources:${NC}"
-    log "\nPods in exemption-test namespace:"
-    log_cmd "kubectl get pods -n exemption-test -o wide"
-    
-    log "\nRoles in exemption-test namespace:"
-    log_cmd "kubectl get roles -n exemption-test"
-
-    # Check specific violations
-    log "\n${GREEN}Checking specific violations:${NC}"
-    
-    # Check non-exempted resources
-    log "\nNon-exempted resources violations:"
-    for resource in capability-test-pod image-test-pod privilege-test-pod test-wildcard-role; do
-        log "\nViolations for $resource:"
-        log_cmd "kubectl describe $resource -n exemption-test | grep -A 5 'Events:'"
-    done
-
-    # Check exempted resources
-    log "\nExempted resources violations:"
-    for resource in exempted-capability-pod exempted-image-pod exempted-wildcard-role; do
-        log "\nViolations for $resource:"
-        log_cmd "kubectl describe $resource -n exemption-test | grep -A 5 'Events:'"
-    done
-
-    # Check constraint audit results
-    log "\nConstraint audit results:"
-    for constraint in $(kubectl get constraints -n gatekeeper-system -o name); do
-        log "\nAudit for $constraint:"
-        log_cmd "kubectl get $constraint -n gatekeeper-system -o jsonpath='{.status.violations}'"
-    done
-}
-
-cleanup() {
-    log "${YELLOW}Cleaning up test resources...${NC}"
-    log_cmd "kubectl delete namespace exemption-test --ignore-not-found"
-}
-
-main() {
-    log "${GREEN}Starting exemption tests...${NC}"
-    
-    # Cleanup any previous test resources
-    cleanup
-    
-    # Create test cases
-    create_test_cases
-    
-    # Verify exemptions
-    verify_exemptions
-    
-    log "${GREEN}Tests completed. Results saved to: $LOG_FILE${NC}"
-}
-
-main
+echo "All tests for policy ${POLICY} completed successfully."
+echo "Logs available in ${LOG_FILE}"

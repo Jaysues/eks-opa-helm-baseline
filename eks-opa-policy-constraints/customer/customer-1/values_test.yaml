@@ -15,13 +15,18 @@ constraints:
     - "Check 'allowedCapabilities' and 'requiredDropCapabilities' in container specs"
     - "Validate capabilities for all containers and initContainers"
     exemptions:
-      excludedContainers: []
-      excludedImages: []
-      allowedCapabilities: []
-      requiredDropCapabilities: []
+      excludedContainers: [ "test-exempt-container" ]
+      excludedImages: [ "test-image:*" ]
+      allowedCapabilities: [ "NET_ADMIN" ]
+      requiredDropCapabilities: [ "ALL" ]
       labelSelector:
-        matchLabels: {}
-        matchExpressions: []
+        matchLabels:
+          exempt-label: "true"
+        matchExpressions:
+        - key: "env"
+          operator: "In"
+          values:
+          - "test"
 
   eksallowedimages:
     cisBenchmark: "5.1.4"
@@ -37,17 +42,22 @@ constraints:
     - "Validate container images match approved registries"
     - "Check both regular and init containers"
     exemptions:
-      excludedNamespaces: []
-      excludedContainers: []
-      excludedImages: []
-      allowedRegistries: []
+      excludedNamespaces: [ "test-exempt-ns" ]
+      excludedContainers: [ "test-exempt-container" ]
+      excludedImages: [ "test-image:*" ]
+      allowedRegistries: [ "test-registry.io" ]
       requireDigests: true
       allowedPullPolicies:
       - "Always"
       - "IfNotPresent"
       labelSelector:
-        matchLabels: {}
-        matchExpressions: []
+        matchLabels:
+          exempt-label: "true"
+        matchExpressions:
+        - key: "env"
+          operator: "In"
+          values:
+          - "test"
 
   eksnoprivilegeescalation:
     cisBenchmark: "5.2.5"
@@ -62,12 +72,17 @@ constraints:
     - "Check securityContext.allowPrivilegeEscalation"
     - "Ensure securityContext.runAsUser is non-root"
     exemptions:
-      excludedNamespaces: []
-      excludedContainers: []
-      excludedImages: []
+      excludedNamespaces: [ "test-exempt-ns" ]
+      excludedContainers: [ "test-exempt-container" ]
+      excludedImages: [ "test-image:*" ]
       labelSelector:
-        matchLabels: {}
-        matchExpressions: []
+        matchLabels:
+          exempt-label: "true"
+        matchExpressions:
+        - key: "env"
+          operator: "In"
+          values:
+          - "test"
 
   eksenforceprobes:
     cisBenchmark: "5.2.7"
@@ -81,13 +96,18 @@ constraints:
     implementation:
     - "Validate 'livenessProbe' and 'readinessProbe' fields in container specs"
     exemptions:
-      excludedNamespaces: []
-      excludedContainers: []
-      excludedImages: []
-      enforceProbes: []
+      excludedNamespaces: [ "test-exempt-ns" ]
+      excludedContainers: [ "test-exempt-container" ]
+      excludedImages: [ "test-image:*" ]
+      enforceProbes: [ "livenessProbe" ]
       labelSelector:
-        matchLabels: {}
-        matchExpressions: []
+        matchLabels:
+          exempt-label: "true"
+        matchExpressions:
+        - key: "env"
+          operator: "In"
+          values:
+          - "test"
 
   eksminimisewildcard:
     cisBenchmark: "5.1.2"
@@ -101,11 +121,16 @@ constraints:
     implementation:
     - "Validate roles and clusterRoles do not contain wildcards"
     exemptions:
-      excludedNamespaces: []
-      whitelistedRoles: []
+      excludedNamespaces: [ "test-exempt-ns" ]
+      whitelistedRoles: [ "system:masters" ]
       labelSelector:
-        matchLabels: {}
-        matchExpressions: []
+        matchLabels:
+          exempt-label: "true"
+        matchExpressions:
+        - key: "env"
+          operator: "In"
+          values:
+          - "test"
 
   eksblockdefaultnamespace:
     cisBenchmark: "5.3.2"
@@ -119,11 +144,16 @@ constraints:
     implementation:
     - "Check if resources are created in the 'default' namespace"
     exemptions:
-      excludedNamespaces: []
-      allowedResources: []
+      excludedNamespaces: [ "test-exempt-ns" ]
+      allowedResources: [ "test-resource" ]
       labelSelector:
-        matchLabels: {}
-        matchExpressions: []
+        matchLabels:
+          exempt-label: "true"
+        matchExpressions:
+        - key: "env"
+          operator: "In"
+          values:
+          - "test"
 
   eksblockautomounttoken:
     cisBenchmark: "5.2.1"
@@ -137,11 +167,16 @@ constraints:
     implementation:
     - "Check pod and service account automountServiceAccountToken settings"
     exemptions:
-      excludedNamespaces: []
-      excludedImages: []
+      excludedNamespaces: [ "test-exempt-ns" ]
+      excludedImages: [ "test-image:*" ]
       labelSelector:
-        matchLabels: {}
-        matchExpressions: []
+        matchLabels:
+          exempt-label: "true"
+        matchExpressions:
+        - key: "env"
+          operator: "In"
+          values:
+          - "test"
 
   ekscontainernoprivilege:
     cisBenchmark: "5.2.1"
@@ -156,12 +191,17 @@ constraints:
     implementation:
     - "Check container securityContext.privileged setting"
     exemptions:
-      excludedNamespaces: []
-      excludedContainers: []
-      excludedImages: []
+      excludedNamespaces: [ "test-exempt-ns" ]
+      excludedContainers: [ "test-exempt-container" ]
+      excludedImages: [ "test-image:*" ]
       labelSelector:
-        matchLabels: {}
-        matchExpressions: []
+        matchLabels:
+          exempt-label: "true"
+        matchExpressions:
+        - key: "env"
+          operator: "In"
+          values:
+          - "test"
 
   eksreadonlyfilesystem:
     cisBenchmark: "5.2.6"
@@ -175,12 +215,17 @@ constraints:
     implementation:
     - "Check container securityContext for readOnlyRootFilesystem setting"
     exemptions:
-      excludedNamespaces: []
-      excludedContainers: []
-      excludedImages: []
+      excludedNamespaces: [ "test-exempt-ns" ]
+      excludedContainers: [ "test-exempt-container" ]
+      excludedImages: [ "test-image:*" ]
       labelSelector:
-        matchLabels: {}
-        matchExpressions: []
+        matchLabels:
+          exempt-label: "true"
+        matchExpressions:
+        - key: "env"
+          operator: "In"
+          values:
+          - "test"
 
   ekslimitsensitiveverbs:
     cisBenchmark: "4.1.8"
@@ -195,11 +240,16 @@ constraints:
     - "Validates RBAC role definitions"
     - "Checks for sensitive verbs that allow privilege escalation"
     exemptions:
-      excludedNamespaces: []
-      excludedRoles: []
+      excludedNamespaces: [ "test-exempt-ns" ]
+      excludedRoles: [ "test-role" ]
       labelSelector:
-        matchLabels: {}
-        matchExpressions: []
+        matchLabels:
+          exempt-label: "true"
+        matchExpressions:
+        - key: "env"
+          operator: "In"
+          values:
+          - "test"
 
   eksenforcesecretaccess:
     cisBenchmark: "4.1.2"
@@ -215,11 +265,16 @@ constraints:
     - "Validates RBAC role definitions"
     - "Checks for sensitive verbs on secret resources"
     exemptions:
-      excludedNamespaces: []
-      excludedRoles: []
+      excludedNamespaces: [ "test-exempt-ns" ]
+      excludedRoles: [ "test-role" ]
       labelSelector:
-        matchLabels: {}
-        matchExpressions: []
+        matchLabels:
+          exempt-label: "true"
+        matchExpressions:
+        - key: "env"
+          operator: "In"
+          values:
+          - "test"
 
   eksforbiddensysctl:
     cisBenchmark: "4.5.2"
@@ -235,12 +290,17 @@ constraints:
     - "Validates pod security context"
     - "Blocks all sysctl modifications by default"
     exemptions:
-      excludedNamespaces: []
-      excludedImages: []
-      allowedSysctls: []
+      excludedNamespaces: [ "test-exempt-ns" ]
+      excludedImages: [ "test-image:*" ]
+      allowedSysctls: [ "net.ipv4.ip_local_port_range" ]
       labelSelector:
-        matchLabels: {}
-        matchExpressions: []
+        matchLabels:
+          exempt-label: "true"
+        matchExpressions:
+        - key: "env"
+          operator: "In"
+          values:
+          - "test"
 
   eksmountedsecrets:
     cisBenchmark: "4.4.1"
@@ -256,12 +316,17 @@ constraints:
     - "Checks for secretKeyRef in environment variables"
     - "Checks for secretRef in envFrom"
     exemptions:
-      excludedNamespaces: []
-      excludedImages: []
-      allowedSecrets: []
+      excludedNamespaces: [ "test-exempt-ns" ]
+      excludedImages: [ "test-image:*" ]
+      allowedSecrets: [ "test-secret" ]
       labelSelector:
-        matchLabels: {}
-        matchExpressions: []
+        matchLabels:
+          exempt-label: "true"
+        matchExpressions:
+        - key: "env"
+          operator: "In"
+          values:
+          - "test"
 
   eksnetworkpolicyexists:
     cisBenchmark: "4.3.2, 5.4.4"
@@ -278,10 +343,15 @@ constraints:
     - "Allows exemptions via annotations or labels"
     - "Automatically exempts single-pod namespaces"
     exemptions:
-      excludedNamespaces: []
+      excludedNamespaces: [ "test-exempt-ns" ]
       labelSelector:
-        matchLabels: {}
-        matchExpressions: []
+        matchLabels:
+          exempt-label: "true"
+        matchExpressions:
+        - key: "env"
+          operator: "In"
+          values:
+          - "test"
 
   ekspsphostnamespace:
     cisBenchmark: "4.2.2, 4.2.3, 4.2.4"
@@ -299,11 +369,16 @@ constraints:
     - "Validates pod specifications"
     - "Blocks pods that attempt to share host namespaces"
     exemptions:
-      excludedNamespaces: []
-      excludedImages: []
+      excludedNamespaces: [ "test-exempt-ns" ]
+      excludedImages: [ "test-image:*" ]
       labelSelector:
-        matchLabels: {}
-        matchExpressions: []
+        matchLabels:
+          exempt-label: "true"
+        matchExpressions:
+        - key: "env"
+          operator: "In"
+          values:
+          - "test"
 
   ekspsphostfilesystem:
     cisBenchmark: "4.5.2"
@@ -319,16 +394,21 @@ constraints:
     - "Validates pod volume specifications"
     - "Enforces allowed host path prefixes"
     exemptions:
-      excludedNamespaces: []
-      excludedImages: []
+      excludedNamespaces: [ "test-exempt-ns" ]
+      excludedImages: [ "test-image:*" ]
       allowedHostPaths:
       - pathPrefix: "/var/log"
         readOnly: true
       - pathPrefix: "/var/lib/kubelet/pods"
         readOnly: true
       labelSelector:
-        matchLabels: {}
-        matchExpressions: []
+        matchLabels:
+          exempt-label: "true"
+        matchExpressions:
+        - key: "env"
+          operator: "In"
+          values:
+          - "test"
 
   eksadminaccess:
     cisBenchmark: "4.1.1, 4.1.7"
@@ -344,11 +424,16 @@ constraints:
     - "Validates ClusterRoleBinding and RoleBinding resources"
     - "Enforces allowed admin role whitelist"
     exemptions:
-      excludedNamespaces: []
-      allowedRoles: []
+      excludedNamespaces: [ "test-exempt-ns" ]
+      allowedRoles: [ "system:masters" ]
       labelSelector:
-        matchLabels: {}
-        matchExpressions: []
+        matchLabels:
+          exempt-label: "true"
+        matchExpressions:
+        - key: "env"
+          operator: "In"
+          values:
+          - "test"
 
   eksrestrictdefaultsa:
     cisBenchmark: "4.1.5"
@@ -365,10 +450,15 @@ constraints:
     - "Validates Pod and ServiceAccount resources"
     - "Checks for default service account usage"
     exemptions:
-      excludedNamespaces: []
+      excludedNamespaces: [ "test-exempt-ns" ]
       labelSelector:
-        matchLabels: {}
-        matchExpressions: []
+        matchLabels:
+          exempt-label: "true"
+        matchExpressions:
+        - key: "env"
+          operator: "In"
+          values:
+          - "test"
 
   eksresourcelimits:
     cisBenchmark: "5.4.1"
@@ -384,8 +474,13 @@ constraints:
     - "Validates container resource specifications"
     - "Applies default limits when not specified"
     exemptions:
-      excludedNamespaces: []
-      excludedImages: []
+      excludedNamespaces: [ "test-exempt-ns" ]
+      excludedImages: [ "test-image:*" ]
       labelSelector:
-        matchLabels: {}
-        matchExpressions: []
+        matchLabels:
+          exempt-label: "true"
+        matchExpressions:
+        - key: "env"
+          operator: "In"
+          values:
+          - "test"

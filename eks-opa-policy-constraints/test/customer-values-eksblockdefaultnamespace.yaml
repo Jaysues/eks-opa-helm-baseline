@@ -1,0 +1,12 @@
+constraints:
+  eksblockdefaultnamespace:
+    version: "1.0.0"
+    exemptions:
+      excludedNamespaces: ["test-exempt-ns"]
+      labelSelector:
+        matchLabels:
+          exempt-label: "true"
+        matchExpressions:
+          - key: "env"
+            operator: "In"
+            values: ["test"]

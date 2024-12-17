@@ -3,7 +3,8 @@ kind: EksNetworkPolicyExists
 metadata:
   name: ensure-network-policy
   annotations:
-    description: "Ensures namespaces have a NetworkPolicy defined"
+    description: "Ensures namespaces have a NetworkPolicy defined (CIS EKS 4.3.2, 5.4.4)"
+    version: "{{ .Values.constraints.eksnetworkpolicyexists.version }}"
 spec:
   enforcementAction: {{ .Values.constraints.enforcementAction | default "deny" }}
   match:
@@ -23,6 +24,10 @@ spec:
         {{- $customMatchLabels := $customLabels.matchLabels | default dict }}
         {{- $combinedMatchLabels := merge $baselineMatchLabels $customMatchLabels }}
         {{ toYaml $combinedMatchLabels | nindent 8 }}
+      matchExpressions:
+        {{- $baselineExpressions := .Values.baselines.labelSelector.matchExpressions | default list }}
+        {{- $customExpressions := .Values.constraints.eksallowedcapabilities.exemptions.labelSelector.matchExpressions | default list }}
+        {{ toYaml (concat $baselineExpressions $customExpressions) | nindent 8 }}
       {{- end }}
   parameters:
     exemptWithAnnotation: "network.policy.skip/servicemesh"

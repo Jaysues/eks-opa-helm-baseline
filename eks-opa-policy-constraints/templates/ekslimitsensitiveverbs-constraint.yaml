@@ -4,6 +4,7 @@ metadata:
   name: limit-sensitive-verbs
   annotations:
     description: "Limits use of bind, impersonate and escalate permissions in RBAC roles (CIS EKS 4.1.8)"
+    version: "{{ .Values.constraints.ekslimitsensitiveverbs.version }}"
 spec:
   enforcementAction: {{ .Values.constraints.enforcementAction | default "deny" }}
   match:
@@ -23,7 +24,12 @@ spec:
         {{- $customMatchLabels := $customLabels.matchLabels | default dict }}
         {{- $combinedMatchLabels := merge $baselineMatchLabels $customMatchLabels }}
         {{ toYaml $combinedMatchLabels | nindent 8 }}
+      matchExpressions:
+        {{- $baselineExpressions := .Values.baselines.labelSelector.matchExpressions | default list }}
+        {{- $customExpressions := .Values.constraints.eksallowedcapabilities.exemptions.labelSelector.matchExpressions | default list }}
+        {{ toYaml (concat $baselineExpressions $customExpressions) | nindent 8 }}
       {{- end }}
   parameters:
-    {{- $excludedRoles := $customExemptions.excludedRoles | default list }}
-    excludedRoles: {{ toYaml $excludedRoles | nindent 6 }}
+    {{- $baselineAllowedRoles := .Values.baselines.whitelistedRoles | default list }}
+    {{- $allowedRoles := $customExemptions.allowedRoles | default list }}
+    allowedRoles: {{ concat $baselineAllowedRoles $allowedRoles | toYaml | nindent 6 }}
