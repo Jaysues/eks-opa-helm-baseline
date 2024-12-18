@@ -21,13 +21,6 @@ spec:
               type: array
               items:
                 type: string
-            labelSelector:
-              type: object
-              properties:
-                matchLabels:
-                  type: object
-                  additionalProperties:
-                    type: string
             defaultCpuLimit:
               type: string
             defaultMemoryLimit:
