@@ -90,7 +90,7 @@ for template in "${TEMPLATES[@]}"; do
         echo -e "${GREEN}✓ Template $template installed successfully${NC}"
         
         # Verify template is ready
-        if kubectl wait --for=condition=ready constrainttemplate "$template" -n gatekeeper-system --timeout=10s &>/dev/null; then
+        if kubectl wait --for=condition=ready constrainttemplate "$template" -n gatekeeper-system --timeout=1s &>/dev/null; then
             echo -e "${GREEN}✓ Template $template is ready${NC}"
         else
             print_error "Template $template is not ready"

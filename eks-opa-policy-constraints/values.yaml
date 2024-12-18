@@ -19,10 +19,6 @@ baselines:
   - "system:controller:persistent-volume-binder"
   - "system:kube-controller-manager"
 
-  labelSelector:
-    matchLabels: {}
-    matchExpressions: []
-
 constraints:
   enforcementAction: []
 
@@ -32,10 +28,10 @@ constraints:
       excludedNamespaces: []
       excludedContainers: []
       excludedImages: []
-      allowedCapabilities: []
+      allowedCapabilities:
+      - "NET_ADMIN"
+      - "SYS_TIME"
       requiredDropCapabilities: []
-      labelSelector:
-        matchLabels: {}
 
   eksallowedimages:
     version: "1.0.0"
@@ -44,10 +40,10 @@ constraints:
       excludedContainers: []
       excludedImages: []
       allowedRegistries: []
-      requireDigests: true
-      allowedPullPolicies: []
-      labelSelector:
-        matchLabels: {}
+      # requireDigests: true
+      allowedPullPolicies:
+      - Always
+      - IfNotPresent
 
   eksnoprivilegeescalation:
     version: "1.0.0"
@@ -55,8 +51,6 @@ constraints:
       excludedNamespaces: []
       excludedContainers: []
       excludedImages: []
-      labelSelector:
-        matchLabels: {}
 
   eksenforceprobes:
     version: "1.0.0"
@@ -65,32 +59,24 @@ constraints:
       excludedContainers: []
       excludedImages: []
       enforceProbes: []
-      labelSelector:
-        matchLabels: {}
 
   eksminimisewildcard:
     version: "1.0.0"
     exemptions:
       excludedNamespaces: []
       allowedRoles: []
-      labelSelector:
-        matchLabels: {}
 
   eksblockdefaultnamespace:
     version: "1.0.0"
     exemptions:
       excludedNamespaces: []
       allowedResources: []
-      labelSelector:
-        matchLabels: {}
 
   eksblockautomounttoken:
     version: "1.0.0"
     exemptions:
       excludedNamespaces: []
       excludedImages: []
-      labelSelector:
-        matchLabels: {}
 
   ekscontainernoprivilege:
     version: "1.0.0"
@@ -98,8 +84,6 @@ constraints:
       excludedNamespaces: []
       excludedContainers: []
       excludedImages: []
-      labelSelector:
-        matchLabels: {}
 
   eksreadonlyfilesystem:
     version: "1.0.0"
@@ -107,24 +91,18 @@ constraints:
       excludedNamespaces: []
       excludedContainers: []
       excludedImages: []
-      labelSelector:
-        matchLabels: {}
 
   ekslimitsensitiveverbs:
     version: "1.0.0"
     exemptions:
       excludedNamespaces: []
       allowedRoles: []
-      labelSelector:
-        matchLabels: {}
 
   eksenforcesecretaccess:
     version: "1.0.0"
     exemptions:
       excludedNamespaces: []
       allowedRoles: []
-      labelSelector:
-        matchLabels: {}
 
   eksforbiddensysctl:
     version: "1.0.0"
@@ -136,8 +114,6 @@ constraints:
       - "net.ipv4.tcp_syncookies"
       - "net.ipv4.ping_group_range"
       - "net.core.somaxconn"
-      labelSelector:
-        matchLabels: {}
 
   eksmountedsecrets:
     version: "1.0.0"
@@ -145,52 +121,44 @@ constraints:
       excludedNamespaces: []
       excludedImages: []
       allowedSecrets: []
-      labelSelector:
-        matchLabels: {}
 
   eksnetworkpolicyexists:
     version: "1.0.0"
     exemptions:
       excludedNamespaces: []
-      labelSelector:
-        matchLabels: {}
 
   ekspsphostnamespace:
     version: "1.0.0"
     exemptions:
       excludedNamespaces: []
       excludedImages: []
-      labelSelector:
-        matchLabels: {}
 
   ekspsphostfilesystem:
     version: "1.0.0"
     exemptions:
       excludedNamespaces: []
       excludedImages: []
-      allowedHostPaths: []
-      labelSelector:
-        matchLabels: {}
+      allowedHostPaths:
+      - pathPrefix: "/var/log"
+        readOnly: true
+      - pathPrefix: "/var/lib/kubelet/pods"
+        readOnly: true
 
   eksadminaccess:
     version: "1.0.0"
     exemptions:
       excludedNamespaces: []
       allowedRoles: []
-      labelSelector:
-        matchLabels: {}
 
   eksrestrictdefaultsa:
     version: "1.0.0"
     exemptions:
       excludedNamespaces: []
-      labelSelector:
-        matchLabels: {}
 
   eksresourcelimits:
     version: "1.0.0"
     exemptions:
       excludedNamespaces: []
       excludedImages: []
-      labelSelector:
-        matchLabels: {}
+      defaultCpuLimit: "500m"
+      defaultMemoryLimit: "512Mi"

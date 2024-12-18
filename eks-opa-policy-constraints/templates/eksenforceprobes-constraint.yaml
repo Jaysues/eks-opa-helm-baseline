@@ -15,12 +15,6 @@ spec:
     {{- $customExemptions := .Values.constraints.eksenforceprobes.exemptions | default dict }}
     {{- $customNamespaces := $customExemptions.excludedNamespaces | default list }}
     excludedNamespaces: {{ concat $baselineNamespaces $customNamespaces | toYaml | nindent 6 }}
-    labelSelector:
-      matchExpressions:
-        - key: "exempted"
-          operator: NotIn
-          values:
-            - "{{ .Values.constraints.eksenforceprobes.exemptions.labelSelector.matchLabels.exempted | default "" }}"
   parameters:
     {{- $enforceProbes := $customExemptions.enforceProbes | default list }}
     enforceProbes: {{ toYaml $enforceProbes | nindent 6 }}

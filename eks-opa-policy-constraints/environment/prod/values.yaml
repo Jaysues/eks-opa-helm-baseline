@@ -1,27 +1,115 @@
 constraints:
-  enforcementAction: "dryrun" # Default enforcement for development
-  exemptions:
-    excludedNamespaces: []
-    excludedContainers: []
-    excludedImages: []
-    labelSelector:
-      matchLabels: {}
+  enforcementAction: "deny"
 
-eksallowedcapabilities:
-  exemptions:
-    excludedContainers: []
-    excludedImages: []
-    allowedCapabilities: []
-    requiredDropCapabilities: []
-    labelSelector:
-      matchLabels: {}
+  eksallowedcapabilities:
+    exemptions:
+      excludedNamespaces: []
+      excludedContainers: []
+      excludedImages: []
+      allowedCapabilities: []
+      requiredDropCapabilities: []
+
+  eksallowedimages:
+    exemptions:
+      excludedNamespaces: []
+      excludedContainers: []
+      excludedImages: []
+      allowedRegistries: []
+      allowedPullPolicies: []
+
+  eksnoprivilegeescalation:
+    exemptions:
+      excludedNamespaces: []
+      excludedContainers: []
+      excludedImages: []
+
+  eksenforceprobes:
+    exemptions:
+      excludedNamespaces: []
+      excludedContainers: []
+      excludedImages: []
+      enforceProbes: []
+
+  eksminimisewildcard:
+    exemptions:
+      excludedNamespaces: []
+      allowedRoles: []
+
+  eksblockdefaultnamespace:
+    exemptions:
+      excludedNamespaces: []
+      allowedResources: []
+
+  eksblockautomounttoken:
+    exemptions:
+      excludedNamespaces: []
+      excludedImages: []
 
   ekscontainernoprivilege:
     exemptions:
       excludedNamespaces: []
       excludedContainers: []
       excludedImages: []
-      labelSelector:
-        matchLabels: {}
-        matchExpressions: []
-      items: []
+
+  eksreadonlyfilesystem:
+    exemptions:
+      excludedNamespaces: []
+      excludedContainers: []
+      excludedImages: []
+
+  ekslimitsensitiveverbs:
+    exemptions:
+      excludedNamespaces: []
+      allowedRoles: []
+
+  eksenforcesecretaccess:
+    exemptions:
+      excludedNamespaces: []
+      allowedRoles: []
+
+  eksforbiddensysctl:
+    exemptions:
+      excludedNamespaces: []
+      excludedImages: []
+      allowedSysctls:
+      - "net.ipv4.ip_local_port_range"
+      - "net.ipv4.tcp_syncookies"
+      - "net.ipv4.ping_group_range"
+      - "net.core.somaxconn"
+
+  eksmountedsecrets:
+    exemptions:
+      excludedNamespaces: []
+      excludedImages: []
+      allowedSecrets: []
+
+  eksnetworkpolicyexists:
+    exemptions:
+      excludedNamespaces: []
+
+  ekspsphostnamespace:
+    exemptions:
+      excludedNamespaces: []
+      excludedImages: []
+
+  ekspsphostfilesystem:
+    exemptions:
+      excludedNamespaces: []
+      excludedImages: []
+      allowedHostPaths: []
+
+  eksadminaccess:
+    exemptions:
+      excludedNamespaces: []
+      allowedRoles: []
+
+  eksrestrictdefaultsa:
+    exemptions:
+      excludedNamespaces: []
+
+  eksresourcelimits:
+    exemptions:
+      excludedNamespaces: []
+      excludedImages: []
+      defaultCpuLimit: []
+      defaultMemoryLimit: []

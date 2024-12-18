@@ -15,12 +15,6 @@ spec:
     {{- $customExemptions := .Values.constraints.eksadminaccess.exemptions | default dict }}
     {{- $customNamespaces := $customExemptions.excludedNamespaces | default list }}
     excludedNamespaces: {{ concat $baselineNamespaces $customNamespaces | toYaml | nindent 6 }}
-    labelSelector:
-      matchExpressions:
-        - key: "exempted"
-          operator: NotIn
-          values:
-            - "{{ .Values.constraints.eksadminaccess.exemptions.labelSelector.matchLabels.exempted | default "" }}"
   parameters:
     {{- $baselineAllowedRoles := .Values.baselines.whitelistedRoles | default list }}
     {{- $customAllowedRoles := $customExemptions.allowedRoles | default list }}

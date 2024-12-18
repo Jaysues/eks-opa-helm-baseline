@@ -19,8 +19,6 @@ constraints:
       excludedImages: []
       allowedCapabilities: []
       requiredDropCapabilities: []
-      labelSelector:
-        matchLabels: {}
 
   eksallowedimages:
     cisBenchmark: "5.1.4"
@@ -40,12 +38,7 @@ constraints:
       excludedContainers: []
       excludedImages: []
       allowedRegistries: []
-      requireDigests: true
-      allowedPullPolicies:
-      - "Always"
-      - "IfNotPresent"
-      labelSelector:
-        matchLabels: {}
+      allowedPullPolicies: []
 
   eksnoprivilegeescalation:
     cisBenchmark: "5.2.5"
@@ -63,8 +56,6 @@ constraints:
       excludedNamespaces: []
       excludedContainers: []
       excludedImages: []
-      labelSelector:
-        matchLabels: {}
 
   eksenforceprobes:
     cisBenchmark: "5.2.7"
@@ -82,9 +73,6 @@ constraints:
       excludedContainers: []
       excludedImages: []
       enforceProbes: []
-      labelSelector:
-        matchLabels:
-          exempted: "REQ1234567"
 
   eksminimisewildcard:
     cisBenchmark: "5.1.2"
@@ -100,8 +88,6 @@ constraints:
     exemptions:
       excludedNamespaces: []
       whitelistedRoles: []
-      labelSelector:
-        matchLabels: {}
 
   eksblockdefaultnamespace:
     cisBenchmark: "5.3.2"
@@ -117,8 +103,6 @@ constraints:
     exemptions:
       excludedNamespaces: []
       allowedResources: []
-      labelSelector:
-        matchLabels: {}
 
   eksblockautomounttoken:
     cisBenchmark: "5.2.1"
@@ -134,8 +118,6 @@ constraints:
     exemptions:
       excludedNamespaces: []
       excludedImages: []
-      labelSelector:
-        matchLabels: {}
 
   ekscontainernoprivilege:
     cisBenchmark: "5.2.1"
@@ -153,8 +135,6 @@ constraints:
       excludedNamespaces: []
       excludedContainers: []
       excludedImages: []
-      labelSelector:
-        matchLabels: {}
 
   eksreadonlyfilesystem:
     cisBenchmark: "5.2.6"
@@ -171,8 +151,6 @@ constraints:
       excludedNamespaces: []
       excludedContainers: []
       excludedImages: []
-      labelSelector:
-        matchLabels: {}
 
   ekslimitsensitiveverbs:
     cisBenchmark: "4.1.8"
@@ -189,8 +167,6 @@ constraints:
     exemptions:
       excludedNamespaces: []
       excludedRoles: []
-      labelSelector:
-        matchLabels: {}
 
   eksenforcesecretaccess:
     cisBenchmark: "4.1.2"
@@ -208,8 +184,6 @@ constraints:
     exemptions:
       excludedNamespaces: []
       excludedRoles: []
-      labelSelector:
-        matchLabels: {}
 
   eksforbiddensysctl:
     cisBenchmark: "4.5.2"
@@ -228,8 +202,6 @@ constraints:
       excludedNamespaces: []
       excludedImages: []
       allowedSysctls: []
-      labelSelector:
-        matchLabels: {}
 
   eksmountedsecrets:
     cisBenchmark: "4.4.1"
@@ -248,8 +220,6 @@ constraints:
       excludedNamespaces: []
       excludedImages: []
       allowedSecrets: []
-      labelSelector:
-        matchLabels: {}
 
   eksnetworkpolicyexists:
     cisBenchmark: "4.3.2, 5.4.4"
@@ -267,8 +237,6 @@ constraints:
     - "Automatically exempts single-pod namespaces"
     exemptions:
       excludedNamespaces: []
-      labelSelector:
-        matchLabels: {}
 
   ekspsphostnamespace:
     cisBenchmark: "4.2.2, 4.2.3, 4.2.4"
@@ -288,8 +256,6 @@ constraints:
     exemptions:
       excludedNamespaces: []
       excludedImages: []
-      labelSelector:
-        matchLabels: {}
 
   ekspsphostfilesystem:
     cisBenchmark: "4.5.2"
@@ -307,13 +273,7 @@ constraints:
     exemptions:
       excludedNamespaces: []
       excludedImages: []
-      allowedHostPaths:
-      - pathPrefix: "/var/log"
-        readOnly: true
-      - pathPrefix: "/var/lib/kubelet/pods"
-        readOnly: true
-      labelSelector:
-        matchLabels: {}
+      allowedHostPaths: []
 
   eksadminaccess:
     cisBenchmark: "4.1.1, 4.1.7"
@@ -331,8 +291,6 @@ constraints:
     exemptions:
       excludedNamespaces: []
       allowedRoles: []
-      labelSelector:
-        matchLabels: {}
 
   eksrestrictdefaultsa:
     cisBenchmark: "4.1.5"
@@ -350,8 +308,6 @@ constraints:
     - "Checks for default service account usage"
     exemptions:
       excludedNamespaces: []
-      labelSelector:
-        matchLabels: {}
 
   eksresourcelimits:
     cisBenchmark: "5.4.1"
@@ -369,5 +325,5 @@ constraints:
     exemptions:
       excludedNamespaces: []
       excludedImages: []
-      labelSelector:
-        matchLabels: {}
+      defaultCpuLimit: []
+      defaultMemoryLimit: []

@@ -8,8 +8,6 @@ constraints:
       excludedImages: []
       allowedCapabilities: []
       requiredDropCapabilities: []
-      labelSelector:
-        matchLabels: {}
 
   eksallowedimages:
     exemptions:
@@ -17,18 +15,13 @@ constraints:
       excludedContainers: []
       excludedImages: []
       allowedRegistries: []
-      requireDigests: true
       allowedPullPolicies: []
-      labelSelector:
-        matchLabels: {}
 
   eksnoprivilegeescalation:
     exemptions:
       excludedNamespaces: []
       excludedContainers: []
       excludedImages: []
-      labelSelector:
-        matchLabels: {}
 
   eksenforceprobes:
     exemptions:
@@ -36,113 +29,83 @@ constraints:
       excludedContainers: []
       excludedImages: []
       enforceProbes: []
-      labelSelector:
-        matchLabels: {}
 
   eksminimisewildcard:
     exemptions:
       excludedNamespaces: []
       whitelistedRoles: []
-      labelSelector:
-        matchLabels: {}
 
   eksblockdefaultnamespace:
     exemptions:
       excludedNamespaces: []
       allowedResources: []
-      labelSelector:
-        matchLabels: {}
 
   eksblockautomounttoken:
     exemptions:
       excludedNamespaces: []
       excludedImages: []
-      labelSelector:
-        matchLabels: {}
 
   ekscontainernoprivilege:
     exemptions:
       excludedNamespaces: []
       excludedContainers: []
       excludedImages: []
-      labelSelector:
-        matchLabels: {}
 
   eksreadonlyfilesystem:
     exemptions:
       excludedNamespaces: []
       excludedContainers: []
       excludedImages: []
-      labelSelector:
-        matchLabels: {}
 
   ekslimitsensitiveverbs:
     exemptions:
       excludedNamespaces: []
       excludedRoles: []
-      labelSelector:
-        matchLabels: {}
 
   eksenforcesecretaccess:
     exemptions:
       excludedNamespaces: []
       excludedRoles: []
-      labelSelector:
-        matchLabels: {}
 
   eksforbiddensysctl:
     exemptions:
       excludedNamespaces: []
       excludedImages: []
       allowedSysctls: []
-      labelSelector:
-        matchLabels: {}
 
   eksmountedsecrets:
     exemptions:
       excludedNamespaces: []
       excludedImages: []
       allowedSecrets: []
-      labelSelector:
-        matchLabels: {}
 
   eksnetworkpolicyexists:
     exemptions:
       excludedNamespaces: []
-      labelSelector:
-        matchLabels: {}
 
   ekspsphostnamespace:
     exemptions:
       excludedNamespaces: []
       excludedImages: []
-      labelSelector:
-        matchLabels: {}
 
   ekspsphostfilesystem:
     exemptions:
       excludedNamespaces: []
       excludedImages: []
       allowedHostPaths: []
-      labelSelector:
-        matchLabels: {}
 
   eksadminaccess:
     exemptions:
       excludedNamespaces: []
       allowedRoles: []
-      labelSelector:
-        matchLabels: {}
 
   eksrestrictdefaultsa:
     exemptions:
       excludedNamespaces: []
-      labelSelector:
-        matchLabels: {}
 
   eksresourcelimits:
     exemptions:
       excludedNamespaces: []
       excludedImages: []
-      labelSelector:
-        matchLabels: {}
+      defaultCpuLimit: []
+      defaultMemoryLimit: []

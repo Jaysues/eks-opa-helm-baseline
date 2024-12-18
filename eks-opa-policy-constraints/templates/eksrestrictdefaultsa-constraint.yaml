@@ -15,9 +15,3 @@ spec:
     {{- $customExemptions := .Values.constraints.eksrestrictdefaultsa.exemptions | default dict }}
     {{- $customNamespaces := $customExemptions.excludedNamespaces | default list }}
     excludedNamespaces: {{ concat $baselineNamespaces $customNamespaces | toYaml | nindent 6 }}
-    labelSelector:
-      matchExpressions:
-        - key: "exempted"
-          operator: NotIn
-          values:
-            - "{{ .Values.constraints.eksrestrictdefaultsa.exemptions.labelSelector.matchLabels.exempted | default "" }}"

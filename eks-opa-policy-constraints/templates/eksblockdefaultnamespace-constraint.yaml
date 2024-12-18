@@ -15,12 +15,6 @@ spec:
     {{- $customExemptions := .Values.constraints.eksblockdefaultnamespace.exemptions | default dict }}
     {{- $customNamespaces := $customExemptions.excludedNamespaces | default list }}
     excludedNamespaces: {{ concat $baselineNamespaces $customNamespaces | toYaml | nindent 6 }}
-    labelSelector:
-      matchExpressions:
-        - key: "exempted"
-          operator: NotIn
-          values:
-            - "{{ .Values.constraints.eksblockdefaultnamespace.exemptions.labelSelector.matchLabels.exempted | default "" }}"
   parameters:
     {{- $allowedResources := $customExemptions.allowedResources | default list }}
     allowedResources: {{ toYaml $allowedResources | nindent 6 }}
