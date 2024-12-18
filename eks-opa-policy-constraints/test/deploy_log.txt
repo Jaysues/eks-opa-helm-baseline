@@ -1,0 +1,86 @@
+Deploying constraints with test exemptions...
+Release "eks-opa-policy-constraint" has been upgraded. Happy Helming!
+NAME: eks-opa-policy-constraint
+LAST DEPLOYED: Wed Dec 18 12:13:08 2024
+NAMESPACE: gatekeeper-system
+STATUS: deployed
+REVISION: 3
+TEST SUITE: None
+Waiting for constraints to be ready...
+Validating constraints in cluster...
+NAME                       AGE
+eksadminaccess             16h
+eksallowedcapabilities     16h
+eksallowedimages           16h
+eksblockautomounttoken     16h
+eksblockdefaultnamespace   16h
+ekscontainernoprivilege    16h
+eksenforceprobes           16h
+eksenforcesecretaccess     16h
+eksforbiddensysctl         16h
+ekslimitsensitiveverbs     16h
+eksminimisewildcard        16h
+eksmountedsecrets          16h
+eksnetworkpolicyexists     16h
+eksnoprivilegeescalation   16h
+ekspsphostfilesystem       16h
+ekspsphostnamespace        16h
+eksreadonlyfilesystem      16h
+eksresourcelimits          16h
+eksrestrictdefaultsa       16h
+NAME                                                            ENFORCEMENT-ACTION   TOTAL-VIOLATIONS
+eksadminaccess.constraints.gatekeeper.sh/admin-access-control   dryrun               0
+
+NAME                                                                    ENFORCEMENT-ACTION   TOTAL-VIOLATIONS
+eksallowedcapabilities.constraints.gatekeeper.sh/allowed-capabilities   dryrun               22
+
+NAME                                                        ENFORCEMENT-ACTION   TOTAL-VIOLATIONS
+eksallowedimages.constraints.gatekeeper.sh/allowed-images   dryrun               36
+
+NAME                                                                            ENFORCEMENT-ACTION   TOTAL-VIOLATIONS
+eksblockautomounttoken.constraints.gatekeeper.sh/disallow-automount-api-token   dryrun               29
+
+NAME                                                                         ENFORCEMENT-ACTION   TOTAL-VIOLATIONS
+eksblockdefaultnamespace.constraints.gatekeeper.sh/block-default-namespace   dryrun               1
+
+NAME                                                                               ENFORCEMENT-ACTION   TOTAL-VIOLATIONS
+ekscontainernoprivilege.constraints.gatekeeper.sh/disallow-privileged-containers   dryrun               2
+
+NAME                                                        ENFORCEMENT-ACTION   TOTAL-VIOLATIONS
+eksenforceprobes.constraints.gatekeeper.sh/enforce-probes   dryrun               13
+
+NAME                                                                     ENFORCEMENT-ACTION   TOTAL-VIOLATIONS
+eksenforcesecretaccess.constraints.gatekeeper.sh/enforce-secret-access   dryrun               66
+
+NAME                                                             ENFORCEMENT-ACTION   TOTAL-VIOLATIONS
+eksforbiddensysctl.constraints.gatekeeper.sh/forbidden-sysctls   dryrun               0
+
+NAME                                                                     ENFORCEMENT-ACTION   TOTAL-VIOLATIONS
+ekslimitsensitiveverbs.constraints.gatekeeper.sh/limit-sensitive-verbs   dryrun               4
+
+NAME                                                                 ENFORCEMENT-ACTION   TOTAL-VIOLATIONS
+eksminimisewildcard.constraints.gatekeeper.sh/block-wildcard-roles   dryrun               7
+
+NAME                                                            ENFORCEMENT-ACTION   TOTAL-VIOLATIONS
+eksmountedsecrets.constraints.gatekeeper.sh/eksmountedsecrets   dryrun               6
+
+NAME                                                                     ENFORCEMENT-ACTION   TOTAL-VIOLATIONS
+eksnetworkpolicyexists.constraints.gatekeeper.sh/ensure-network-policy   dryrun               12
+
+NAME                                                                         ENFORCEMENT-ACTION   TOTAL-VIOLATIONS
+eksnoprivilegeescalation.constraints.gatekeeper.sh/no-privilege-escalation   dryrun               5
+
+NAME                                                                 ENFORCEMENT-ACTION   TOTAL-VIOLATIONS
+ekspsphostfilesystem.constraints.gatekeeper.sh/psp-host-filesystem   dryrun               15
+
+NAME                                                               ENFORCEMENT-ACTION   TOTAL-VIOLATIONS
+ekspsphostnamespace.constraints.gatekeeper.sh/psp-host-namespace   dryrun               16
+
+NAME                                                                        ENFORCEMENT-ACTION   TOTAL-VIOLATIONS
+eksreadonlyfilesystem.constraints.gatekeeper.sh/read-only-root-filesystem   dryrun               12
+
+NAME                                                          ENFORCEMENT-ACTION   TOTAL-VIOLATIONS
+eksresourcelimits.constraints.gatekeeper.sh/resource-limits   dryrun               35
+
+NAME                                                                 ENFORCEMENT-ACTION   TOTAL-VIOLATIONS
+eksrestrictdefaultsa.constraints.gatekeeper.sh/restrict-default-sa   dryrun               0

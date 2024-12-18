@@ -1,0 +1,41 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: compliant-pod
+  namespace: compliant-ns
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: compliant-pod
+  template:
+    metadata:
+      labels:
+        app: compliant-pod
+        exempted: "REQ1234567"
+    spec:
+      serviceAccountName: "custom-sa"
+      securityContext:
+        runAsNonRoot: true
+      containers:
+      - name: compliant-container
+        image: test-registry.io/approved-image:latest
+        imagePullPolicy: Always
+        securityContext:
+          allowPrivilegeEscalation: false
+          readOnlyRootFilesystem: true
+          privileged: false
+          capabilities:
+            drop: [ "ALL" ]
+        resources:
+          limits:
+            cpu: "500m"
+            memory: "512Mi"
+          requests:
+            cpu: "250m"
+            memory: "256Mi"
+      automountServiceAccountToken: false
+      volumes:
+      - name: secret-volume
+        secret:
+          secretName: test-secret

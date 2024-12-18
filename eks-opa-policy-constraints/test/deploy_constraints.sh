@@ -2,7 +2,7 @@
 set -euo pipefail
 
 # Paths - adjust as necessary
-CHART_DIR=".."
+CHART_DIR="/home/jaysues/helm-opa/eks-opa-policy/eks-opa-policy-constraints"
 BASE_VALUES="${CHART_DIR}/values.yaml"
 ENV_VALUES="${CHART_DIR}/environment/dev/values.yaml"
 CUSTOMER_VALUES_TEST="${CHART_DIR}/customer/customer-1/values_test.yaml"

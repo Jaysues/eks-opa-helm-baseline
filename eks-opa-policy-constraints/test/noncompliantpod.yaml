@@ -1,0 +1,33 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: noncompliant-pod
+  namespace: default
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: noncompliant-pod
+  template:
+    metadata:
+      labels:
+        app: noncompliant-pod
+    spec:
+      containers:
+      - name: noncompliant-container
+        image: nginx:latest
+        imagePullPolicy: IfNotPresent
+        securityContext:
+          allowPrivilegeEscalation: true
+          privileged: true
+          readOnlyRootFilesystem: false
+          capabilities:
+            add: [ "NET_ADMIN" ]
+        resources: {}
+      automountServiceAccountToken: true
+      hostNetwork: true
+      volumes:
+      - name: host-volume
+        hostPath:
+          path: /var/log
+          type: Directory
