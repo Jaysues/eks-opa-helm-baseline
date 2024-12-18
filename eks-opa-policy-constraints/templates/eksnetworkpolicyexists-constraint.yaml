@@ -16,19 +16,11 @@ spec:
     {{- $customNamespaces := $customExemptions.excludedNamespaces | default list }}
     excludedNamespaces: {{ concat $baselineNamespaces $customNamespaces | toYaml | nindent 6 }}
     labelSelector:
-      {{- $baselineLabels := .Values.baselines.labelSelector | default dict }}
-      {{- $customLabels := $customExemptions.labelSelector | default dict }}
-      {{- if or $baselineLabels.matchLabels $customLabels.matchLabels }}
-      matchLabels:
-        {{- $baselineMatchLabels := $baselineLabels.matchLabels | default dict }}
-        {{- $customMatchLabels := $customLabels.matchLabels | default dict }}
-        {{- $combinedMatchLabels := merge $baselineMatchLabels $customMatchLabels }}
-        {{ toYaml $combinedMatchLabels | nindent 8 }}
       matchExpressions:
-        {{- $baselineExpressions := .Values.baselines.labelSelector.matchExpressions | default list }}
-        {{- $customExpressions := .Values.constraints.eksallowedcapabilities.exemptions.labelSelector.matchExpressions | default list }}
-        {{ toYaml (concat $baselineExpressions $customExpressions) | nindent 8 }}
-      {{- end }}
+        - key: "exempted"
+          operator: NotIn
+          values:
+            - "{{ .Values.constraints.eksnetworkpolicyexists.exemptions.labelSelector.matchLabels.exempted | default "" }}"
   parameters:
     exemptWithAnnotation: "network.policy.skip/servicemesh"
     exemptWithLabel: "network.policy.skip"

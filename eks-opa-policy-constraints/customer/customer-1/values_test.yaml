@@ -21,13 +21,7 @@ constraints:
       requiredDropCapabilities: [ "ALL" ]
       labelSelector:
         matchLabels:
-          exempt-label: "true"
-        matchExpressions:
-        - key: "env"
-          operator: "In"
-          values:
-          - "test"
-
+          exempted: "REQ1234567"
   eksallowedimages:
     cisBenchmark: "5.1.4"
     title: "Ensure Image Provenance"
@@ -52,12 +46,7 @@ constraints:
       - "IfNotPresent"
       labelSelector:
         matchLabels:
-          exempt-label: "true"
-        matchExpressions:
-        - key: "env"
-          operator: "In"
-          values:
-          - "test"
+          exempted: "REQ1234567"
 
   eksnoprivilegeescalation:
     cisBenchmark: "5.2.5"
@@ -77,12 +66,7 @@ constraints:
       excludedImages: [ "test-image:*" ]
       labelSelector:
         matchLabels:
-          exempt-label: "true"
-        matchExpressions:
-        - key: "env"
-          operator: "In"
-          values:
-          - "test"
+          exempted: "REQ1234567"
 
   eksenforceprobes:
     cisBenchmark: "5.2.7"
@@ -96,18 +80,13 @@ constraints:
     implementation:
     - "Validate 'livenessProbe' and 'readinessProbe' fields in container specs"
     exemptions:
-      excludedNamespaces: [ "test-exempt-ns" ]
-      excludedContainers: [ "test-exempt-container" ]
-      excludedImages: [ "test-image:*" ]
-      enforceProbes: [ "livenessProbe" ]
+      excludedNamespaces: []
+      excludedContainers: []
+      excludedImages: []
+      enforceProbes: []
       labelSelector:
         matchLabels:
-          exempt-label: "true"
-        matchExpressions:
-        - key: "env"
-          operator: "In"
-          values:
-          - "test"
+          exempted: "REQ1234567"
 
   eksminimisewildcard:
     cisBenchmark: "5.1.2"
@@ -125,12 +104,7 @@ constraints:
       whitelistedRoles: [ "system:masters" ]
       labelSelector:
         matchLabels:
-          exempt-label: "true"
-        matchExpressions:
-        - key: "env"
-          operator: "In"
-          values:
-          - "test"
+          exempted: "REQ1234567"
 
   eksblockdefaultnamespace:
     cisBenchmark: "5.3.2"
@@ -148,12 +122,7 @@ constraints:
       allowedResources: [ "test-resource" ]
       labelSelector:
         matchLabels:
-          exempt-label: "true"
-        matchExpressions:
-        - key: "env"
-          operator: "In"
-          values:
-          - "test"
+          exempted: "REQ1234567"
 
   eksblockautomounttoken:
     cisBenchmark: "5.2.1"
@@ -171,12 +140,7 @@ constraints:
       excludedImages: [ "test-image:*" ]
       labelSelector:
         matchLabels:
-          exempt-label: "true"
-        matchExpressions:
-        - key: "env"
-          operator: "In"
-          values:
-          - "test"
+          exempted: "REQ1234567"
 
   ekscontainernoprivilege:
     cisBenchmark: "5.2.1"
@@ -196,12 +160,7 @@ constraints:
       excludedImages: [ "test-image:*" ]
       labelSelector:
         matchLabels:
-          exempt-label: "true"
-        matchExpressions:
-        - key: "env"
-          operator: "In"
-          values:
-          - "test"
+          exempted: "REQ1234567"
 
   eksreadonlyfilesystem:
     cisBenchmark: "5.2.6"
@@ -220,12 +179,7 @@ constraints:
       excludedImages: [ "test-image:*" ]
       labelSelector:
         matchLabels:
-          exempt-label: "true"
-        matchExpressions:
-        - key: "env"
-          operator: "In"
-          values:
-          - "test"
+          exempted: "REQ1234567"
 
   ekslimitsensitiveverbs:
     cisBenchmark: "4.1.8"
@@ -244,12 +198,7 @@ constraints:
       excludedRoles: [ "test-role" ]
       labelSelector:
         matchLabels:
-          exempt-label: "true"
-        matchExpressions:
-        - key: "env"
-          operator: "In"
-          values:
-          - "test"
+          exempted: "REQ1234567"
 
   eksenforcesecretaccess:
     cisBenchmark: "4.1.2"
@@ -269,12 +218,7 @@ constraints:
       excludedRoles: [ "test-role" ]
       labelSelector:
         matchLabels:
-          exempt-label: "true"
-        matchExpressions:
-        - key: "env"
-          operator: "In"
-          values:
-          - "test"
+          exempted: "REQ1234567"
 
   eksforbiddensysctl:
     cisBenchmark: "4.5.2"
@@ -295,12 +239,7 @@ constraints:
       allowedSysctls: [ "net.ipv4.ip_local_port_range" ]
       labelSelector:
         matchLabels:
-          exempt-label: "true"
-        matchExpressions:
-        - key: "env"
-          operator: "In"
-          values:
-          - "test"
+          exempted: "REQ1234567"
 
   eksmountedsecrets:
     cisBenchmark: "4.4.1"
@@ -321,12 +260,7 @@ constraints:
       allowedSecrets: [ "test-secret" ]
       labelSelector:
         matchLabels:
-          exempt-label: "true"
-        matchExpressions:
-        - key: "env"
-          operator: "In"
-          values:
-          - "test"
+          exempted: "REQ1234567"
 
   eksnetworkpolicyexists:
     cisBenchmark: "4.3.2, 5.4.4"
@@ -346,12 +280,7 @@ constraints:
       excludedNamespaces: [ "test-exempt-ns" ]
       labelSelector:
         matchLabels:
-          exempt-label: "true"
-        matchExpressions:
-        - key: "env"
-          operator: "In"
-          values:
-          - "test"
+          exempted: "REQ1234567"
 
   ekspsphostnamespace:
     cisBenchmark: "4.2.2, 4.2.3, 4.2.4"
@@ -373,12 +302,7 @@ constraints:
       excludedImages: [ "test-image:*" ]
       labelSelector:
         matchLabels:
-          exempt-label: "true"
-        matchExpressions:
-        - key: "env"
-          operator: "In"
-          values:
-          - "test"
+          exempted: "REQ1234567"
 
   ekspsphostfilesystem:
     cisBenchmark: "4.5.2"
@@ -403,12 +327,7 @@ constraints:
         readOnly: true
       labelSelector:
         matchLabels:
-          exempt-label: "true"
-        matchExpressions:
-        - key: "env"
-          operator: "In"
-          values:
-          - "test"
+          exempted: "REQ1234567"
 
   eksadminaccess:
     cisBenchmark: "4.1.1, 4.1.7"
@@ -428,12 +347,7 @@ constraints:
       allowedRoles: [ "system:masters" ]
       labelSelector:
         matchLabels:
-          exempt-label: "true"
-        matchExpressions:
-        - key: "env"
-          operator: "In"
-          values:
-          - "test"
+          exempted: "REQ1234567"
 
   eksrestrictdefaultsa:
     cisBenchmark: "4.1.5"
@@ -453,12 +367,7 @@ constraints:
       excludedNamespaces: [ "test-exempt-ns" ]
       labelSelector:
         matchLabels:
-          exempt-label: "true"
-        matchExpressions:
-        - key: "env"
-          operator: "In"
-          values:
-          - "test"
+          exempted: "REQ1234567"
 
   eksresourcelimits:
     cisBenchmark: "5.4.1"
@@ -478,9 +387,4 @@ constraints:
       excludedImages: [ "test-image:*" ]
       labelSelector:
         matchLabels:
-          exempt-label: "true"
-        matchExpressions:
-        - key: "env"
-          operator: "In"
-          values:
-          - "test"
+          exempted: "REQ1234567"

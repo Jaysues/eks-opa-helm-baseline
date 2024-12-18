@@ -21,7 +21,6 @@ constraints:
       requiredDropCapabilities: []
       labelSelector:
         matchLabels: {}
-        matchExpressions: []
 
   eksallowedimages:
     cisBenchmark: "5.1.4"
@@ -47,7 +46,6 @@ constraints:
       - "IfNotPresent"
       labelSelector:
         matchLabels: {}
-        matchExpressions: []
 
   eksnoprivilegeescalation:
     cisBenchmark: "5.2.5"
@@ -67,7 +65,6 @@ constraints:
       excludedImages: []
       labelSelector:
         matchLabels: {}
-        matchExpressions: []
 
   eksenforceprobes:
     cisBenchmark: "5.2.7"
@@ -86,8 +83,8 @@ constraints:
       excludedImages: []
       enforceProbes: []
       labelSelector:
-        matchLabels: {}
-        matchExpressions: []
+        matchLabels:
+          exempted: "REQ1234567"
 
   eksminimisewildcard:
     cisBenchmark: "5.1.2"
@@ -105,7 +102,6 @@ constraints:
       whitelistedRoles: []
       labelSelector:
         matchLabels: {}
-        matchExpressions: []
 
   eksblockdefaultnamespace:
     cisBenchmark: "5.3.2"
@@ -123,7 +119,6 @@ constraints:
       allowedResources: []
       labelSelector:
         matchLabels: {}
-        matchExpressions: []
 
   eksblockautomounttoken:
     cisBenchmark: "5.2.1"
@@ -141,7 +136,6 @@ constraints:
       excludedImages: []
       labelSelector:
         matchLabels: {}
-        matchExpressions: []
 
   ekscontainernoprivilege:
     cisBenchmark: "5.2.1"
@@ -161,7 +155,6 @@ constraints:
       excludedImages: []
       labelSelector:
         matchLabels: {}
-        matchExpressions: []
 
   eksreadonlyfilesystem:
     cisBenchmark: "5.2.6"
@@ -180,7 +173,6 @@ constraints:
       excludedImages: []
       labelSelector:
         matchLabels: {}
-        matchExpressions: []
 
   ekslimitsensitiveverbs:
     cisBenchmark: "4.1.8"
@@ -199,7 +191,6 @@ constraints:
       excludedRoles: []
       labelSelector:
         matchLabels: {}
-        matchExpressions: []
 
   eksenforcesecretaccess:
     cisBenchmark: "4.1.2"
@@ -219,7 +210,6 @@ constraints:
       excludedRoles: []
       labelSelector:
         matchLabels: {}
-        matchExpressions: []
 
   eksforbiddensysctl:
     cisBenchmark: "4.5.2"
@@ -240,7 +230,6 @@ constraints:
       allowedSysctls: []
       labelSelector:
         matchLabels: {}
-        matchExpressions: []
 
   eksmountedsecrets:
     cisBenchmark: "4.4.1"
@@ -261,7 +250,6 @@ constraints:
       allowedSecrets: []
       labelSelector:
         matchLabels: {}
-        matchExpressions: []
 
   eksnetworkpolicyexists:
     cisBenchmark: "4.3.2, 5.4.4"
@@ -281,7 +269,6 @@ constraints:
       excludedNamespaces: []
       labelSelector:
         matchLabels: {}
-        matchExpressions: []
 
   ekspsphostnamespace:
     cisBenchmark: "4.2.2, 4.2.3, 4.2.4"
@@ -303,7 +290,6 @@ constraints:
       excludedImages: []
       labelSelector:
         matchLabels: {}
-        matchExpressions: []
 
   ekspsphostfilesystem:
     cisBenchmark: "4.5.2"
@@ -328,7 +314,6 @@ constraints:
         readOnly: true
       labelSelector:
         matchLabels: {}
-        matchExpressions: []
 
   eksadminaccess:
     cisBenchmark: "4.1.1, 4.1.7"
@@ -348,7 +333,6 @@ constraints:
       allowedRoles: []
       labelSelector:
         matchLabels: {}
-        matchExpressions: []
 
   eksrestrictdefaultsa:
     cisBenchmark: "4.1.5"
@@ -368,7 +352,6 @@ constraints:
       excludedNamespaces: []
       labelSelector:
         matchLabels: {}
-        matchExpressions: []
 
   eksresourcelimits:
     cisBenchmark: "5.4.1"
@@ -388,4 +371,3 @@ constraints:
       excludedImages: []
       labelSelector:
         matchLabels: {}
-        matchExpressions: []

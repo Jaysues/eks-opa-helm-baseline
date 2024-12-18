@@ -10,7 +10,6 @@ constraints:
       requiredDropCapabilities: []
       labelSelector:
         matchLabels: {}
-        matchExpressions: []
 
   eksallowedimages:
     exemptions:
@@ -22,7 +21,6 @@ constraints:
       allowedPullPolicies: []
       labelSelector:
         matchLabels: {}
-        matchExpressions: []
 
   eksnoprivilegeescalation:
     exemptions:
@@ -31,7 +29,6 @@ constraints:
       excludedImages: []
       labelSelector:
         matchLabels: {}
-        matchExpressions: []
 
   eksenforceprobes:
     exemptions:
@@ -41,7 +38,6 @@ constraints:
       enforceProbes: []
       labelSelector:
         matchLabels: {}
-        matchExpressions: []
 
   eksminimisewildcard:
     exemptions:
@@ -49,7 +45,6 @@ constraints:
       whitelistedRoles: []
       labelSelector:
         matchLabels: {}
-        matchExpressions: []
 
   eksblockdefaultnamespace:
     exemptions:
@@ -57,7 +52,6 @@ constraints:
       allowedResources: []
       labelSelector:
         matchLabels: {}
-        matchExpressions: []
 
   eksblockautomounttoken:
     exemptions:
@@ -65,7 +59,6 @@ constraints:
       excludedImages: []
       labelSelector:
         matchLabels: {}
-        matchExpressions: []
 
   ekscontainernoprivilege:
     exemptions:
@@ -74,7 +67,6 @@ constraints:
       excludedImages: []
       labelSelector:
         matchLabels: {}
-        matchExpressions: []
 
   eksreadonlyfilesystem:
     exemptions:
@@ -83,7 +75,6 @@ constraints:
       excludedImages: []
       labelSelector:
         matchLabels: {}
-        matchExpressions: []
 
   ekslimitsensitiveverbs:
     exemptions:
@@ -91,7 +82,6 @@ constraints:
       excludedRoles: []
       labelSelector:
         matchLabels: {}
-        matchExpressions: []
 
   eksenforcesecretaccess:
     exemptions:
@@ -99,7 +89,6 @@ constraints:
       excludedRoles: []
       labelSelector:
         matchLabels: {}
-        matchExpressions: []
 
   eksforbiddensysctl:
     exemptions:
@@ -108,7 +97,6 @@ constraints:
       allowedSysctls: []
       labelSelector:
         matchLabels: {}
-        matchExpressions: []
 
   eksmountedsecrets:
     exemptions:
@@ -117,14 +105,12 @@ constraints:
       allowedSecrets: []
       labelSelector:
         matchLabels: {}
-        matchExpressions: []
 
   eksnetworkpolicyexists:
     exemptions:
       excludedNamespaces: []
       labelSelector:
         matchLabels: {}
-        matchExpressions: []
 
   ekspsphostnamespace:
     exemptions:
@@ -132,7 +118,6 @@ constraints:
       excludedImages: []
       labelSelector:
         matchLabels: {}
-        matchExpressions: []
 
   ekspsphostfilesystem:
     exemptions:
@@ -141,7 +126,6 @@ constraints:
       allowedHostPaths: []
       labelSelector:
         matchLabels: {}
-        matchExpressions: []
 
   eksadminaccess:
     exemptions:
@@ -149,14 +133,12 @@ constraints:
       allowedRoles: []
       labelSelector:
         matchLabels: {}
-        matchExpressions: []
 
   eksrestrictdefaultsa:
     exemptions:
       excludedNamespaces: []
       labelSelector:
         matchLabels: {}
-        matchExpressions: []
 
   eksresourcelimits:
     exemptions:
@@ -164,4 +146,3 @@ constraints:
       excludedImages: []
       labelSelector:
         matchLabels: {}
-        matchExpressions: []
